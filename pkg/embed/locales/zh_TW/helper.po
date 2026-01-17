@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Traditional\n"
-"PO-Revision-Date: 2026-01-17 15:16\n"
+"PO-Revision-Date: 2026-01-17 15:37\n"
 
 #: internal/ui/app.go:563
 msgid "All data will be cleared and cannot be recovered!"
@@ -34,8 +34,28 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+#: internal/system/detector.go:255
+msgid "CPU must support at least x86-64-v2 instruction set"
+msgstr ""
+
 #: internal/ui/app.go:582
 msgid "Cancel"
+msgstr ""
+
+#: internal/service/mounter.go:57
+msgid "Cannot operate on system disk"
+msgstr ""
+
+#: internal/service/installer.go:57
+msgid "Checking system requirements"
+msgstr ""
+
+#: internal/service/installer.go:348
+msgid "Checksum mismatch"
+msgstr ""
+
+#: internal/service/installer.go:63
+msgid "Configuring firewall"
 msgstr ""
 
 #: internal/ui/app.go:306
@@ -54,6 +74,46 @@ msgstr ""
 msgid "Continue"
 msgstr ""
 
+#: internal/service/mounter.go:77
+msgid "Creating %s..."
+msgstr ""
+
+#: internal/service/mounter.go:77
+msgid "Creating mount point"
+msgstr ""
+
+#: internal/service/mounter.go:107
+msgid "Creating partition"
+msgstr ""
+
+#: internal/service/mounter.go:107
+msgid "Creating partition on /dev/%s..."
+msgstr ""
+
+#: internal/service/installer.go:61
+msgid "Creating swap file"
+msgstr ""
+
+#: internal/service/installer.go:64
+msgid "Creating systemd service"
+msgstr ""
+
+#: internal/service/installer.go:58
+msgid "Creating www user"
+msgstr ""
+
+#: internal/service/mounter.go:92
+msgid "Deleting existing partitions"
+msgstr ""
+
+#: internal/service/mounter.go:92
+msgid "Deleting existing partitions..."
+msgstr ""
+
+#: internal/service/installer.go:66
+msgid "Detecting installed apps"
+msgstr ""
+
 #: internal/ui/app.go:830
 msgid "Device"
 msgstr ""
@@ -63,16 +123,124 @@ msgstr ""
 msgid "Disk Partition"
 msgstr ""
 
+#: internal/service/mounter.go:52
+msgid "Disk not found"
+msgstr ""
+
+#: internal/service/mounter.go:170
+msgid "Disk partition and mount successful"
+msgstr ""
+
 #: internal/ui/app.go:789
 msgid "Disk: %s, Mount Point: %s, File System: %s"
+msgstr ""
+
+#: internal/service/installer.go:62
+msgid "Downloading panel"
 msgstr ""
 
 #: internal/ui/app.go:756
 msgid "Enter the mount point path (e.g. /opt/ace)"
 msgstr ""
 
+#: internal/service/installer.go:81
+msgid "Error"
+msgstr ""
+
 #: internal/ui/app.go:247
 msgid "Exit"
+msgstr ""
+
+#: internal/system/firewall.go:70
+msgid "Failed to add port"
+msgstr ""
+
+#: internal/service/installer.go:343
+msgid "Failed to compute checksum"
+msgstr ""
+
+#: internal/system/user.go:66
+msgid "Failed to create group"
+msgstr ""
+
+#: internal/service/mounter.go:111
+msgid "Failed to create partition"
+msgstr ""
+
+#: internal/system/user.go:55
+msgid "Failed to create user"
+msgstr ""
+
+#: internal/system/systemd.go:109
+msgid "Failed to daemon-reload"
+msgstr ""
+
+#: internal/system/systemd.go:82
+msgid "Failed to disable"
+msgstr ""
+
+#: internal/service/installer.go:332
+msgid "Failed to download checksum"
+msgstr ""
+
+#: internal/service/installer.go:324
+msgid "Failed to download panel"
+msgstr ""
+
+#: internal/system/systemd.go:71
+msgid "Failed to enable"
+msgstr ""
+
+#: internal/system/firewall.go:55
+msgid "Failed to enable firewalld"
+msgstr ""
+
+#: internal/service/mounter.go:142
+msgid "Failed to get UUID"
+msgstr ""
+
+#: internal/service/installer.go:280
+msgid "Failed to get version info"
+msgstr ""
+
+#: internal/service/installer.go:442
+msgid "Failed to initialize panel"
+msgstr ""
+
+#: internal/service/installer.go:338
+msgid "Failed to open downloaded file"
+msgstr ""
+
+#: internal/service/installer.go:295
+msgid "Failed to parse version info"
+msgstr ""
+
+#: internal/system/firewall.go:93
+msgid "Failed to reload firewall"
+msgstr ""
+
+#: internal/system/firewall.go:82
+msgid "Failed to remove port"
+msgstr ""
+
+#: internal/system/systemd.go:93
+msgid "Failed to restart"
+msgstr ""
+
+#: internal/system/systemd.go:49
+msgid "Failed to start"
+msgstr ""
+
+#: internal/system/systemd.go:60
+msgid "Failed to stop"
+msgstr ""
+
+#: internal/service/installer.go:448
+msgid "Failed to sync panel"
+msgstr ""
+
+#: internal/service/installer.go:354
+msgid "Failed to unzip panel"
 msgstr ""
 
 #: internal/ui/app.go:772
@@ -84,13 +252,33 @@ msgstr ""
 msgid "For safety, please wait before proceeding"
 msgstr ""
 
+#: internal/service/mounter.go:125
+msgid "Format failed"
+msgstr ""
+
+#: internal/service/mounter.go:115
+msgid "Formatting /dev/%s1 as %s..."
+msgstr ""
+
+#: internal/service/mounter.go:115
+msgid "Formatting partition"
+msgstr ""
+
 #: internal/ui/app.go:561
 msgid "High-risk operation"
+msgstr ""
+
+#: internal/service/installer.go:65
+msgid "Initializing panel"
 msgstr ""
 
 #: internal/ui/app.go:244
 #: internal/ui/app.go:404
 msgid "Install Panel"
+msgstr ""
+
+#: internal/service/installer.go:97
+msgid "Installation complete"
 msgstr ""
 
 #: internal/ui/app.go:409
@@ -101,6 +289,22 @@ msgstr ""
 msgid "Installation successful"
 msgstr ""
 
+#: internal/service/installer.go:60
+msgid "Installing dependencies"
+msgstr ""
+
+#: internal/service/mounter.go:61
+msgid "Installing partition tools"
+msgstr ""
+
+#: internal/service/mounter.go:61
+msgid "Installing partition tools..."
+msgstr ""
+
+#: internal/service/installer.go:139
+msgid "Kernel version too old, requires 4.x or above"
+msgstr ""
+
 #: internal/ui/app.go:842
 msgid "Loading disk list..."
 msgstr ""
@@ -108,6 +312,26 @@ msgstr ""
 #: internal/ui/app.go:755
 #: internal/ui/app.go:831
 msgid "Mount Point"
+msgstr ""
+
+#: internal/service/mounter.go:170
+msgid "Mount complete"
+msgstr ""
+
+#: internal/service/mounter.go:135
+msgid "Mount failed"
+msgstr ""
+
+#: internal/service/mounter.go:85
+msgid "Mount point is not empty"
+msgstr ""
+
+#: internal/service/mounter.go:132
+msgid "Mounting /dev/%s1 to %s..."
+msgstr ""
+
+#: internal/service/mounter.go:132
+msgid "Mounting partition"
 msgstr ""
 
 #: internal/ui/app.go:309
@@ -120,8 +344,32 @@ msgstr ""
 msgid "No available disks found"
 msgstr ""
 
+#: internal/service/installer.go:314
+msgid "No download URL found for architecture %s"
+msgstr ""
+
 #: internal/ui/app.go:822
 msgid "Operation failed"
+msgstr ""
+
+#: internal/service/installer.go:59
+msgid "Optimizing system settings"
+msgstr ""
+
+#: internal/service/installer.go:99
+msgid "Panel installed successfully"
+msgstr ""
+
+#: internal/service/installer.go:151
+msgid "Panel is already installed"
+msgstr ""
+
+#: internal/service/uninstaller.go:47
+msgid "Panel is not installed"
+msgstr ""
+
+#: internal/service/uninstaller.go:84
+msgid "Panel uninstalled successfully"
 msgstr ""
 
 #: internal/ui/app.go:307
@@ -140,8 +388,48 @@ msgstr ""
 msgid "Please enter an absolute path"
 msgstr ""
 
+#: internal/system/detector.go:237
+msgid "Please run with root privileges"
+msgstr ""
+
 #: internal/ui/app.go:775
 msgid "Recommended"
+msgstr ""
+
+#: internal/service/uninstaller.go:81
+msgid "Removing %s..."
+msgstr ""
+
+#: internal/service/uninstaller.go:61
+msgid "Removing /usr/local/sbin/acepanel..."
+msgstr ""
+
+#: internal/service/uninstaller.go:61
+msgid "Removing CLI tool"
+msgstr ""
+
+#: internal/service/uninstaller.go:81
+msgid "Removing installation directory"
+msgstr ""
+
+#: internal/service/uninstaller.go:56
+msgid "Removing service file"
+msgstr ""
+
+#: internal/service/uninstaller.go:65
+msgid "Removing swap file"
+msgstr ""
+
+#: internal/service/uninstaller.go:65
+msgid "Removing swap file..."
+msgstr ""
+
+#: internal/service/uninstaller.go:56
+msgid "Removing systemd service file..."
+msgstr ""
+
+#: internal/service/installer.go:146
+msgid "Requires 64-bit system"
 msgstr ""
 
 #: internal/ui/app.go:743
@@ -164,6 +452,14 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
+#: internal/service/uninstaller.go:51
+msgid "Stopping acepanel service..."
+msgstr ""
+
+#: internal/service/uninstaller.go:51
+msgid "Stopping panel service"
+msgstr ""
+
 #: internal/ui/app.go:602
 msgid "Thank you for using AcePanel."
 msgstr ""
@@ -173,12 +469,38 @@ msgstr ""
 msgid "Uninstall Panel"
 msgstr ""
 
+#: internal/service/uninstaller.go:84
+msgid "Uninstallation complete"
+msgstr ""
+
 #: internal/ui/app.go:596
 msgid "Uninstallation failed"
 msgstr ""
 
 #: internal/ui/app.go:600
 msgid "Uninstallation successful"
+msgstr ""
+
+#: internal/service/installer.go:124
+msgid "Unsupported CPU architecture"
+msgstr ""
+
+#: internal/service/mounter.go:122
+msgid "Unsupported filesystem type: %s"
+msgstr ""
+
+#: internal/service/installer.go:119
+#: internal/service/installer.go:207
+#: internal/system/firewall.go:44
+msgid "Unsupported operating system"
+msgstr ""
+
+#: internal/service/mounter.go:139
+msgid "Updating /etc/fstab for auto-mount..."
+msgstr ""
+
+#: internal/service/mounter.go:139
+msgid "Updating fstab"
 msgstr ""
 
 #: internal/ui/app.go:572
@@ -193,6 +515,42 @@ msgstr ""
 #: internal/ui/app.go:526
 #: internal/ui/app.go:794
 msgid "Yes"
+msgstr ""
+
+#: internal/system/package.go:174
+msgid "apt-get install failed"
+msgstr ""
+
+#: internal/system/package.go:186
+msgid "apt-get remove failed"
+msgstr ""
+
+#: internal/system/package.go:162
+msgid "apt-get update failed"
+msgstr ""
+
+#: internal/service/installer.go:92
+msgid "completed"
+msgstr ""
+
+#: internal/system/package.go:64
+msgid "dnf install failed"
+msgstr ""
+
+#: internal/system/package.go:52
+msgid "dnf makecache failed"
+msgstr ""
+
+#: internal/system/package.go:76
+msgid "dnf remove failed"
+msgstr ""
+
+#: internal/service/mounter.go:167
+msgid "fstab configuration error"
+msgstr ""
+
+#: internal/service/uninstaller.go:77
+msgid "fstab configuration error, please check /etc/fstab"
 msgstr ""
 
 #: internal/ui/app.go:574
