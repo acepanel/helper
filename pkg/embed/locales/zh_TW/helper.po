@@ -1,0 +1,201 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"X-Generator: xgotext\n"
+"X-Crowdin-Project: acepanel\n"
+"X-Crowdin-Project-ID: 822366\n"
+"X-Crowdin-Language: zh-TW\n"
+"X-Crowdin-File: helper.pot\n"
+"X-Crowdin-File-ID: 1242\n"
+"Project-Id-Version: acepanel\n"
+"Language-Team: Chinese Traditional\n"
+"PO-Revision-Date: 2026-01-17 15:16\n"
+
+#: internal/ui/app.go:563
+msgid "All data will be cleared and cannot be recovered!"
+msgstr ""
+
+#: internal/ui/app.go:525
+msgid "Are you sure you want to uninstall the panel?"
+msgstr ""
+
+#: internal/ui/app.go:845
+msgid "Available disks:"
+msgstr ""
+
+#: internal/ui/app.go:416
+#: internal/ui/app.go:566
+#: internal/ui/app.go:605
+#: internal/ui/app.go:836
+msgid "Back"
+msgstr ""
+
+#: internal/ui/app.go:582
+msgid "Cancel"
+msgstr ""
+
+#: internal/ui/app.go:306
+msgid "Confirm Installation"
+msgstr ""
+
+#: internal/ui/app.go:788
+msgid "Confirm Operation"
+msgstr ""
+
+#: internal/ui/app.go:524
+msgid "Confirm Uninstallation"
+msgstr ""
+
+#: internal/ui/app.go:566
+msgid "Continue"
+msgstr ""
+
+#: internal/ui/app.go:830
+msgid "Device"
+msgstr ""
+
+#: internal/ui/app.go:246
+#: internal/ui/app.go:817
+msgid "Disk Partition"
+msgstr ""
+
+#: internal/ui/app.go:789
+msgid "Disk: %s, Mount Point: %s, File System: %s"
+msgstr ""
+
+#: internal/ui/app.go:756
+msgid "Enter the mount point path (e.g. /opt/ace)"
+msgstr ""
+
+#: internal/ui/app.go:247
+msgid "Exit"
+msgstr ""
+
+#: internal/ui/app.go:772
+#: internal/ui/app.go:832
+msgid "File System"
+msgstr ""
+
+#: internal/ui/app.go:571
+msgid "For safety, please wait before proceeding"
+msgstr ""
+
+#: internal/ui/app.go:561
+msgid "High-risk operation"
+msgstr ""
+
+#: internal/ui/app.go:244
+#: internal/ui/app.go:404
+msgid "Install Panel"
+msgstr ""
+
+#: internal/ui/app.go:409
+msgid "Installation failed"
+msgstr ""
+
+#: internal/ui/app.go:413
+msgid "Installation successful"
+msgstr ""
+
+#: internal/ui/app.go:842
+msgid "Loading disk list..."
+msgstr ""
+
+#: internal/ui/app.go:755
+#: internal/ui/app.go:831
+msgid "Mount Point"
+msgstr ""
+
+#: internal/ui/app.go:309
+#: internal/ui/app.go:527
+#: internal/ui/app.go:795
+msgid "No"
+msgstr ""
+
+#: internal/ui/app.go:645
+msgid "No available disks found"
+msgstr ""
+
+#: internal/ui/app.go:822
+msgid "Operation failed"
+msgstr ""
+
+#: internal/ui/app.go:307
+msgid "Panel will be installed to %s"
+msgstr ""
+
+#: internal/ui/app.go:826
+msgid "Partition and mount successful"
+msgstr ""
+
+#: internal/ui/app.go:562
+msgid "Please backup all data before uninstalling."
+msgstr ""
+
+#: internal/ui/app.go:760
+msgid "Please enter an absolute path"
+msgstr ""
+
+#: internal/ui/app.go:775
+msgid "Recommended"
+msgstr ""
+
+#: internal/ui/app.go:743
+msgid "Select Disk"
+msgstr ""
+
+#: internal/ui/app.go:242
+msgid "Select Operation"
+msgstr ""
+
+#: internal/ui/app.go:744
+msgid "Select a disk to partition and mount"
+msgstr ""
+
+#: internal/ui/app.go:773
+msgid "Select the file system type"
+msgstr ""
+
+#: internal/ui/app.go:582
+msgid "Skip"
+msgstr ""
+
+#: internal/ui/app.go:602
+msgid "Thank you for using AcePanel."
+msgstr ""
+
+#: internal/ui/app.go:245
+#: internal/ui/app.go:555
+msgid "Uninstall Panel"
+msgstr ""
+
+#: internal/ui/app.go:596
+msgid "Uninstallation failed"
+msgstr ""
+
+#: internal/ui/app.go:600
+msgid "Uninstallation successful"
+msgstr ""
+
+#: internal/ui/app.go:572
+msgid "Waiting:"
+msgstr ""
+
+#: internal/ui/app.go:860
+msgid "Warning: This will erase all data on the disk!"
+msgstr ""
+
+#: internal/ui/app.go:308
+#: internal/ui/app.go:526
+#: internal/ui/app.go:794
+msgid "Yes"
+msgstr ""
+
+#: internal/ui/app.go:574
+msgid "seconds"
+msgstr ""
+
