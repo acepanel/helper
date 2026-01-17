@@ -13,24 +13,24 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Traditional\n"
-"PO-Revision-Date: 2026-01-17 15:37\n"
+"PO-Revision-Date: 2026-01-17 16:07\n"
 
-#: internal/ui/app.go:563
+#: internal/ui/app.go:581
 msgid "All data will be cleared and cannot be recovered!"
 msgstr ""
 
-#: internal/ui/app.go:525
+#: internal/ui/app.go:543
 msgid "Are you sure you want to uninstall the panel?"
 msgstr ""
 
-#: internal/ui/app.go:845
+#: internal/ui/app.go:863
 msgid "Available disks:"
 msgstr ""
 
-#: internal/ui/app.go:416
-#: internal/ui/app.go:566
-#: internal/ui/app.go:605
-#: internal/ui/app.go:836
+#: internal/ui/app.go:434
+#: internal/ui/app.go:584
+#: internal/ui/app.go:623
+#: internal/ui/app.go:854
 msgid "Back"
 msgstr ""
 
@@ -38,7 +38,7 @@ msgstr ""
 msgid "CPU must support at least x86-64-v2 instruction set"
 msgstr ""
 
-#: internal/ui/app.go:582
+#: internal/ui/app.go:600
 msgid "Cancel"
 msgstr ""
 
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Checking system requirements"
 msgstr ""
 
-#: internal/service/installer.go:348
+#: internal/service/installer.go:347
 msgid "Checksum mismatch"
 msgstr ""
 
@@ -58,19 +58,19 @@ msgstr ""
 msgid "Configuring firewall"
 msgstr ""
 
-#: internal/ui/app.go:306
+#: internal/ui/app.go:311
 msgid "Confirm Installation"
 msgstr ""
 
-#: internal/ui/app.go:788
+#: internal/ui/app.go:806
 msgid "Confirm Operation"
 msgstr ""
 
-#: internal/ui/app.go:524
+#: internal/ui/app.go:542
 msgid "Confirm Uninstallation"
 msgstr ""
 
-#: internal/ui/app.go:566
+#: internal/ui/app.go:584
 msgid "Continue"
 msgstr ""
 
@@ -114,12 +114,12 @@ msgstr ""
 msgid "Detecting installed apps"
 msgstr ""
 
-#: internal/ui/app.go:830
+#: internal/ui/app.go:848
 msgid "Device"
 msgstr ""
 
-#: internal/ui/app.go:246
-#: internal/ui/app.go:817
+#: internal/ui/app.go:251
+#: internal/ui/app.go:835
 msgid "Disk Partition"
 msgstr ""
 
@@ -131,7 +131,7 @@ msgstr ""
 msgid "Disk partition and mount successful"
 msgstr ""
 
-#: internal/ui/app.go:789
+#: internal/ui/app.go:807
 msgid "Disk: %s, Mount Point: %s, File System: %s"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgstr ""
 msgid "Downloading panel"
 msgstr ""
 
-#: internal/ui/app.go:756
+#: internal/ui/app.go:774
 msgid "Enter the mount point path (e.g. /opt/ace)"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: internal/ui/app.go:247
+#: internal/ui/app.go:252
 msgid "Exit"
 msgstr ""
 
@@ -155,7 +155,7 @@ msgstr ""
 msgid "Failed to add port"
 msgstr ""
 
-#: internal/service/installer.go:343
+#: internal/service/installer.go:342
 msgid "Failed to compute checksum"
 msgstr ""
 
@@ -179,11 +179,11 @@ msgstr ""
 msgid "Failed to disable"
 msgstr ""
 
-#: internal/service/installer.go:332
+#: internal/service/installer.go:331
 msgid "Failed to download checksum"
 msgstr ""
 
-#: internal/service/installer.go:324
+#: internal/service/installer.go:323
 msgid "Failed to download panel"
 msgstr ""
 
@@ -199,19 +199,19 @@ msgstr ""
 msgid "Failed to get UUID"
 msgstr ""
 
-#: internal/service/installer.go:280
+#: internal/service/installer.go:279
 msgid "Failed to get version info"
 msgstr ""
 
-#: internal/service/installer.go:442
+#: internal/service/installer.go:448
 msgid "Failed to initialize panel"
 msgstr ""
 
-#: internal/service/installer.go:338
+#: internal/service/installer.go:337
 msgid "Failed to open downloaded file"
 msgstr ""
 
-#: internal/service/installer.go:295
+#: internal/service/installer.go:294
 msgid "Failed to parse version info"
 msgstr ""
 
@@ -235,20 +235,20 @@ msgstr ""
 msgid "Failed to stop"
 msgstr ""
 
-#: internal/service/installer.go:448
+#: internal/service/installer.go:454
 msgid "Failed to sync panel"
 msgstr ""
 
-#: internal/service/installer.go:354
+#: internal/service/installer.go:353
 msgid "Failed to unzip panel"
 msgstr ""
 
-#: internal/ui/app.go:772
-#: internal/ui/app.go:832
+#: internal/ui/app.go:790
+#: internal/ui/app.go:850
 msgid "File System"
 msgstr ""
 
-#: internal/ui/app.go:571
+#: internal/ui/app.go:589
 msgid "For safety, please wait before proceeding"
 msgstr ""
 
@@ -264,7 +264,7 @@ msgstr ""
 msgid "Formatting partition"
 msgstr ""
 
-#: internal/ui/app.go:561
+#: internal/ui/app.go:579
 msgid "High-risk operation"
 msgstr ""
 
@@ -272,8 +272,8 @@ msgstr ""
 msgid "Initializing panel"
 msgstr ""
 
-#: internal/ui/app.go:244
-#: internal/ui/app.go:404
+#: internal/ui/app.go:249
+#: internal/ui/app.go:418
 msgid "Install Panel"
 msgstr ""
 
@@ -281,11 +281,11 @@ msgstr ""
 msgid "Installation complete"
 msgstr ""
 
-#: internal/ui/app.go:409
+#: internal/ui/app.go:423
 msgid "Installation failed"
 msgstr ""
 
-#: internal/ui/app.go:413
+#: internal/ui/app.go:427
 msgid "Installation successful"
 msgstr ""
 
@@ -301,16 +301,16 @@ msgstr ""
 msgid "Installing partition tools..."
 msgstr ""
 
-#: internal/service/installer.go:139
-msgid "Kernel version too old, requires 4.x or above"
+#: internal/service/installer.go:138
+msgid "Kernel version too old, requires 5.x or above"
 msgstr ""
 
-#: internal/ui/app.go:842
+#: internal/ui/app.go:860
 msgid "Loading disk list..."
 msgstr ""
 
-#: internal/ui/app.go:755
-#: internal/ui/app.go:831
+#: internal/ui/app.go:773
+#: internal/ui/app.go:849
 msgid "Mount Point"
 msgstr ""
 
@@ -334,21 +334,21 @@ msgstr ""
 msgid "Mounting partition"
 msgstr ""
 
-#: internal/ui/app.go:309
-#: internal/ui/app.go:527
-#: internal/ui/app.go:795
+#: internal/ui/app.go:314
+#: internal/ui/app.go:545
+#: internal/ui/app.go:813
 msgid "No"
 msgstr ""
 
-#: internal/ui/app.go:645
+#: internal/ui/app.go:663
 msgid "No available disks found"
 msgstr ""
 
-#: internal/service/installer.go:314
+#: internal/service/installer.go:313
 msgid "No download URL found for architecture %s"
 msgstr ""
 
-#: internal/ui/app.go:822
+#: internal/ui/app.go:840
 msgid "Operation failed"
 msgstr ""
 
@@ -360,7 +360,7 @@ msgstr ""
 msgid "Panel installed successfully"
 msgstr ""
 
-#: internal/service/installer.go:151
+#: internal/service/installer.go:150
 msgid "Panel is already installed"
 msgstr ""
 
@@ -372,19 +372,19 @@ msgstr ""
 msgid "Panel uninstalled successfully"
 msgstr ""
 
-#: internal/ui/app.go:307
+#: internal/ui/app.go:312
 msgid "Panel will be installed to %s"
 msgstr ""
 
-#: internal/ui/app.go:826
+#: internal/ui/app.go:844
 msgid "Partition and mount successful"
 msgstr ""
 
-#: internal/ui/app.go:562
+#: internal/ui/app.go:580
 msgid "Please backup all data before uninstalling."
 msgstr ""
 
-#: internal/ui/app.go:760
+#: internal/ui/app.go:778
 msgid "Please enter an absolute path"
 msgstr ""
 
@@ -392,7 +392,7 @@ msgstr ""
 msgid "Please run with root privileges"
 msgstr ""
 
-#: internal/ui/app.go:775
+#: internal/ui/app.go:793
 msgid "Recommended"
 msgstr ""
 
@@ -428,27 +428,27 @@ msgstr ""
 msgid "Removing systemd service file..."
 msgstr ""
 
-#: internal/service/installer.go:146
+#: internal/service/installer.go:145
 msgid "Requires 64-bit system"
 msgstr ""
 
-#: internal/ui/app.go:743
+#: internal/ui/app.go:761
 msgid "Select Disk"
 msgstr ""
 
-#: internal/ui/app.go:242
+#: internal/ui/app.go:247
 msgid "Select Operation"
 msgstr ""
 
-#: internal/ui/app.go:744
+#: internal/ui/app.go:762
 msgid "Select a disk to partition and mount"
 msgstr ""
 
-#: internal/ui/app.go:773
+#: internal/ui/app.go:791
 msgid "Select the file system type"
 msgstr ""
 
-#: internal/ui/app.go:582
+#: internal/ui/app.go:600
 msgid "Skip"
 msgstr ""
 
@@ -460,12 +460,12 @@ msgstr ""
 msgid "Stopping panel service"
 msgstr ""
 
-#: internal/ui/app.go:602
+#: internal/ui/app.go:620
 msgid "Thank you for using AcePanel."
 msgstr ""
 
-#: internal/ui/app.go:245
-#: internal/ui/app.go:555
+#: internal/ui/app.go:250
+#: internal/ui/app.go:573
 msgid "Uninstall Panel"
 msgstr ""
 
@@ -473,15 +473,15 @@ msgstr ""
 msgid "Uninstallation complete"
 msgstr ""
 
-#: internal/ui/app.go:596
+#: internal/ui/app.go:614
 msgid "Uninstallation failed"
 msgstr ""
 
-#: internal/ui/app.go:600
+#: internal/ui/app.go:618
 msgid "Uninstallation successful"
 msgstr ""
 
-#: internal/service/installer.go:124
+#: internal/service/installer.go:123
 msgid "Unsupported CPU architecture"
 msgstr ""
 
@@ -490,7 +490,7 @@ msgid "Unsupported filesystem type: %s"
 msgstr ""
 
 #: internal/service/installer.go:119
-#: internal/service/installer.go:207
+#: internal/service/installer.go:206
 #: internal/system/firewall.go:44
 msgid "Unsupported operating system"
 msgstr ""
@@ -503,17 +503,17 @@ msgstr ""
 msgid "Updating fstab"
 msgstr ""
 
-#: internal/ui/app.go:572
+#: internal/ui/app.go:590
 msgid "Waiting:"
 msgstr ""
 
-#: internal/ui/app.go:860
+#: internal/ui/app.go:878
 msgid "Warning: This will erase all data on the disk!"
 msgstr ""
 
-#: internal/ui/app.go:308
-#: internal/ui/app.go:526
-#: internal/ui/app.go:794
+#: internal/ui/app.go:313
+#: internal/ui/app.go:544
+#: internal/ui/app.go:812
 msgid "Yes"
 msgstr ""
 
@@ -553,7 +553,7 @@ msgstr ""
 msgid "fstab configuration error, please check /etc/fstab"
 msgstr ""
 
-#: internal/ui/app.go:574
+#: internal/ui/app.go:592
 msgid "seconds"
 msgstr ""
 
