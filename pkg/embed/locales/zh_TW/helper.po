@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Traditional\n"
-"PO-Revision-Date: 2026-01-17 16:07\n"
+"PO-Revision-Date: 2026-01-17 22:06\n"
 
 #: internal/ui/app.go:581
 msgid "All data will be cleared and cannot be recovered!"
@@ -50,7 +50,7 @@ msgstr ""
 msgid "Checking system requirements"
 msgstr ""
 
-#: internal/service/installer.go:347
+#: internal/service/installer.go:455
 msgid "Checksum mismatch"
 msgstr ""
 
@@ -151,11 +151,11 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: internal/system/firewall.go:70
+#: internal/system/firewall.go:80
 msgid "Failed to add port"
 msgstr ""
 
-#: internal/service/installer.go:342
+#: internal/service/installer.go:450
 msgid "Failed to compute checksum"
 msgstr ""
 
@@ -179,11 +179,11 @@ msgstr ""
 msgid "Failed to disable"
 msgstr ""
 
-#: internal/service/installer.go:331
+#: internal/service/installer.go:439
 msgid "Failed to download checksum"
 msgstr ""
 
-#: internal/service/installer.go:323
+#: internal/service/installer.go:431
 msgid "Failed to download panel"
 msgstr ""
 
@@ -191,7 +191,7 @@ msgstr ""
 msgid "Failed to enable"
 msgstr ""
 
-#: internal/system/firewall.go:55
+#: internal/system/firewall.go:65
 msgid "Failed to enable firewalld"
 msgstr ""
 
@@ -199,27 +199,27 @@ msgstr ""
 msgid "Failed to get UUID"
 msgstr ""
 
-#: internal/service/installer.go:279
+#: internal/service/installer.go:387
 msgid "Failed to get version info"
 msgstr ""
 
-#: internal/service/installer.go:448
+#: internal/service/installer.go:556
 msgid "Failed to initialize panel"
 msgstr ""
 
-#: internal/service/installer.go:337
+#: internal/service/installer.go:445
 msgid "Failed to open downloaded file"
 msgstr ""
 
-#: internal/service/installer.go:294
+#: internal/service/installer.go:402
 msgid "Failed to parse version info"
 msgstr ""
 
-#: internal/system/firewall.go:93
+#: internal/system/firewall.go:103
 msgid "Failed to reload firewall"
 msgstr ""
 
-#: internal/system/firewall.go:82
+#: internal/system/firewall.go:92
 msgid "Failed to remove port"
 msgstr ""
 
@@ -235,11 +235,11 @@ msgstr ""
 msgid "Failed to stop"
 msgstr ""
 
-#: internal/service/installer.go:454
+#: internal/service/installer.go:562
 msgid "Failed to sync panel"
 msgstr ""
 
-#: internal/service/installer.go:353
+#: internal/service/installer.go:461
 msgid "Failed to unzip panel"
 msgstr ""
 
@@ -344,7 +344,7 @@ msgstr ""
 msgid "No available disks found"
 msgstr ""
 
-#: internal/service/installer.go:313
+#: internal/service/installer.go:421
 msgid "No download URL found for architecture %s"
 msgstr ""
 
@@ -464,6 +464,10 @@ msgstr ""
 msgid "Thank you for using AcePanel."
 msgstr ""
 
+#: internal/service/installer.go:368
+msgid "There is an error in the /etc/fstab file configuration"
+msgstr ""
+
 #: internal/ui/app.go:250
 #: internal/ui/app.go:573
 msgid "Uninstall Panel"
@@ -490,8 +494,8 @@ msgid "Unsupported filesystem type: %s"
 msgstr ""
 
 #: internal/service/installer.go:119
-#: internal/service/installer.go:206
-#: internal/system/firewall.go:44
+#: internal/service/installer.go:300
+#: internal/system/firewall.go:45
 msgid "Unsupported operating system"
 msgstr ""
 
