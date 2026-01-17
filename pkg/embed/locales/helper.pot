@@ -38,11 +38,15 @@ msgstr ""
 msgid "Cannot operate on system disk"
 msgstr ""
 
-#: internal/service/installer.go:54
+#: internal/service/installer.go:57
 msgid "Checking system requirements"
 msgstr ""
 
-#: internal/service/installer.go:60
+#: internal/service/installer.go:348
+msgid "Checksum mismatch"
+msgstr ""
+
+#: internal/service/installer.go:63
 msgid "Configuring firewall"
 msgstr ""
 
@@ -78,15 +82,15 @@ msgstr ""
 msgid "Creating partition on /dev/%s..."
 msgstr ""
 
-#: internal/service/installer.go:58
+#: internal/service/installer.go:61
 msgid "Creating swap file"
 msgstr ""
 
-#: internal/service/installer.go:61
+#: internal/service/installer.go:64
 msgid "Creating systemd service"
 msgstr ""
 
-#: internal/service/installer.go:55
+#: internal/service/installer.go:58
 msgid "Creating www user"
 msgstr ""
 
@@ -98,7 +102,7 @@ msgstr ""
 msgid "Deleting existing partitions..."
 msgstr ""
 
-#: internal/service/installer.go:63
+#: internal/service/installer.go:66
 msgid "Detecting installed apps"
 msgstr ""
 
@@ -123,7 +127,7 @@ msgstr ""
 msgid "Disk: %s, Mount Point: %s, File System: %s"
 msgstr ""
 
-#: internal/service/installer.go:59
+#: internal/service/installer.go:62
 msgid "Downloading panel"
 msgstr ""
 
@@ -131,7 +135,7 @@ msgstr ""
 msgid "Enter the mount point path (e.g. /opt/ace)"
 msgstr ""
 
-#: internal/service/installer.go:78
+#: internal/service/installer.go:81
 msgid "Error"
 msgstr ""
 
@@ -141,6 +145,10 @@ msgstr ""
 
 #: internal/system/firewall.go:70
 msgid "Failed to add port"
+msgstr ""
+
+#: internal/service/installer.go:343
+msgid "Failed to compute checksum"
 msgstr ""
 
 #: internal/system/user.go:66
@@ -163,7 +171,11 @@ msgstr ""
 msgid "Failed to disable"
 msgstr ""
 
-#: internal/service/installer.go:321
+#: internal/service/installer.go:332
+msgid "Failed to download checksum"
+msgstr ""
+
+#: internal/service/installer.go:324
 msgid "Failed to download panel"
 msgstr ""
 
@@ -179,15 +191,19 @@ msgstr ""
 msgid "Failed to get UUID"
 msgstr ""
 
-#: internal/service/installer.go:277
+#: internal/service/installer.go:280
 msgid "Failed to get version info"
 msgstr ""
 
-#: internal/service/installer.go:415
+#: internal/service/installer.go:442
 msgid "Failed to initialize panel"
 msgstr ""
 
-#: internal/service/installer.go:292
+#: internal/service/installer.go:338
+msgid "Failed to open downloaded file"
+msgstr ""
+
+#: internal/service/installer.go:295
 msgid "Failed to parse version info"
 msgstr ""
 
@@ -211,11 +227,11 @@ msgstr ""
 msgid "Failed to stop"
 msgstr ""
 
-#: internal/service/installer.go:421
+#: internal/service/installer.go:448
 msgid "Failed to sync panel"
 msgstr ""
 
-#: internal/service/installer.go:327
+#: internal/service/installer.go:354
 msgid "Failed to unzip panel"
 msgstr ""
 
@@ -244,7 +260,7 @@ msgstr ""
 msgid "High-risk operation"
 msgstr ""
 
-#: internal/service/installer.go:62
+#: internal/service/installer.go:65
 msgid "Initializing panel"
 msgstr ""
 
@@ -253,7 +269,7 @@ msgstr ""
 msgid "Install Panel"
 msgstr ""
 
-#: internal/service/installer.go:94
+#: internal/service/installer.go:97
 msgid "Installation complete"
 msgstr ""
 
@@ -265,7 +281,7 @@ msgstr ""
 msgid "Installation successful"
 msgstr ""
 
-#: internal/service/installer.go:57
+#: internal/service/installer.go:60
 msgid "Installing dependencies"
 msgstr ""
 
@@ -277,7 +293,7 @@ msgstr ""
 msgid "Installing partition tools..."
 msgstr ""
 
-#: internal/service/installer.go:136
+#: internal/service/installer.go:139
 msgid "Kernel version too old, requires 4.x or above"
 msgstr ""
 
@@ -320,7 +336,7 @@ msgstr ""
 msgid "No available disks found"
 msgstr ""
 
-#: internal/service/installer.go:311
+#: internal/service/installer.go:314
 msgid "No download URL found for architecture %s"
 msgstr ""
 
@@ -328,15 +344,15 @@ msgstr ""
 msgid "Operation failed"
 msgstr ""
 
-#: internal/service/installer.go:56
+#: internal/service/installer.go:59
 msgid "Optimizing system settings"
 msgstr ""
 
-#: internal/service/installer.go:96
+#: internal/service/installer.go:99
 msgid "Panel installed successfully"
 msgstr ""
 
-#: internal/service/installer.go:148
+#: internal/service/installer.go:151
 msgid "Panel is already installed"
 msgstr ""
 
@@ -404,7 +420,7 @@ msgstr ""
 msgid "Removing systemd service file..."
 msgstr ""
 
-#: internal/service/installer.go:143
+#: internal/service/installer.go:146
 msgid "Requires 64-bit system"
 msgstr ""
 
@@ -457,7 +473,7 @@ msgstr ""
 msgid "Uninstallation successful"
 msgstr ""
 
-#: internal/service/installer.go:121
+#: internal/service/installer.go:124
 msgid "Unsupported CPU architecture"
 msgstr ""
 
@@ -465,8 +481,8 @@ msgstr ""
 msgid "Unsupported filesystem type: %s"
 msgstr ""
 
-#: internal/service/installer.go:116
-#: internal/service/installer.go:204
+#: internal/service/installer.go:119
+#: internal/service/installer.go:207
 #: internal/system/firewall.go:44
 msgid "Unsupported operating system"
 msgstr ""
@@ -505,7 +521,7 @@ msgstr ""
 msgid "apt-get update failed"
 msgstr ""
 
-#: internal/service/installer.go:89
+#: internal/service/installer.go:92
 msgid "completed"
 msgstr ""
 
