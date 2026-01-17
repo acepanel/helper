@@ -49,7 +49,7 @@ func (m *dnfManager) UpdateCache(ctx context.Context) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("dnf makecache failed"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("dnf makecache failed"), result.Stderr)
 	}
 	return nil
 }
@@ -61,7 +61,7 @@ func (m *dnfManager) Install(ctx context.Context, packages ...string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("dnf install failed"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("dnf install failed"), result.Stderr)
 	}
 	return nil
 }
@@ -73,7 +73,7 @@ func (m *dnfManager) Remove(ctx context.Context, packages ...string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("dnf remove failed"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("dnf remove failed"), result.Stderr)
 	}
 	return nil
 }
@@ -159,7 +159,7 @@ func (m *aptManager) UpdateCache(ctx context.Context) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("apt-get update failed"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("apt-get update failed"), result.Stderr)
 	}
 	return nil
 }
@@ -171,7 +171,7 @@ func (m *aptManager) Install(ctx context.Context, packages ...string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("apt-get install failed"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("apt-get install failed"), result.Stderr)
 	}
 	return nil
 }
@@ -183,7 +183,7 @@ func (m *aptManager) Remove(ctx context.Context, packages ...string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("apt-get remove failed"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("apt-get remove failed"), result.Stderr)
 	}
 	return nil
 }

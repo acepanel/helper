@@ -46,7 +46,7 @@ func (s *systemd) Start(ctx context.Context, service string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to start"), service, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to start"), service, result.Stderr)
 	}
 	return nil
 }
@@ -57,7 +57,7 @@ func (s *systemd) Stop(ctx context.Context, service string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to stop"), service, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to stop"), service, result.Stderr)
 	}
 	return nil
 }
@@ -68,7 +68,7 @@ func (s *systemd) Enable(ctx context.Context, service string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to enable"), service, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to enable"), service, result.Stderr)
 	}
 	return nil
 }
@@ -79,7 +79,7 @@ func (s *systemd) Disable(ctx context.Context, service string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to disable"), service, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to disable"), service, result.Stderr)
 	}
 	return nil
 }
@@ -90,7 +90,7 @@ func (s *systemd) Restart(ctx context.Context, service string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to restart"), service, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to restart"), service, result.Stderr)
 	}
 	return nil
 }
@@ -106,7 +106,7 @@ func (s *systemd) DaemonReload(ctx context.Context) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("Failed to daemon-reload"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to daemon-reload"), result.Stderr)
 	}
 	return nil
 }

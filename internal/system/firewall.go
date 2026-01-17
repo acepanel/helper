@@ -41,7 +41,7 @@ func (f *firewall) Install(ctx context.Context) error {
 	}
 	pkgMgr := NewPackageManager(info.OS, f.executor)
 	if pkgMgr == nil {
-		return fmt.Errorf("%s", i18n.T().Get("Unsupported operating system"))
+		return fmt.Errorf("%s", i18n.T.Get("Unsupported operating system"))
 	}
 	return pkgMgr.Install(ctx, "firewalld")
 }
@@ -52,7 +52,7 @@ func (f *firewall) Enable(ctx context.Context) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("Failed to enable firewalld"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to enable firewalld"), result.Stderr)
 	}
 
 	// 设置默认zone
@@ -67,7 +67,7 @@ func (f *firewall) AddPort(ctx context.Context, port int, protocol string) error
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to add port"), portStr, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to add port"), portStr, result.Stderr)
 	}
 	return nil
 }
@@ -79,7 +79,7 @@ func (f *firewall) RemovePort(ctx context.Context, port int, protocol string) er
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to remove port"), portStr, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to remove port"), portStr, result.Stderr)
 	}
 	return nil
 }
@@ -90,7 +90,7 @@ func (f *firewall) Reload(ctx context.Context) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T().Get("Failed to reload firewall"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to reload firewall"), result.Stderr)
 	}
 	return nil
 }

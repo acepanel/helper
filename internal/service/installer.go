@@ -51,16 +51,16 @@ func (i *installer) Install(ctx context.Context, cfg *types.InstallConfig, progr
 		weight float64
 		fn     func(ctx context.Context, cfg *types.InstallConfig) error
 	}{
-		{i18n.T().Get("Checking system requirements"), 0.05, i.checkSystem},
-		{i18n.T().Get("Creating www user"), 0.02, i.createUser},
-		{i18n.T().Get("Optimizing system settings"), 0.08, i.optimizeSystem},
-		{i18n.T().Get("Installing dependencies"), 0.20, i.installDeps},
-		{i18n.T().Get("Creating swap file"), 0.05, i.createSwap},
-		{i18n.T().Get("Downloading panel"), 0.30, i.downloadPanel},
-		{i18n.T().Get("Configuring firewall"), 0.10, i.configureFirewall},
-		{i18n.T().Get("Creating systemd service"), 0.10, i.createService},
-		{i18n.T().Get("Initializing panel"), 0.08, i.initPanel},
-		{i18n.T().Get("Detecting installed apps"), 0.02, i.detectApps},
+		{i18n.T.Get("Checking system requirements"), 0.05, i.checkSystem},
+		{i18n.T.Get("Creating www user"), 0.02, i.createUser},
+		{i18n.T.Get("Optimizing system settings"), 0.08, i.optimizeSystem},
+		{i18n.T.Get("Installing dependencies"), 0.20, i.installDeps},
+		{i18n.T.Get("Creating swap file"), 0.05, i.createSwap},
+		{i18n.T.Get("Downloading panel"), 0.30, i.downloadPanel},
+		{i18n.T.Get("Configuring firewall"), 0.10, i.configureFirewall},
+		{i18n.T.Get("Creating systemd service"), 0.10, i.createService},
+		{i18n.T.Get("Initializing panel"), 0.08, i.initPanel},
+		{i18n.T.Get("Detecting installed apps"), 0.02, i.detectApps},
 	}
 
 	var currentProgress float64
@@ -75,7 +75,7 @@ func (i *installer) Install(ctx context.Context, cfg *types.InstallConfig, progr
 			progress <- types.Progress{
 				Step:    step.name,
 				Percent: currentProgress,
-				Message: fmt.Sprintf("%s: %v", i18n.T().Get("Error"), err),
+				Message: fmt.Sprintf("%s: %v", i18n.T.Get("Error"), err),
 				IsError: true,
 				Error:   err,
 			}
@@ -86,14 +86,14 @@ func (i *installer) Install(ctx context.Context, cfg *types.InstallConfig, progr
 		progress <- types.Progress{
 			Step:    step.name,
 			Percent: currentProgress,
-			Message: step.name + " " + i18n.T().Get("completed"),
+			Message: step.name + " " + i18n.T.Get("completed"),
 		}
 	}
 
 	progress <- types.Progress{
-		Step:    i18n.T().Get("Installation complete"),
+		Step:    i18n.T.Get("Installation complete"),
 		Percent: 1.0,
-		Message: i18n.T().Get("Panel installed successfully"),
+		Message: i18n.T.Get("Panel installed successfully"),
 	}
 
 	return nil
@@ -113,12 +113,12 @@ func (i *installer) checkSystem(ctx context.Context, cfg *types.InstallConfig) e
 
 	// 检查OS
 	if info.OS == types.OSUnknown {
-		return errors.New(i18n.T().Get("Unsupported operating system"))
+		return errors.New(i18n.T.Get("Unsupported operating system"))
 	}
 
 	// 检查架构
 	if info.Arch == types.ArchUnknown {
-		return errors.New(i18n.T().Get("Unsupported CPU architecture"))
+		return errors.New(i18n.T.Get("Unsupported CPU architecture"))
 	}
 
 	// 检查CPU特性
@@ -133,19 +133,19 @@ func (i *installer) checkSystem(ctx context.Context, cfg *types.InstallConfig) e
 			major := 0
 			_, _ = fmt.Sscanf(parts[0], "%d", &major)
 			if major < 4 {
-				return errors.New(i18n.T().Get("Kernel version too old, requires 4.x or above"))
+				return errors.New(i18n.T.Get("Kernel version too old, requires 4.x or above"))
 			}
 		}
 	}
 
 	// 检查是否64位
 	if !info.Is64Bit {
-		return errors.New(i18n.T().Get("Requires 64-bit system"))
+		return errors.New(i18n.T.Get("Requires 64-bit system"))
 	}
 
 	// 检查是否已安装
 	if i.detector.CheckPanelInstalled(cfg.SetupPath) {
-		return errors.New(i18n.T().Get("Panel is already installed"))
+		return errors.New(i18n.T.Get("Panel is already installed"))
 	}
 
 	// 保存系统信息到配置
@@ -201,7 +201,7 @@ func (i *installer) installDeps(ctx context.Context, cfg *types.InstallConfig) e
 	info, _ := i.detector.Detect(ctx)
 	pkgMgr := system.NewPackageManager(info.OS, i.executor)
 	if pkgMgr == nil {
-		return errors.New(i18n.T().Get("Unsupported operating system"))
+		return errors.New(i18n.T.Get("Unsupported operating system"))
 	}
 
 	// 设置镜像源
@@ -274,7 +274,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 		SetContext(ctx).
 		Get("https://api.acepanel.net/version/latest")
 	if err != nil {
-		return fmt.Errorf("%s: %w", i18n.T().Get("Failed to get version info"), err)
+		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to get version info"), err)
 	}
 
 	var versionResp struct {
@@ -289,7 +289,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	}
 
 	if err := json.Unmarshal(resp.Body(), &versionResp); err != nil {
-		return fmt.Errorf("%s: %w", i18n.T().Get("Failed to parse version info"), err)
+		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to parse version info"), err)
 	}
 
 	// 根据架构选择下载链接
@@ -308,23 +308,23 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	}
 
 	if downloadURL == "" {
-		return errors.New(i18n.T().Get("No download URL found for architecture %s", arch))
+		return errors.New(i18n.T.Get("No download URL found for architecture %s", arch))
 	}
 
 	// 下载面板
 	zipPath := cfg.SetupPath + "/panel/panel.zip"
-	resp, err = client.R().
+	_, err = client.R().
 		SetContext(ctx).
 		SetOutput(zipPath).
 		Get(downloadURL)
 	if err != nil {
-		return fmt.Errorf("%s: %w", i18n.T().Get("Failed to download panel"), err)
+		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to download panel"), err)
 	}
 
 	// 解压
 	result, err := i.executor.Run(ctx, "unzip", "-o", zipPath, "-d", cfg.SetupPath+"/panel")
 	if err != nil || result.ExitCode != 0 {
-		return errors.New(i18n.T().Get("Failed to unzip panel"))
+		return errors.New(i18n.T.Get("Failed to unzip panel"))
 	}
 
 	// 删除zip文件
@@ -412,13 +412,13 @@ func (i *installer) initPanel(ctx context.Context, cfg *types.InstallConfig) err
 	// 初始化面板
 	result, err := i.executor.Run(ctx, "/usr/local/sbin/acepanel", "init")
 	if err != nil || result.ExitCode != 0 {
-		return errors.New(i18n.T().Get("Failed to initialize panel"))
+		return errors.New(i18n.T.Get("Failed to initialize panel"))
 	}
 
 	// 同步
 	result, err = i.executor.Run(ctx, "/usr/local/sbin/acepanel", "sync")
 	if err != nil || result.ExitCode != 0 {
-		return errors.New(i18n.T().Get("Failed to sync panel"))
+		return errors.New(i18n.T.Get("Failed to sync panel"))
 	}
 
 	return nil

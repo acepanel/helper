@@ -52,7 +52,7 @@ func (u *userManager) CreateUser(ctx context.Context, username, groupname string
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to create user"), username, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to create user"), username, result.Stderr)
 	}
 	return nil
 }
@@ -63,7 +63,7 @@ func (u *userManager) CreateGroup(ctx context.Context, groupname string) error {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T().Get("Failed to create group"), groupname, result.Stderr)
+		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to create group"), groupname, result.Stderr)
 	}
 	return nil
 }

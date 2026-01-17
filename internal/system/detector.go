@@ -234,7 +234,7 @@ func (d *detector) CheckRoot() error {
 		return err
 	}
 	if currentUser.Uid != "0" {
-		return errors.New(i18n.T().Get("Please run with root privileges"))
+		return errors.New(i18n.T.Get("Please run with root privileges"))
 	}
 	return nil
 }
@@ -252,7 +252,7 @@ func (d *detector) CheckCPUFeatures(ctx context.Context) error {
 
 	// 检查是否支持ssse3 (x86-64-v2的标志之一)
 	if !strings.Contains(string(data), "ssse3") {
-		return errors.New(i18n.T().Get("CPU must support at least x86-64-v2 instruction set"))
+		return errors.New(i18n.T.Get("CPU must support at least x86-64-v2 instruction set"))
 	}
 
 	return nil

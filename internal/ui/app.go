@@ -2,6 +2,7 @@ package ui
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -220,7 +221,7 @@ func (a *App) updateLanguageSelect(msg tea.Msg) (tea.Model, tea.Cmd) {
 	if a.langForm.State == huh.StateCompleted {
 		locale := gotext.NewLocaleFSWithPath(a.langChoice, embed.LocalesFS, "locales")
 		locale.AddDomain("helper")
-		i18n.Init(locale)
+		i18n.T = locale
 		a.state = ViewMainMenu
 		return a, a.initMainMenu()
 	}
@@ -238,12 +239,12 @@ func (a *App) initMainMenu() tea.Cmd {
 	a.menuForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewSelect[MenuChoice]().
-				Title(i18n.T().Get("Select Operation")).
+				Title(i18n.T.Get("Select Operation")).
 				Options(
-					huh.NewOption(i18n.T().Get("Install Panel"), MenuInstall),
-					huh.NewOption(i18n.T().Get("Uninstall Panel"), MenuUninstall),
-					huh.NewOption(i18n.T().Get("Disk Partition"), MenuMount),
-					huh.NewOption(i18n.T().Get("Exit"), MenuExit),
+					huh.NewOption(i18n.T.Get("Install Panel"), MenuInstall),
+					huh.NewOption(i18n.T.Get("Uninstall Panel"), MenuUninstall),
+					huh.NewOption(i18n.T.Get("Disk Partition"), MenuMount),
+					huh.NewOption(i18n.T.Get("Exit"), MenuExit),
 				).
 				Value(&a.menuChoice),
 		),
@@ -302,10 +303,10 @@ func (a *App) initInstall() tea.Cmd {
 	a.installForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewConfirm().
-				Title(i18n.T().Get("Confirm Installation")).
-				Description(i18n.T().Get("Panel will be installed to %s", a.setupPath)).
-				Affirmative(i18n.T().Get("Yes")).
-				Negative(i18n.T().Get("No")).
+				Title(i18n.T.Get("Confirm Installation")).
+				Description(i18n.T.Get("Panel will be installed to %s", a.setupPath)).
+				Affirmative(i18n.T.Get("Yes")).
+				Negative(i18n.T.Get("No")).
 				Value(&a.installConfirmed),
 		),
 	).WithTheme(huh.ThemeDracula())
@@ -400,19 +401,19 @@ func (a *App) viewInstall() string {
 	var sb strings.Builder
 	sb.WriteString(RenderLogo())
 	sb.WriteString("\n")
-	sb.WriteString(RenderTitle(i18n.T().Get("Install Panel")))
+	sb.WriteString(RenderTitle(i18n.T.Get("Install Panel")))
 	sb.WriteString("\n")
 
 	if a.installDone {
 		if a.installErr != nil {
-			sb.WriteString(RenderError(i18n.T().Get("Installation failed")))
+			sb.WriteString(RenderError(i18n.T.Get("Installation failed")))
 			sb.WriteString("\n\n")
 			sb.WriteString(ErrorBoxStyle.Render(a.installErr.Error()))
 		} else {
-			sb.WriteString(RenderSuccess(i18n.T().Get("Installation successful")))
+			sb.WriteString(RenderSuccess(i18n.T.Get("Installation successful")))
 		}
 		sb.WriteString("\n\n")
-		sb.WriteString(RenderHelp("Enter", i18n.T().Get("Back")))
+		sb.WriteString(RenderHelp("Enter", i18n.T.Get("Back")))
 	} else if a.installRunning {
 		sb.WriteString(fmt.Sprintf("%s %s\n\n", a.installSpinner.View(), a.installStep))
 		sb.WriteString(a.installProgress.ViewAs(a.installPercent))
@@ -520,10 +521,10 @@ func (a *App) initUninstallConfirm() {
 	a.uninstallForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewConfirm().
-				Title(i18n.T().Get("Confirm Uninstallation")).
-				Description(i18n.T().Get("Are you sure you want to uninstall the panel?")).
-				Affirmative(i18n.T().Get("Yes")).
-				Negative(i18n.T().Get("No")).
+				Title(i18n.T.Get("Confirm Uninstallation")).
+				Description(i18n.T.Get("Are you sure you want to uninstall the panel?")).
+				Affirmative(i18n.T.Get("Yes")).
+				Negative(i18n.T.Get("No")).
 				Value(&a.uninstallConfirm),
 		),
 	).WithTheme(huh.ThemeDracula())
@@ -551,26 +552,26 @@ func (a *App) viewUninstall() string {
 	var sb strings.Builder
 	sb.WriteString(RenderLogo())
 	sb.WriteString("\n")
-	sb.WriteString(RenderTitle(i18n.T().Get("Uninstall Panel")))
+	sb.WriteString(RenderTitle(i18n.T.Get("Uninstall Panel")))
 	sb.WriteString("\n")
 
 	switch a.uninstallState {
 	case 0: // warning
 		sb.WriteString(WarningBoxStyle.Render(
-			RenderWarning(i18n.T().Get("High-risk operation")) + "\n\n" +
-				i18n.T().Get("Please backup all data before uninstalling.") + "\n" +
-				i18n.T().Get("All data will be cleared and cannot be recovered!"),
+			RenderWarning(i18n.T.Get("High-risk operation")) + "\n\n" +
+				i18n.T.Get("Please backup all data before uninstalling.") + "\n" +
+				i18n.T.Get("All data will be cleared and cannot be recovered!"),
 		))
 		sb.WriteString("\n\n")
-		sb.WriteString(RenderHelp("Enter", i18n.T().Get("Continue"), "Esc", i18n.T().Get("Back")))
+		sb.WriteString(RenderHelp("Enter", i18n.T.Get("Continue"), "Esc", i18n.T.Get("Back")))
 
 	case 1: // countdown
 		sb.WriteString(WarningBoxStyle.Render(
 			fmt.Sprintf("%s\n\n%s %d %s",
-				i18n.T().Get("For safety, please wait before proceeding"),
-				i18n.T().Get("Waiting:"),
+				i18n.T.Get("For safety, please wait before proceeding"),
+				i18n.T.Get("Waiting:"),
 				a.uninstallCountdown,
-				i18n.T().Get("seconds"),
+				i18n.T.Get("seconds"),
 			),
 		))
 		sb.WriteString("\n\n")
@@ -578,7 +579,7 @@ func (a *App) viewUninstall() string {
 			sb.WriteString(MutedStyle.Render(fmt.Sprintf("Press Enter %d more times to skip", 10-a.uninstallSkipCount)))
 			sb.WriteString("\n")
 		}
-		sb.WriteString(RenderHelp("Esc", i18n.T().Get("Cancel"), "Enter×10", i18n.T().Get("Skip")))
+		sb.WriteString(RenderHelp("Esc", i18n.T.Get("Cancel"), "Enter×10", i18n.T.Get("Skip")))
 
 	case 2: // confirm
 		sb.WriteString(a.uninstallForm.View())
@@ -592,16 +593,16 @@ func (a *App) viewUninstall() string {
 
 	case 4: // done
 		if a.uninstallErr != nil {
-			sb.WriteString(RenderError(i18n.T().Get("Uninstallation failed")))
+			sb.WriteString(RenderError(i18n.T.Get("Uninstallation failed")))
 			sb.WriteString("\n\n")
 			sb.WriteString(ErrorBoxStyle.Render(a.uninstallErr.Error()))
 		} else {
-			sb.WriteString(RenderSuccess(i18n.T().Get("Uninstallation successful")))
+			sb.WriteString(RenderSuccess(i18n.T.Get("Uninstallation successful")))
 			sb.WriteString("\n\n")
-			sb.WriteString(i18n.T().Get("Thank you for using AcePanel."))
+			sb.WriteString(i18n.T.Get("Thank you for using AcePanel."))
 		}
 		sb.WriteString("\n\n")
-		sb.WriteString(RenderHelp("Enter", i18n.T().Get("Back")))
+		sb.WriteString(RenderHelp("Enter", i18n.T.Get("Back")))
 	}
 
 	return sb.String()
@@ -641,7 +642,7 @@ func (a *App) updateMount(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		if len(msg.disks) == 0 {
 			a.mountDone = true
-			a.mountErr = fmt.Errorf(i18n.T().Get("No available disks found"))
+			a.mountErr = errors.New(i18n.T.Get("No available disks found"))
 			return a, nil
 		}
 		a.disks = msg.disks
@@ -739,8 +740,8 @@ func (a *App) initDiskForm() {
 	a.mountDiskForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewSelect[string]().
-				Title(i18n.T().Get("Select Disk")).
-				Description(i18n.T().Get("Select a disk to partition and mount")).
+				Title(i18n.T.Get("Select Disk")).
+				Description(i18n.T.Get("Select a disk to partition and mount")).
 				Options(options...).
 				Value(&a.mountConfig.Disk),
 		),
@@ -751,12 +752,12 @@ func (a *App) initMountPointForm() {
 	a.mountPointForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewInput().
-				Title(i18n.T().Get("Mount Point")).
-				Description(i18n.T().Get("Enter the mount point path (e.g. /opt/ace)")).
+				Title(i18n.T.Get("Mount Point")).
+				Description(i18n.T.Get("Enter the mount point path (e.g. /opt/ace)")).
 				Value(&a.mountConfig.MountPoint).
 				Validate(func(s string) error {
 					if len(s) == 0 || s[0] != '/' {
-						return fmt.Errorf(i18n.T().Get("Please enter an absolute path"))
+						return errors.New(i18n.T.Get("Please enter an absolute path"))
 					}
 					return nil
 				}),
@@ -768,10 +769,10 @@ func (a *App) initFSForm() {
 	a.mountFSForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewSelect[types.FSType]().
-				Title(i18n.T().Get("File System")).
-				Description(i18n.T().Get("Select the file system type")).
+				Title(i18n.T.Get("File System")).
+				Description(i18n.T.Get("Select the file system type")).
 				Options(
-					huh.NewOption(fmt.Sprintf("ext4 (%s)", i18n.T().Get("Recommended")), types.FSTypeExt4),
+					huh.NewOption(fmt.Sprintf("ext4 (%s)", i18n.T.Get("Recommended")), types.FSTypeExt4),
 					huh.NewOption("xfs", types.FSTypeXFS),
 				).
 				Value(&a.mountConfig.FSType),
@@ -784,14 +785,14 @@ func (a *App) initMountConfirmForm() {
 	a.mountConfirmForm = huh.NewForm(
 		huh.NewGroup(
 			huh.NewConfirm().
-				Title(i18n.T().Get("Confirm Operation")).
-				Description(i18n.T().Get("Disk: %s, Mount Point: %s, File System: %s",
+				Title(i18n.T.Get("Confirm Operation")).
+				Description(i18n.T.Get("Disk: %s, Mount Point: %s, File System: %s",
 					a.mountConfig.Disk,
 					a.mountConfig.MountPoint,
 					a.mountConfig.FSType,
 				)).
-				Affirmative(i18n.T().Get("Yes")).
-				Negative(i18n.T().Get("No")).
+				Affirmative(i18n.T.Get("Yes")).
+				Negative(i18n.T.Get("No")).
 				Value(&a.mountConfirmed),
 		),
 	).WithTheme(huh.ThemeDracula())
@@ -813,35 +814,35 @@ func (a *App) viewMount() string {
 	var sb strings.Builder
 	sb.WriteString(RenderLogo())
 	sb.WriteString("\n")
-	sb.WriteString(RenderTitle(i18n.T().Get("Disk Partition")))
+	sb.WriteString(RenderTitle(i18n.T.Get("Disk Partition")))
 	sb.WriteString("\n")
 
 	if a.mountDone {
 		if a.mountErr != nil {
-			sb.WriteString(RenderError(i18n.T().Get("Operation failed")))
+			sb.WriteString(RenderError(i18n.T.Get("Operation failed")))
 			sb.WriteString("\n\n")
 			sb.WriteString(ErrorBoxStyle.Render(a.mountErr.Error()))
 		} else {
-			sb.WriteString(RenderSuccess(i18n.T().Get("Partition and mount successful")))
+			sb.WriteString(RenderSuccess(i18n.T.Get("Partition and mount successful")))
 			sb.WriteString("\n\n")
 			sb.WriteString(BoxStyle.Render(fmt.Sprintf(
 				"%s: /dev/%s1\n%s: %s\n%s: %s",
-				i18n.T().Get("Device"), a.mountConfig.Disk,
-				i18n.T().Get("Mount Point"), a.mountConfig.MountPoint,
-				i18n.T().Get("File System"), a.mountConfig.FSType,
+				i18n.T.Get("Device"), a.mountConfig.Disk,
+				i18n.T.Get("Mount Point"), a.mountConfig.MountPoint,
+				i18n.T.Get("File System"), a.mountConfig.FSType,
 			)))
 		}
 		sb.WriteString("\n\n")
-		sb.WriteString(RenderHelp("Enter", i18n.T().Get("Back")))
+		sb.WriteString(RenderHelp("Enter", i18n.T.Get("Back")))
 		return sb.String()
 	}
 
 	switch a.mountState {
 	case 0: // loading
-		sb.WriteString(fmt.Sprintf("%s %s", a.mountSpinner.View(), i18n.T().Get("Loading disk list...")))
+		sb.WriteString(fmt.Sprintf("%s %s", a.mountSpinner.View(), i18n.T.Get("Loading disk list...")))
 
 	case 1: // select disk
-		sb.WriteString(i18n.T().Get("Available disks:"))
+		sb.WriteString(i18n.T.Get("Available disks:"))
 		sb.WriteString("\n\n")
 		for _, disk := range a.disks {
 			sb.WriteString(fmt.Sprintf("  • %s (%s)\n", disk.Name, disk.Size))
@@ -856,7 +857,7 @@ func (a *App) viewMount() string {
 		sb.WriteString(a.mountFSForm.View())
 
 	case 4: // confirm
-		sb.WriteString(WarningBoxStyle.Render(i18n.T().Get("Warning: This will erase all data on the disk!")))
+		sb.WriteString(WarningBoxStyle.Render(i18n.T.Get("Warning: This will erase all data on the disk!")))
 		sb.WriteString("\n\n")
 		sb.WriteString(a.mountConfirmForm.View())
 
