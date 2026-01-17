@@ -2,9 +2,12 @@ package service
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -316,9 +319,33 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	_, err = client.R().
 		SetContext(ctx).
 		SetOutput(zipPath).
-		Get(downloadURL)
+		Get("https://dl.aceopanel.net" + downloadURL)
 	if err != nil {
 		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to download panel"), err)
+	}
+
+	// 校验SHA256
+	resp, err = client.R().
+		SetContext(ctx).
+		Get("https://dl.aceopanel.net" + downloadURL + ".sha256")
+	if err != nil {
+		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to download checksum"), err)
+	}
+	expectedHash := strings.TrimSpace(strings.Split(string(resp.Body()), " ")[0])
+
+	f, err := os.Open(zipPath)
+	if err != nil {
+		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to open downloaded file"), err)
+	}
+	defer func() { _ = f.Close() }()
+	h := sha256.New()
+	if _, err := io.Copy(h, f); err != nil {
+		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to compute checksum"), err)
+	}
+	actualHash := hex.EncodeToString(h.Sum(nil))
+
+	if actualHash != expectedHash {
+		return errors.New(i18n.T.Get("Checksum mismatch"))
 	}
 
 	// 解压
