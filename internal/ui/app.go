@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os/exec"
 	"strings"
 	"time"
 
@@ -43,8 +44,11 @@ const (
 
 // 消息类型
 type (
-	progressMsg          types.Progress
-	installCompleteMsg   struct{ err error }
+	progressMsg        types.Progress
+	installCompleteMsg struct {
+		err  error
+		info string
+	}
 	uninstallCompleteMsg struct{ err error }
 	mountCompleteMsg     struct{ err error }
 	countdownTickMsg     struct{ remaining int }
@@ -84,6 +88,7 @@ type App struct {
 	installErr       error
 	installRunning   bool
 	installDone      bool
+	installInfo      string // 安装完成后的面板信息
 
 	// 卸载
 	uninstallCountdown int
@@ -341,6 +346,7 @@ func (a *App) updateInstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 		a.installRunning = false
 		a.installDone = true
 		a.installErr = msg.err
+		a.installInfo = msg.info
 		return a, nil
 
 	case spinner.TickMsg:
@@ -393,7 +399,15 @@ func (a *App) startInstall() tea.Cmd {
 		close(progressCh)
 		time.Sleep(100 * time.Millisecond)
 
-		return installCompleteMsg{err: err}
+		// 安装成功后获取面板信息
+		var info string
+		if err == nil {
+			cmd := exec.CommandContext(ctx, "/usr/local/sbin/acepanel", "info")
+			output, _ := cmd.Output()
+			info = string(output)
+		}
+
+		return installCompleteMsg{err: err, info: info}
 	}
 }
 
@@ -411,6 +425,10 @@ func (a *App) viewInstall() string {
 			sb.WriteString(ErrorBoxStyle.Render(a.installErr.Error()))
 		} else {
 			sb.WriteString(RenderSuccess(i18n.T.Get("Installation successful")))
+			if a.installInfo != "" {
+				sb.WriteString("\n\n")
+				sb.WriteString(InfoBoxStyle.Render(strings.TrimSpace(a.installInfo)))
+			}
 		}
 		sb.WriteString("\n\n")
 		sb.WriteString(RenderHelp("Enter", i18n.T.Get("Back")))
