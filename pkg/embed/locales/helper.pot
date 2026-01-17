@@ -42,7 +42,7 @@ msgstr ""
 msgid "Checking system requirements"
 msgstr ""
 
-#: internal/service/installer.go:348
+#: internal/service/installer.go:347
 msgid "Checksum mismatch"
 msgstr ""
 
@@ -147,7 +147,7 @@ msgstr ""
 msgid "Failed to add port"
 msgstr ""
 
-#: internal/service/installer.go:343
+#: internal/service/installer.go:342
 msgid "Failed to compute checksum"
 msgstr ""
 
@@ -171,11 +171,11 @@ msgstr ""
 msgid "Failed to disable"
 msgstr ""
 
-#: internal/service/installer.go:332
+#: internal/service/installer.go:331
 msgid "Failed to download checksum"
 msgstr ""
 
-#: internal/service/installer.go:324
+#: internal/service/installer.go:323
 msgid "Failed to download panel"
 msgstr ""
 
@@ -191,19 +191,19 @@ msgstr ""
 msgid "Failed to get UUID"
 msgstr ""
 
-#: internal/service/installer.go:280
+#: internal/service/installer.go:279
 msgid "Failed to get version info"
 msgstr ""
 
-#: internal/service/installer.go:442
+#: internal/service/installer.go:448
 msgid "Failed to initialize panel"
 msgstr ""
 
-#: internal/service/installer.go:338
+#: internal/service/installer.go:337
 msgid "Failed to open downloaded file"
 msgstr ""
 
-#: internal/service/installer.go:295
+#: internal/service/installer.go:294
 msgid "Failed to parse version info"
 msgstr ""
 
@@ -227,11 +227,11 @@ msgstr ""
 msgid "Failed to stop"
 msgstr ""
 
-#: internal/service/installer.go:448
+#: internal/service/installer.go:454
 msgid "Failed to sync panel"
 msgstr ""
 
-#: internal/service/installer.go:354
+#: internal/service/installer.go:353
 msgid "Failed to unzip panel"
 msgstr ""
 
@@ -293,8 +293,8 @@ msgstr ""
 msgid "Installing partition tools..."
 msgstr ""
 
-#: internal/service/installer.go:139
-msgid "Kernel version too old, requires 4.x or above"
+#: internal/service/installer.go:138
+msgid "Kernel version too old, requires 5.x or above"
 msgstr ""
 
 #: internal/ui/app.go:842
@@ -336,7 +336,7 @@ msgstr ""
 msgid "No available disks found"
 msgstr ""
 
-#: internal/service/installer.go:314
+#: internal/service/installer.go:313
 msgid "No download URL found for architecture %s"
 msgstr ""
 
@@ -352,7 +352,7 @@ msgstr ""
 msgid "Panel installed successfully"
 msgstr ""
 
-#: internal/service/installer.go:151
+#: internal/service/installer.go:150
 msgid "Panel is already installed"
 msgstr ""
 
@@ -420,7 +420,7 @@ msgstr ""
 msgid "Removing systemd service file..."
 msgstr ""
 
-#: internal/service/installer.go:146
+#: internal/service/installer.go:145
 msgid "Requires 64-bit system"
 msgstr ""
 
@@ -473,7 +473,7 @@ msgstr ""
 msgid "Uninstallation successful"
 msgstr ""
 
-#: internal/service/installer.go:124
+#: internal/service/installer.go:123
 msgid "Unsupported CPU architecture"
 msgstr ""
 
@@ -482,7 +482,7 @@ msgid "Unsupported filesystem type: %s"
 msgstr ""
 
 #: internal/service/installer.go:119
-#: internal/service/installer.go:207
+#: internal/service/installer.go:206
 #: internal/system/firewall.go:44
 msgid "Unsupported operating system"
 msgstr ""
