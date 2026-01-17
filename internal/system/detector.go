@@ -259,7 +259,7 @@ func (d *detector) CheckCPUFeatures(ctx context.Context) error {
 }
 
 func (d *detector) CheckPanelInstalled(path string) bool {
-	_, err := os.Stat(path + "/panel/web")
+	_, err := os.Stat(path + "/panel/ace")
 	return err == nil
 }
 

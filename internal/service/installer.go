@@ -89,7 +89,7 @@ func (i *installer) Install(ctx context.Context, cfg *types.InstallConfig, progr
 		progress <- types.Progress{
 			Step:    step.name,
 			Percent: currentProgress,
-			Message: step.name + " " + i18n.T.Get("completed"),
+			Message: step.name + " - " + i18n.T.Get("completed"),
 		}
 	}
 
@@ -118,14 +118,13 @@ func (i *installer) checkSystem(ctx context.Context, cfg *types.InstallConfig) e
 	if info.OS == types.OSUnknown {
 		return errors.New(i18n.T.Get("Unsupported operating system"))
 	}
-
 	// 检查架构
 	if info.Arch == types.ArchUnknown {
 		return errors.New(i18n.T.Get("Unsupported CPU architecture"))
 	}
 
 	// 检查CPU特性
-	if err := i.detector.CheckCPUFeatures(ctx); err != nil {
+	if err = i.detector.CheckCPUFeatures(ctx); err != nil {
 		return err
 	}
 
@@ -135,8 +134,8 @@ func (i *installer) checkSystem(ctx context.Context, cfg *types.InstallConfig) e
 		if len(parts) > 0 {
 			major := 0
 			_, _ = fmt.Sscanf(parts[0], "%d", &major)
-			if major < 4 {
-				return errors.New(i18n.T.Get("Kernel version too old, requires 4.x or above"))
+			if major < 5 {
+				return errors.New(i18n.T.Get("Kernel version too old, requires 5.x or above"))
 			}
 		}
 	}
@@ -291,7 +290,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 		} `json:"data"`
 	}
 
-	if err := json.Unmarshal(resp.Body(), &versionResp); err != nil {
+	if err = json.Unmarshal(resp.Body(), &versionResp); err != nil {
 		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to parse version info"), err)
 	}
 
@@ -319,7 +318,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	_, err = client.R().
 		SetContext(ctx).
 		SetOutput(zipPath).
-		Get("https://dl.aceopanel.net" + downloadURL)
+		Get("https://dl.acepanel.net" + downloadURL)
 	if err != nil {
 		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to download panel"), err)
 	}
@@ -327,7 +326,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	// 校验SHA256
 	resp, err = client.R().
 		SetContext(ctx).
-		Get("https://dl.aceopanel.net" + downloadURL + ".sha256")
+		Get("https://dl.acepanel.net" + downloadURL + ".sha256")
 	if err != nil {
 		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to download checksum"), err)
 	}
@@ -411,14 +410,21 @@ func (i *installer) configureFirewall(ctx context.Context, cfg *types.InstallCon
 func (i *installer) createService(ctx context.Context, cfg *types.InstallConfig) error {
 	serviceContent := fmt.Sprintf(`[Unit]
 Description=AcePanel
-After=network.target
+After=syslog.target network.target
+Wants=network.target
 
 [Service]
 Type=simple
 ExecStart=%s/panel/ace
 WorkingDirectory=%s/panel
+ExecReload=kill -s HUP $MAINPID
+ExecStop=kill -s QUIT $MAINPID
+User=root
 Restart=always
 RestartSec=5
+LimitNOFILE=1048576
+LimitNPROC=1048576
+Delegate=yes
 
 [Install]
 WantedBy=multi-user.target
@@ -432,7 +438,7 @@ WantedBy=multi-user.target
 		return err
 	}
 
-	return i.systemd.Enable(ctx, "acepanel")
+	return nil
 }
 
 func (i *installer) initPanel(ctx context.Context, cfg *types.InstallConfig) error {
@@ -448,7 +454,7 @@ func (i *installer) initPanel(ctx context.Context, cfg *types.InstallConfig) err
 		return errors.New(i18n.T.Get("Failed to sync panel"))
 	}
 
-	return nil
+	return i.systemd.Enable(ctx, "acepanel")
 }
 
 func (i *installer) detectApps(ctx context.Context, cfg *types.InstallConfig) error {
