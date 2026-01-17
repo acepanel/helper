@@ -168,31 +168,125 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	_, _ = i.executor.Run(ctx, "setenforce", "0")
 	_, _ = i.executor.Run(ctx, "sed", "-i", "s/SELINUX=enforcing/SELINUX=disabled/g", "/etc/selinux/config")
 
-	// 系统参数优化
+	// 临时设置系统参数
 	_, _ = i.executor.Run(ctx, "sysctl", "-w", "vm.overcommit_memory=1")
 	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=1024")
 
-	// 写入sysctl配置
-	sysctlConf := `fs.file-max = 2147483584
-net.core.somaxconn = 1024
-net.ipv4.tcp_congestion_control = bbr
-`
-	_ = os.WriteFile("/etc/sysctl.d/99-panel.conf", []byte(sysctlConf), 0644)
+	// 设置 file-max
+	_ = os.WriteFile("/proc/sys/fs/file-max", []byte("2147483584"), 0644)
 
-	// 写入limits配置
-	limitsConf := `* soft nofile 1048576
-* hard nofile 1048576
-* soft nproc 1048576
-* hard nproc 1048576
-`
-	// 追加到limits.conf
-	f, err := os.OpenFile("/etc/security/limits.conf", os.O_APPEND|os.O_WRONLY, 0644)
+	// 检查并追加 limits.conf 配置
+	limitsContent, _ := os.ReadFile("/etc/security/limits.conf")
+	limitsStr := string(limitsContent)
+	limitsFile, err := os.OpenFile("/etc/security/limits.conf", os.O_APPEND|os.O_WRONLY, 0644)
 	if err == nil {
-		_, _ = f.WriteString(limitsConf)
-		_ = f.Close()
+		if !strings.Contains(limitsStr, "* soft nofile") {
+			_, _ = limitsFile.WriteString("* soft nofile 1048576\n")
+		}
+		if !strings.Contains(limitsStr, "* hard nofile") {
+			_, _ = limitsFile.WriteString("* hard nofile 1048576\n")
+		}
+		if !strings.Contains(limitsStr, "* soft nproc") {
+			_, _ = limitsFile.WriteString("* soft nproc 1048576\n")
+		}
+		if !strings.Contains(limitsStr, "* hard nproc") {
+			_, _ = limitsFile.WriteString("* hard nproc 1048576\n")
+		}
+		_ = limitsFile.Close()
 	}
 
-	// 重载sysctl
+	// 检查 sysctl.conf 中是否已有 fs.file-max
+	sysctlContent, _ := os.ReadFile("/etc/sysctl.conf")
+
+	// 构建 sysctl 配置
+	var sysctlConf strings.Builder
+
+	// fs.file-max
+	if !strings.Contains(string(sysctlContent), "fs.file-max") {
+		sysctlConf.WriteString("fs.file-max = 2147483584\n")
+	}
+
+	// 自动开启 BBR
+	// 清理旧配置
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.core.default_qdisc/d", "/etc/sysctl.conf")
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.ipv4.tcp_congestion_control/d", "/etc/sysctl.conf")
+
+	// 检查 BBR 支持
+	bbrSupport, _ := i.executor.Run(ctx, "sh", "-c", "ls -l /lib/modules/*/kernel/net/ipv4 2>/dev/null | grep -c tcp_bbr || echo 0")
+	bbrOpen, _ := i.executor.Run(ctx, "sh", "-c", "sysctl net.ipv4.tcp_congestion_control 2>/dev/null | grep -c bbr || echo 0")
+
+	bbrSupportCount := strings.TrimSpace(bbrSupport.Stdout)
+	bbrOpenCount := strings.TrimSpace(bbrOpen.Stdout)
+
+	if bbrSupportCount != "0" && bbrOpenCount == "0" {
+		// 选择最佳 qdisc
+		qdisc := ""
+		kernelVersion, _ := i.executor.Run(ctx, "uname", "-r")
+		if kernelVersion != nil {
+			kv := strings.TrimSpace(kernelVersion.Stdout)
+			bootConfig := "/boot/config-" + kv
+
+			// 按优先级检查: cake > fq_codel > fq_pie > fq
+			if cakeCheck, _ := i.executor.Run(ctx, "sh", "-c", "cat "+bootConfig+" 2>/dev/null | grep CONFIG_NET_SCH_CAKE | grep -q '=' && echo yes"); cakeCheck != nil && strings.TrimSpace(cakeCheck.Stdout) == "yes" {
+				qdisc = "cake"
+			} else if fqCodelCheck, _ := i.executor.Run(ctx, "sh", "-c", "cat "+bootConfig+" 2>/dev/null | grep CONFIG_NET_SCH_FQ_CODEL | grep -q '=' && echo yes"); fqCodelCheck != nil && strings.TrimSpace(fqCodelCheck.Stdout) == "yes" {
+				qdisc = "fq_codel"
+			} else if fqPieCheck, _ := i.executor.Run(ctx, "sh", "-c", "cat "+bootConfig+" 2>/dev/null | grep CONFIG_NET_SCH_FQ_PIE | grep -q '=' && echo yes"); fqPieCheck != nil && strings.TrimSpace(fqPieCheck.Stdout) == "yes" {
+				qdisc = "fq_pie"
+			} else if fqCheck, _ := i.executor.Run(ctx, "sh", "-c", "cat "+bootConfig+" 2>/dev/null | grep CONFIG_NET_SCH_FQ | grep -q '=' && echo yes"); fqCheck != nil && strings.TrimSpace(fqCheck.Stdout) == "yes" {
+				qdisc = "fq"
+			} else {
+				// 获取当前 qdisc
+				currentQdisc, _ := i.executor.Run(ctx, "sh", "-c", "sysctl net.core.default_qdisc 2>/dev/null | awk '{print $3}'")
+				if currentQdisc != nil {
+					qdisc = strings.TrimSpace(currentQdisc.Stdout)
+				}
+			}
+		}
+		if qdisc != "" {
+			sysctlConf.WriteString(fmt.Sprintf("net.core.default_qdisc=%s\n", qdisc))
+		}
+		sysctlConf.WriteString("net.ipv4.tcp_congestion_control=bbr\n")
+	}
+
+	// nf_conntrack 调优
+	// 清理旧配置
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/nf_conntrack_max/d", "/etc/sysctl.conf")
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/nf_conntrack_buckets/d", "/etc/sysctl.conf")
+
+	info, _ := i.detector.Detect(ctx)
+	mem := info.Memory // MB
+	if mem < 2100 {
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_max=262144\n")
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_buckets=65536\n")
+	} else if mem < 4100 {
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_max=655360\n")
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_buckets=163840\n")
+	} else if mem < 8200 {
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_max=1048576\n")
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_buckets=262144\n")
+	} else {
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_max=1503232\n")
+		sysctlConf.WriteString("net.netfilter.nf_conntrack_buckets=375808\n")
+	}
+
+	// somaxconn 调优
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.core.somaxconn/d", "/etc/sysctl.conf")
+	sysctlConf.WriteString("net.core.somaxconn=1024\n")
+
+	// 写入 sysctl 配置
+	_ = os.WriteFile("/etc/sysctl.d/99-panel.conf", []byte(sysctlConf.String()), 0644)
+
+	// sudoers 添加 /usr/local/bin 和 /usr/local/sbin 路径
+	// 检查是否已包含
+	sudoersCheck, _ := i.executor.Run(ctx, "sh", "-c", "grep -q '^Defaults.*secure_path.*:/usr/local/bin' /etc/sudoers && echo yes")
+	if sudoersCheck == nil || strings.TrimSpace(sudoersCheck.Stdout) != "yes" {
+		_, _ = i.executor.Run(ctx, "sed", "-i",
+			`s|^\(Defaults\s*secure_path\s*=\s*/sbin:/bin:/usr/sbin:/usr/bin\)$|\1:/usr/local/sbin:/usr/local/bin|`,
+			"/etc/sudoers")
+	}
+
+	// 重载 sysctl
 	_, _ = i.executor.Run(ctx, "sysctl", "-p")
 	_, _ = i.executor.Run(ctx, "systemctl", "restart", "systemd-sysctl")
 
@@ -224,9 +318,9 @@ func (i *installer) installDeps(ctx context.Context, cfg *types.InstallConfig) e
 	// 安装依赖
 	var packages []string
 	if info.OS == types.OSRHEL {
-		packages = []string{"bash", "curl", "wget", "zip", "unzip", "tar", "git", "jq", "make", "sudo"}
+		packages = []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "p7zip", "p7zip-plugins", "git", "jq", "dos2unix", "make"}
 	} else {
-		packages = []string{"bash", "curl", "wget", "zip", "unzip", "tar", "git", "jq", "make", "sudo"}
+		packages = []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "p7zip", "p7zip-full", "git", "jq", "dos2unix", "make"}
 	}
 
 	return pkgMgr.Install(ctx, packages...)
@@ -246,8 +340,16 @@ func (i *installer) createSwap(ctx context.Context, cfg *types.InstallConfig) er
 
 	swapFile := cfg.SetupPath + "/swap"
 
-	// 创建swap文件
-	_, _ = i.executor.Run(ctx, "dd", "if=/dev/zero", "of="+swapFile, "bs=8M", "count=256")
+	// 检查是否是 btrfs 文件系统
+	btrfsCheck, _ := i.executor.Run(ctx, "sh", "-c", fmt.Sprintf("df -T %s | awk '{print $2}' | tail -n 1", cfg.SetupPath))
+	if btrfsCheck != nil && strings.TrimSpace(btrfsCheck.Stdout) == "btrfs" {
+		// btrfs 文件系统使用专用命令创建 swap
+		_, _ = i.executor.Run(ctx, "btrfs", "filesystem", "mkswapfile", "--size", "2G", "--uuid", "clear", swapFile)
+	} else {
+		// 普通文件系统使用 dd
+		_, _ = i.executor.Run(ctx, "dd", "if=/dev/zero", "of="+swapFile, "bs=8M", "count=256")
+	}
+
 	_, _ = i.executor.Run(ctx, "chmod", "600", swapFile)
 	_, _ = i.executor.Run(ctx, "mkswap", "-f", swapFile)
 	_, _ = i.executor.Run(ctx, "swapon", swapFile)
@@ -258,6 +360,12 @@ func (i *installer) createSwap(ctx context.Context, cfg *types.InstallConfig) er
 	if err == nil {
 		_, _ = f.WriteString(fstabEntry)
 		_ = f.Close()
+	}
+
+	// 验证 fstab 配置
+	result, _ := i.executor.Run(ctx, "mount", "-a")
+	if result != nil && result.ExitCode != 0 {
+		return errors.New(i18n.T.Get("There is an error in the /etc/fstab file configuration"))
 	}
 
 	return nil
@@ -458,9 +566,12 @@ func (i *installer) initPanel(ctx context.Context, cfg *types.InstallConfig) err
 }
 
 func (i *installer) detectApps(ctx context.Context, cfg *types.InstallConfig) error {
+	dockerFound := false
+
 	// 检测Docker
 	result, _ := i.executor.Run(ctx, "which", "docker")
 	if result != nil && result.ExitCode == 0 {
+		dockerFound = true
 		_, _ = i.executor.Run(ctx, "systemctl", "enable", "--now", "docker")
 		versionResult, _ := i.executor.Run(ctx, "docker", "-v")
 		if versionResult != nil {
@@ -474,9 +585,10 @@ func (i *installer) detectApps(ctx context.Context, cfg *types.InstallConfig) er
 
 	// 检测Podman
 	result, _ = i.executor.Run(ctx, "which", "podman")
-	if result != nil && result.ExitCode == 0 {
+	if result != nil && result.ExitCode == 0 && !dockerFound {
 		_, _ = i.executor.Run(ctx, "systemctl", "enable", "--now", "podman")
 		_, _ = i.executor.Run(ctx, "systemctl", "enable", "--now", "podman.socket")
+		_, _ = i.executor.Run(ctx, "systemctl", "enable", "--now", "podman-restart")
 		versionResult, _ := i.executor.Run(ctx, "podman", "-v")
 		if versionResult != nil {
 			parts := strings.Fields(versionResult.Stdout)

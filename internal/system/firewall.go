@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/acepanel/helper/pkg/i18n"
+	"github.com/acepanel/helper/pkg/types"
 )
 
 // Firewall 防火墙接口
@@ -43,6 +44,15 @@ func (f *firewall) Install(ctx context.Context) error {
 	if pkgMgr == nil {
 		return fmt.Errorf("%s", i18n.T.Get("Unsupported operating system"))
 	}
+
+	// Debian/Ubuntu 需要先禁用并卸载 ufw
+	if info.OS == types.OSDebian || info.OS == types.OSUbuntu {
+		_, _ = f.executor.Run(ctx, "ufw", "disable")
+		_, _ = f.executor.Run(ctx, "systemctl", "stop", "ufw")
+		_, _ = f.executor.Run(ctx, "systemctl", "disable", "ufw")
+		_ = pkgMgr.Remove(ctx, "ufw")
+	}
+
 	return pkgMgr.Install(ctx, "firewalld")
 }
 
