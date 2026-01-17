@@ -1,0 +1,5 @@
+project_id_env: CROWDIN_PROJECT_ID
+api_token_env: CROWDIN_PERSONAL_TOKEN
+files:
+  - source: /pkg/embed/locales/*.pot
+    translation: /pkg/embed/locales/%locale_with_underscore%/%file_name%.po

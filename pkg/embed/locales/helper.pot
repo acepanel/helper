@@ -1,0 +1,398 @@
+msgid ""
+msgstr ""
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"X-Generator: xgotext\n"
+
+#: internal/ui/app.go:558
+msgid "All data will be cleared and cannot be recovered!"
+msgstr ""
+
+#: internal/ui/app.go:840
+msgid "Available disks:"
+msgstr ""
+
+#: internal/ui/app.go:415
+#: internal/ui/app.go:561
+#: internal/ui/app.go:600
+#: internal/ui/app.go:831
+msgid "Back"
+msgstr ""
+
+#: internal/ui/app.go:577
+msgid "Cancel"
+msgstr ""
+
+#: internal/service/mounter.go:58
+msgid "Cannot operate on system disk"
+msgstr ""
+
+#: internal/service/installer.go:55
+msgid "Checking system requirements"
+msgstr ""
+
+#: internal/service/installer.go:61
+msgid "Configuring firewall"
+msgstr ""
+
+#: internal/ui/app.go:305
+msgid "Confirm Installation"
+msgstr ""
+
+#: internal/ui/app.go:783
+msgid "Confirm Operation"
+msgstr ""
+
+#: internal/ui/app.go:561
+msgid "Continue"
+msgstr ""
+
+#: internal/service/mounter.go:78
+msgid "Creating %s..."
+msgstr ""
+
+#: internal/service/mounter.go:78
+msgid "Creating mount point"
+msgstr ""
+
+#: internal/service/mounter.go:108
+msgid "Creating partition"
+msgstr ""
+
+#: internal/service/mounter.go:108
+msgid "Creating partition on /dev/%s..."
+msgstr ""
+
+#: internal/service/installer.go:59
+msgid "Creating swap file"
+msgstr ""
+
+#: internal/service/installer.go:62
+msgid "Creating systemd service"
+msgstr ""
+
+#: internal/service/installer.go:56
+msgid "Creating www user"
+msgstr ""
+
+#: internal/service/mounter.go:93
+msgid "Deleting existing partitions"
+msgstr ""
+
+#: internal/service/mounter.go:93
+msgid "Deleting existing partitions..."
+msgstr ""
+
+#: internal/service/installer.go:64
+msgid "Detecting installed apps"
+msgstr ""
+
+#: internal/ui/app.go:825
+msgid "Device"
+msgstr ""
+
+#: internal/ui/app.go:245
+#: internal/ui/app.go:812
+msgid "Disk Partition"
+msgstr ""
+
+#: internal/service/mounter.go:53
+msgid "Disk not found"
+msgstr ""
+
+#: internal/service/mounter.go:171
+msgid "Disk partition and mount successful"
+msgstr ""
+
+#: internal/ui/app.go:784
+msgid "Disk: %s, Mount Point: %s, File System: %s"
+msgstr ""
+
+#: internal/service/installer.go:60
+msgid "Downloading panel"
+msgstr ""
+
+#: internal/ui/app.go:522
+msgid "Enter 'y' to confirm uninstallation"
+msgstr ""
+
+#: internal/ui/app.go:751
+msgid "Enter the mount point path (e.g. /opt/ace)"
+msgstr ""
+
+#: internal/service/installer.go:79
+msgid "Error"
+msgstr ""
+
+#: internal/ui/app.go:246
+msgid "Exit"
+msgstr ""
+
+#: internal/service/mounter.go:112
+msgid "Failed to create partition"
+msgstr ""
+
+#: internal/service/mounter.go:143
+msgid "Failed to get UUID"
+msgstr ""
+
+#: internal/ui/app.go:767
+#: internal/ui/app.go:827
+msgid "File System"
+msgstr ""
+
+#: internal/ui/app.go:566
+msgid "For safety, please wait before proceeding"
+msgstr ""
+
+#: internal/service/mounter.go:126
+msgid "Format failed"
+msgstr ""
+
+#: internal/service/mounter.go:116
+msgid "Formatting /dev/%s1 as %s..."
+msgstr ""
+
+#: internal/service/mounter.go:116
+msgid "Formatting partition"
+msgstr ""
+
+#: internal/ui/app.go:556
+msgid "High-risk operation"
+msgstr ""
+
+#: internal/service/installer.go:63
+msgid "Initializing panel"
+msgstr ""
+
+#: internal/ui/app.go:243
+#: internal/ui/app.go:403
+msgid "Install Panel"
+msgstr ""
+
+#: internal/service/installer.go:95
+msgid "Installation complete"
+msgstr ""
+
+#: internal/ui/app.go:408
+msgid "Installation failed"
+msgstr ""
+
+#: internal/ui/app.go:412
+msgid "Installation successful"
+msgstr ""
+
+#: internal/service/installer.go:58
+msgid "Installing dependencies"
+msgstr ""
+
+#: internal/service/mounter.go:62
+msgid "Installing partition tools"
+msgstr ""
+
+#: internal/service/mounter.go:62
+msgid "Installing partition tools..."
+msgstr ""
+
+#: internal/ui/app.go:837
+msgid "Loading disk list..."
+msgstr ""
+
+#: internal/ui/app.go:750
+#: internal/ui/app.go:826
+msgid "Mount Point"
+msgstr ""
+
+#: internal/service/mounter.go:171
+msgid "Mount complete"
+msgstr ""
+
+#: internal/service/mounter.go:136
+msgid "Mount failed"
+msgstr ""
+
+#: internal/service/mounter.go:86
+msgid "Mount point is not empty"
+msgstr ""
+
+#: internal/service/mounter.go:133
+msgid "Mounting /dev/%s1 to %s..."
+msgstr ""
+
+#: internal/service/mounter.go:133
+msgid "Mounting partition"
+msgstr ""
+
+#: internal/ui/app.go:308
+#: internal/ui/app.go:790
+msgid "No"
+msgstr ""
+
+#: internal/ui/app.go:640
+msgid "No available disks found"
+msgstr ""
+
+#: internal/ui/app.go:817
+msgid "Operation failed"
+msgstr ""
+
+#: internal/service/installer.go:57
+msgid "Optimizing system settings"
+msgstr ""
+
+#: internal/service/installer.go:97
+msgid "Panel installed successfully"
+msgstr ""
+
+#: internal/service/uninstaller.go:48
+msgid "Panel is not installed"
+msgstr ""
+
+#: internal/service/uninstaller.go:85
+msgid "Panel uninstalled successfully"
+msgstr ""
+
+#: internal/ui/app.go:306
+msgid "Panel will be installed to %s"
+msgstr ""
+
+#: internal/ui/app.go:821
+msgid "Partition and mount successful"
+msgstr ""
+
+#: internal/ui/app.go:557
+msgid "Please backup all data before uninstalling."
+msgstr ""
+
+#: internal/ui/app.go:755
+msgid "Please enter an absolute path"
+msgstr ""
+
+#: internal/ui/app.go:770
+msgid "Recommended"
+msgstr ""
+
+#: internal/service/uninstaller.go:82
+msgid "Removing %s..."
+msgstr ""
+
+#: internal/service/uninstaller.go:62
+msgid "Removing /usr/local/sbin/acepanel..."
+msgstr ""
+
+#: internal/service/uninstaller.go:62
+msgid "Removing CLI tool"
+msgstr ""
+
+#: internal/service/uninstaller.go:82
+msgid "Removing installation directory"
+msgstr ""
+
+#: internal/service/uninstaller.go:57
+msgid "Removing service file"
+msgstr ""
+
+#: internal/service/uninstaller.go:66
+msgid "Removing swap file"
+msgstr ""
+
+#: internal/service/uninstaller.go:66
+msgid "Removing swap file..."
+msgstr ""
+
+#: internal/service/uninstaller.go:57
+msgid "Removing systemd service file..."
+msgstr ""
+
+#: internal/ui/app.go:738
+msgid "Select Disk"
+msgstr ""
+
+#: internal/ui/app.go:241
+msgid "Select Operation"
+msgstr ""
+
+#: internal/ui/app.go:739
+msgid "Select a disk to partition and mount"
+msgstr ""
+
+#: internal/ui/app.go:768
+msgid "Select the file system type"
+msgstr ""
+
+#: internal/ui/app.go:577
+msgid "Skip"
+msgstr ""
+
+#: internal/service/uninstaller.go:52
+msgid "Stopping acepanel service..."
+msgstr ""
+
+#: internal/service/uninstaller.go:52
+msgid "Stopping panel service"
+msgstr ""
+
+#: internal/ui/app.go:597
+msgid "Thank you for using AcePanel."
+msgstr ""
+
+#: internal/ui/app.go:244
+#: internal/ui/app.go:550
+msgid "Uninstall Panel"
+msgstr ""
+
+#: internal/service/uninstaller.go:85
+msgid "Uninstallation complete"
+msgstr ""
+
+#: internal/ui/app.go:591
+msgid "Uninstallation failed"
+msgstr ""
+
+#: internal/ui/app.go:595
+msgid "Uninstallation successful"
+msgstr ""
+
+#: internal/service/mounter.go:123
+msgid "Unsupported filesystem type: %s"
+msgstr ""
+
+#: internal/service/mounter.go:140
+msgid "Updating /etc/fstab for auto-mount..."
+msgstr ""
+
+#: internal/service/mounter.go:140
+msgid "Updating fstab"
+msgstr ""
+
+#: internal/ui/app.go:567
+msgid "Waiting:"
+msgstr ""
+
+#: internal/ui/app.go:855
+msgid "Warning: This will erase all data on the disk!"
+msgstr ""
+
+#: internal/ui/app.go:307
+#: internal/ui/app.go:789
+msgid "Yes"
+msgstr ""
+
+#: internal/service/installer.go:90
+msgid "completed"
+msgstr ""
+
+#: internal/service/mounter.go:168
+msgid "fstab configuration error"
+msgstr ""
+
+#: internal/service/uninstaller.go:78
+msgid "fstab configuration error, please check /etc/fstab"
+msgstr ""
+
+#: internal/ui/app.go:569
+msgid "seconds"
+msgstr ""

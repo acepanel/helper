@@ -1,0 +1,42 @@
+version: 2
+project_name: helper
+
+builds:
+  - id: helper
+    main: ./cmd/helper
+    binary: helper
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+      - -buildvcs=false
+    ldflags:
+      - -s -w --extldflags "-static"
+
+upx:
+  - enabled: true
+    # Filter by build ID.
+    ids:
+      - helper
+    # Compress argument.
+    # Valid options are from '1' (faster) to '9' (better), and 'best'.
+    compress: best
+    # Whether to try LZMA (slower).
+    lzma: true
+    # Whether to try all methods and filters (slow).
+    brute: false
+
+archives:
+  - id: helper
+    ids:
+      - helper
+    formats: ["zip"]
+    wrap_in_directory: false
+    strip_binary_directory: true
+    files:
+      - LICENSE
