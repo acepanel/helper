@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Simplified\n"
-"PO-Revision-Date: 2026-01-17 16:09\n"
+"PO-Revision-Date: 2026-01-17 22:09\n"
 
 #: internal/ui/app.go:581
 msgid "All data will be cleared and cannot be recovered!"
@@ -50,7 +50,7 @@ msgstr "无法操作系统盘"
 msgid "Checking system requirements"
 msgstr "检查系统要求"
 
-#: internal/service/installer.go:347
+#: internal/service/installer.go:455
 msgid "Checksum mismatch"
 msgstr "校验和不匹配"
 
@@ -151,11 +151,11 @@ msgstr "错误"
 msgid "Exit"
 msgstr "退出"
 
-#: internal/system/firewall.go:70
+#: internal/system/firewall.go:80
 msgid "Failed to add port"
 msgstr "添加端口失败"
 
-#: internal/service/installer.go:342
+#: internal/service/installer.go:450
 msgid "Failed to compute checksum"
 msgstr "计算校验和失败"
 
@@ -179,11 +179,11 @@ msgstr "daemon-reload 失败"
 msgid "Failed to disable"
 msgstr "禁用失败"
 
-#: internal/service/installer.go:331
+#: internal/service/installer.go:439
 msgid "Failed to download checksum"
 msgstr "下载校验和失败"
 
-#: internal/service/installer.go:323
+#: internal/service/installer.go:431
 msgid "Failed to download panel"
 msgstr "下载面板失败"
 
@@ -191,7 +191,7 @@ msgstr "下载面板失败"
 msgid "Failed to enable"
 msgstr "启用失败"
 
-#: internal/system/firewall.go:55
+#: internal/system/firewall.go:65
 msgid "Failed to enable firewalld"
 msgstr "启用 firewalld 失败"
 
@@ -199,27 +199,27 @@ msgstr "启用 firewalld 失败"
 msgid "Failed to get UUID"
 msgstr "获取 UUID 失败"
 
-#: internal/service/installer.go:279
+#: internal/service/installer.go:387
 msgid "Failed to get version info"
 msgstr "获取版本信息失败"
 
-#: internal/service/installer.go:448
+#: internal/service/installer.go:556
 msgid "Failed to initialize panel"
 msgstr "初始化面板失败"
 
-#: internal/service/installer.go:337
+#: internal/service/installer.go:445
 msgid "Failed to open downloaded file"
 msgstr "打开下载的文件失败"
 
-#: internal/service/installer.go:294
+#: internal/service/installer.go:402
 msgid "Failed to parse version info"
 msgstr "解析版本信息失败"
 
-#: internal/system/firewall.go:93
+#: internal/system/firewall.go:103
 msgid "Failed to reload firewall"
 msgstr "重新加载防火墙失败"
 
-#: internal/system/firewall.go:82
+#: internal/system/firewall.go:92
 msgid "Failed to remove port"
 msgstr "移除端口失败"
 
@@ -235,11 +235,11 @@ msgstr "启动失败"
 msgid "Failed to stop"
 msgstr "停止失败"
 
-#: internal/service/installer.go:454
+#: internal/service/installer.go:562
 msgid "Failed to sync panel"
 msgstr "同步面板失败"
 
-#: internal/service/installer.go:353
+#: internal/service/installer.go:461
 msgid "Failed to unzip panel"
 msgstr "解压面板失败"
 
@@ -344,7 +344,7 @@ msgstr "否"
 msgid "No available disks found"
 msgstr "未找到可用磁盘"
 
-#: internal/service/installer.go:313
+#: internal/service/installer.go:421
 msgid "No download URL found for architecture %s"
 msgstr "未找到架构 %s 的下载 URL"
 
@@ -464,6 +464,10 @@ msgstr "停止面板服务"
 msgid "Thank you for using AcePanel."
 msgstr "感谢您使用 AcePanel。"
 
+#: internal/service/installer.go:368
+msgid "There is an error in the /etc/fstab file configuration"
+msgstr "在 /etc/fstab 文件配置中存在错误"
+
 #: internal/ui/app.go:250
 #: internal/ui/app.go:573
 msgid "Uninstall Panel"
@@ -490,8 +494,8 @@ msgid "Unsupported filesystem type: %s"
 msgstr "不支持的文件系统类型：%s"
 
 #: internal/service/installer.go:119
-#: internal/service/installer.go:206
-#: internal/system/firewall.go:44
+#: internal/service/installer.go:300
+#: internal/system/firewall.go:45
 msgid "Unsupported operating system"
 msgstr "不支持的操作系统"
 
