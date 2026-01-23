@@ -377,6 +377,8 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	_ = os.MkdirAll(cfg.SetupPath+"/server/webhook", 0755)
 	_ = os.MkdirAll(cfg.SetupPath+"/server/cron/logs", 0755)
 	_ = os.MkdirAll(cfg.SetupPath+"/projects", 0755)
+	_ = os.MkdirAll(cfg.SetupPath+"/backup/website", 0755)
+	_ = os.MkdirAll(cfg.SetupPath+"/backup/mysql", 0755)
 
 	// 获取最新版本信息
 	client := resty.New()
