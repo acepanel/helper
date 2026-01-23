@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Simplified\n"
-"PO-Revision-Date: 2026-01-17 22:09\n"
+"PO-Revision-Date: 2026-01-23 21:57\n"
 
 #: internal/ui/app.go:581
 msgid "All data will be cleared and cannot be recovered!"
@@ -258,7 +258,7 @@ msgstr "格式化失败"
 
 #: internal/service/mounter.go:115
 msgid "Formatting /dev/%s1 as %s..."
-msgstr "正在将 /dev/%s1 格式化为 %s..."
+msgstr "正在将 /dev/%s1 格式化为 %s……"
 
 #: internal/service/mounter.go:115
 msgid "Formatting partition"
