@@ -21,6 +21,7 @@ import (
 // Installer 安装器接口
 type Installer interface {
 	Install(ctx context.Context, cfg *types.InstallConfig, progress chan<- types.Progress) error
+	SetVerboseCallback(cb system.VerboseCallback)
 }
 
 type installer struct {
@@ -46,6 +47,10 @@ func NewInstaller(
 		systemd:  systemd,
 		userMgr:  userMgr,
 	}
+}
+
+func (i *installer) SetVerboseCallback(cb system.VerboseCallback) {
+	i.executor.SetVerboseCallback(cb)
 }
 
 func (i *installer) Install(ctx context.Context, cfg *types.InstallConfig, progress chan<- types.Progress) error {

@@ -15,6 +15,7 @@ type ProgressCallback func(step, message string)
 // Uninstaller 卸载器接口
 type Uninstaller interface {
 	Uninstall(ctx context.Context, setupPath string, progress ProgressCallback) error
+	SetVerboseCallback(cb system.VerboseCallback)
 }
 
 type uninstaller struct {
@@ -34,6 +35,10 @@ func NewUninstaller(
 		executor: executor,
 		systemd:  systemd,
 	}
+}
+
+func (u *uninstaller) SetVerboseCallback(cb system.VerboseCallback) {
+	u.executor.SetVerboseCallback(cb)
 }
 
 func (u *uninstaller) Uninstall(ctx context.Context, setupPath string, progress ProgressCallback) error {

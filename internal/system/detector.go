@@ -91,7 +91,7 @@ func (d *detector) detectOS() types.OSType {
 		return types.OSDebian
 	case "ubuntu":
 		return types.OSUbuntu
-	case "rhel", "centos", "rocky", "almalinux", "fedora":
+	case "rhel", "centos", "rocky", "almalinux", "fedora", "tencentos":
 		return types.OSRHEL
 	default:
 		// 检查ID_LIKE

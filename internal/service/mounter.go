@@ -17,6 +17,7 @@ type Mounter interface {
 	ListDisks(ctx context.Context) ([]types.DiskInfo, error)
 	IsPartitioned(disk string) bool
 	Mount(ctx context.Context, cfg *types.MountConfig, progress ProgressCallback) error
+	SetVerboseCallback(cb system.VerboseCallback)
 }
 
 type mounter struct {
@@ -30,6 +31,10 @@ func NewMounter(detector system.Detector, executor system.Executor) Mounter {
 		detector: detector,
 		executor: executor,
 	}
+}
+
+func (m *mounter) SetVerboseCallback(cb system.VerboseCallback) {
+	m.executor.SetVerboseCallback(cb)
 }
 
 func (m *mounter) ListDisks(ctx context.Context) ([]types.DiskInfo, error) {

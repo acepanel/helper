@@ -8,9 +8,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/acepanel/helper/pkg/config"
 	"github.com/acepanel/helper/pkg/embed"
 	"github.com/charmbracelet/bubbles/progress"
 	"github.com/charmbracelet/bubbles/spinner"
+	"github.com/charmbracelet/bubbles/viewport"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/huh"
 	"github.com/charmbracelet/lipgloss"
@@ -45,6 +47,7 @@ const (
 // 消息类型
 type (
 	progressMsg        types.Progress
+	verboseMsg         string // verbose 模式命令输出
 	installCompleteMsg struct {
 		err  error
 		info string
@@ -89,6 +92,10 @@ type App struct {
 	installRunning   bool
 	installDone      bool
 	installInfo      string // 安装完成后的面板信息
+
+	// verbose 模式
+	verboseLogs     []string
+	verboseViewport viewport.Model
 
 	// 卸载
 	uninstallCountdown int
@@ -145,6 +152,13 @@ func NewApp(installer service.Installer, uninstaller service.Uninstaller, mounte
 
 	// 初始化进度条
 	app.installProgress = progress.New(progress.WithDefaultGradient())
+
+	// 初始化 verbose viewport
+	app.verboseViewport = viewport.New(80, 8)
+	app.verboseViewport.Style = lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(ColorMuted).
+		Padding(0, 1)
 
 	return app
 }
@@ -342,6 +356,16 @@ func (a *App) updateInstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return a, nil
 
+	case verboseMsg:
+		a.verboseLogs = append(a.verboseLogs, string(msg))
+		// 保留最近 100 条
+		if len(a.verboseLogs) > 100 {
+			a.verboseLogs = a.verboseLogs[len(a.verboseLogs)-100:]
+		}
+		a.verboseViewport.SetContent(strings.Join(a.verboseLogs, "\n"))
+		a.verboseViewport.GotoBottom()
+		return a, nil
+
 	case installCompleteMsg:
 		a.installRunning = false
 		a.installDone = true
@@ -366,6 +390,7 @@ func (a *App) updateInstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if a.installForm.State == huh.StateCompleted {
 			if a.installConfirmed {
 				a.installRunning = true
+				a.verboseLogs = nil // 清空 verbose 日志
 				return a, tea.Batch(a.installSpinner.Tick, a.startInstall())
 			}
 			a.state = ViewMainMenu
@@ -389,6 +414,15 @@ func (a *App) startInstall() tea.Cmd {
 				}
 			}
 		}()
+
+		// 设置 verbose 回调
+		if config.Global.Verbose {
+			a.installer.SetVerboseCallback(func(cmd string) {
+				if a.program != nil {
+					a.program.Send(verboseMsg("$ " + cmd))
+				}
+			})
+		}
 
 		cfg := &types.InstallConfig{
 			SetupPath: a.setupPath,
@@ -439,6 +473,13 @@ func (a *App) viewInstall() string {
 		for _, log := range a.installLogs {
 			sb.WriteString(LogStyle.Render(log))
 			sb.WriteString("\n")
+		}
+		// verbose 模式显示命令日志
+		if config.Global.Verbose && len(a.verboseLogs) > 0 {
+			sb.WriteString("\n")
+			sb.WriteString(MutedStyle.Render("Commands:"))
+			sb.WriteString("\n")
+			sb.WriteString(a.verboseViewport.View())
 		}
 	} else {
 		sb.WriteString(a.installForm.View())
@@ -498,6 +539,15 @@ func (a *App) updateUninstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return a, nil
 
+	case verboseMsg:
+		a.verboseLogs = append(a.verboseLogs, string(msg))
+		if len(a.verboseLogs) > 100 {
+			a.verboseLogs = a.verboseLogs[len(a.verboseLogs)-100:]
+		}
+		a.verboseViewport.SetContent(strings.Join(a.verboseLogs, "\n"))
+		a.verboseViewport.GotoBottom()
+		return a, nil
+
 	case uninstallCompleteMsg:
 		a.uninstallRunning = false
 		a.uninstallDone = true
@@ -523,6 +573,7 @@ func (a *App) updateUninstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if a.uninstallConfirm {
 				a.uninstallState = 3
 				a.uninstallRunning = true
+				a.verboseLogs = nil // 清空 verbose 日志
 				return a, tea.Batch(a.uninstallSpinner.Tick, a.startUninstall())
 			}
 			a.state = ViewMainMenu
@@ -557,6 +608,16 @@ func (a *App) tickCountdown() tea.Cmd {
 func (a *App) startUninstall() tea.Cmd {
 	return func() tea.Msg {
 		ctx := context.Background()
+
+		// 设置 verbose 回调
+		if config.Global.Verbose {
+			a.uninstaller.SetVerboseCallback(func(cmd string) {
+				if a.program != nil {
+					a.program.Send(verboseMsg("$ " + cmd))
+				}
+			})
+		}
+
 		err := a.uninstaller.Uninstall(ctx, a.setupPath, func(step, message string) {
 			if a.program != nil {
 				a.program.Send(progressMsg{Step: step, Message: message})
@@ -607,6 +668,13 @@ func (a *App) viewUninstall() string {
 		for _, log := range a.uninstallLogs {
 			sb.WriteString(LogStyle.Render(log))
 			sb.WriteString("\n")
+		}
+		// verbose 模式显示命令日志
+		if config.Global.Verbose && len(a.verboseLogs) > 0 {
+			sb.WriteString("\n")
+			sb.WriteString(MutedStyle.Render("Commands:"))
+			sb.WriteString("\n")
+			sb.WriteString(a.verboseViewport.View())
 		}
 
 	case 4: // done
@@ -678,6 +746,15 @@ func (a *App) updateMount(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return a, nil
 
+	case verboseMsg:
+		a.verboseLogs = append(a.verboseLogs, string(msg))
+		if len(a.verboseLogs) > 100 {
+			a.verboseLogs = a.verboseLogs[len(a.verboseLogs)-100:]
+		}
+		a.verboseViewport.SetContent(strings.Join(a.verboseLogs, "\n"))
+		a.verboseViewport.GotoBottom()
+		return a, nil
+
 	case mountCompleteMsg:
 		a.mountRunning = false
 		a.mountDone = true
@@ -738,6 +815,7 @@ func (a *App) updateMount(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if a.mountConfirmed {
 				a.mountState = 5
 				a.mountRunning = true
+				a.verboseLogs = nil // 清空 verbose 日志
 				return a, tea.Batch(a.mountSpinner.Tick, a.startMount())
 			}
 			a.state = ViewMainMenu
@@ -819,6 +897,16 @@ func (a *App) initMountConfirmForm() {
 func (a *App) startMount() tea.Cmd {
 	return func() tea.Msg {
 		ctx := context.Background()
+
+		// 设置 verbose 回调
+		if config.Global.Verbose {
+			a.mounter.SetVerboseCallback(func(cmd string) {
+				if a.program != nil {
+					a.program.Send(verboseMsg("$ " + cmd))
+				}
+			})
+		}
+
 		err := a.mounter.Mount(ctx, &a.mountConfig, func(step, message string) {
 			if a.program != nil {
 				a.program.Send(progressMsg{Step: step, Message: message})
@@ -884,6 +972,13 @@ func (a *App) viewMount() string {
 		for _, log := range a.mountLogs {
 			sb.WriteString(LogStyle.Render(log))
 			sb.WriteString("\n")
+		}
+		// verbose 模式显示命令日志
+		if config.Global.Verbose && len(a.verboseLogs) > 0 {
+			sb.WriteString("\n")
+			sb.WriteString(MutedStyle.Render("Commands:"))
+			sb.WriteString("\n")
+			sb.WriteString(a.verboseViewport.View())
 		}
 	}
 
