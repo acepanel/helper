@@ -34,12 +34,12 @@ func (c *Config) InitLogFile() error {
 // CloseLogFile 关闭日志文件
 func (c *Config) CloseLogFile() {
 	if c.logWriter != nil {
-		c.logWriter.Close()
+		_ = c.logWriter.Close()
 	}
 }
 
 // WriteLog 写日志
-func (c *Config) WriteLog(format string, args ...interface{}) {
+func (c *Config) WriteLog(format string, args ...any) {
 	if c.logWriter == nil {
 		return
 	}
@@ -47,5 +47,5 @@ func (c *Config) WriteLog(format string, args ...interface{}) {
 	defer c.logMu.Unlock()
 	timestamp := time.Now().Format("2006-01-02 15:04:05")
 	msg := fmt.Sprintf(format, args...)
-	fmt.Fprintf(c.logWriter, "[%s] %s\n", timestamp, msg)
+	_, _ = fmt.Fprintf(c.logWriter, "[%s] %s\n", timestamp, msg)
 }
