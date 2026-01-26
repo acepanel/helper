@@ -13,24 +13,24 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Simplified\n"
-"PO-Revision-Date: 2026-01-24 08:54\n"
+"PO-Revision-Date: 2026-01-26 09:56\n"
 
-#: internal/ui/app.go:642
+#: internal/ui/app.go:662
 msgid "All data will be cleared and cannot be recovered!"
 msgstr "所有数据将被清除且无法恢复！"
 
-#: internal/ui/app.go:594
+#: internal/ui/app.go:604
 msgid "Are you sure you want to uninstall the panel?"
 msgstr "您确定要卸载面板吗？"
 
-#: internal/ui/app.go:951
+#: internal/ui/app.go:981
 msgid "Available disks:"
 msgstr "可用磁盘："
 
-#: internal/ui/app.go:468
-#: internal/ui/app.go:645
-#: internal/ui/app.go:691
-#: internal/ui/app.go:942
+#: internal/ui/app.go:478
+#: internal/ui/app.go:665
+#: internal/ui/app.go:711
+#: internal/ui/app.go:972
 msgid "Back"
 msgstr "返回"
 
@@ -38,7 +38,7 @@ msgstr "返回"
 msgid "CPU must support at least x86-64-v2 instruction set"
 msgstr "CPU 必须支持至少 x86-64-v2 指令集"
 
-#: internal/ui/app.go:661
+#: internal/ui/app.go:681
 msgid "Cancel"
 msgstr "取消"
 
@@ -46,15 +46,15 @@ msgstr "取消"
 msgid "Cannot operate on system disk"
 msgstr "无法操作系统盘"
 
-#: internal/service/installer.go:62
+#: internal/service/installer.go:64
 msgid "Checking system requirements"
 msgstr "检查系统要求"
 
-#: internal/service/installer.go:460
+#: internal/service/installer.go:477
 msgid "Checksum mismatch"
 msgstr "校验和不匹配"
 
-#: internal/service/installer.go:68
+#: internal/service/installer.go:70
 msgid "Configuring firewall"
 msgstr "配置防火墙"
 
@@ -62,15 +62,15 @@ msgstr "配置防火墙"
 msgid "Confirm Installation"
 msgstr "确认安装"
 
-#: internal/ui/app.go:884
+#: internal/ui/app.go:904
 msgid "Confirm Operation"
 msgstr "确认操作"
 
-#: internal/ui/app.go:593
+#: internal/ui/app.go:603
 msgid "Confirm Uninstallation"
 msgstr "确认卸载"
 
-#: internal/ui/app.go:645
+#: internal/ui/app.go:665
 msgid "Continue"
 msgstr "继续"
 
@@ -90,15 +90,15 @@ msgstr "创建分区"
 msgid "Creating partition on /dev/%s..."
 msgstr "正在 /dev/%s 上创建分区……"
 
-#: internal/service/installer.go:66
+#: internal/service/installer.go:68
 msgid "Creating swap file"
 msgstr "创建交换文件"
 
-#: internal/service/installer.go:69
+#: internal/service/installer.go:71
 msgid "Creating systemd service"
 msgstr "创建 systemd 服务"
 
-#: internal/service/installer.go:63
+#: internal/service/installer.go:65
 msgid "Creating www user"
 msgstr "创建 www 用户"
 
@@ -110,16 +110,16 @@ msgstr "删除现有分区"
 msgid "Deleting existing partitions..."
 msgstr "正在删除现有分区……"
 
-#: internal/service/installer.go:71
+#: internal/service/installer.go:73
 msgid "Detecting installed apps"
 msgstr "检测已安装的应用"
 
-#: internal/ui/app.go:936
+#: internal/ui/app.go:966
 msgid "Device"
 msgstr "设备"
 
 #: internal/ui/app.go:265
-#: internal/ui/app.go:923
+#: internal/ui/app.go:953
 msgid "Disk Partition"
 msgstr "磁盘分区"
 
@@ -131,19 +131,19 @@ msgstr "磁盘未找到"
 msgid "Disk partition and mount successful"
 msgstr "磁盘分区和挂载成功"
 
-#: internal/ui/app.go:885
+#: internal/ui/app.go:905
 msgid "Disk: %s, Mount Point: %s, File System: %s"
 msgstr "磁盘：%s，挂载点：%s，文件系统：%s"
 
-#: internal/service/installer.go:67
+#: internal/service/installer.go:69
 msgid "Downloading panel"
 msgstr "下载面板"
 
-#: internal/ui/app.go:852
+#: internal/ui/app.go:872
 msgid "Enter the mount point path (e.g. /opt/ace)"
 msgstr "输入挂载点路径（例如 /opt/ace）"
 
-#: internal/service/installer.go:86
+#: internal/service/installer.go:88
 msgid "Error"
 msgstr "错误"
 
@@ -155,7 +155,7 @@ msgstr "退出"
 msgid "Failed to add port"
 msgstr "添加端口失败"
 
-#: internal/service/installer.go:455
+#: internal/service/installer.go:472
 msgid "Failed to compute checksum"
 msgstr "计算校验和失败"
 
@@ -179,11 +179,11 @@ msgstr "daemon-reload 失败"
 msgid "Failed to disable"
 msgstr "禁用失败"
 
-#: internal/service/installer.go:444
+#: internal/service/installer.go:461
 msgid "Failed to download checksum"
 msgstr "下载校验和失败"
 
-#: internal/service/installer.go:436
+#: internal/service/installer.go:453
 msgid "Failed to download panel"
 msgstr "下载面板失败"
 
@@ -199,19 +199,19 @@ msgstr "启用 firewalld 失败"
 msgid "Failed to get UUID"
 msgstr "获取 UUID 失败"
 
-#: internal/service/installer.go:392
+#: internal/service/installer.go:396
 msgid "Failed to get version info"
 msgstr "获取版本信息失败"
 
-#: internal/service/installer.go:561
+#: internal/service/installer.go:576
 msgid "Failed to initialize panel"
 msgstr "初始化面板失败"
 
-#: internal/service/installer.go:450
+#: internal/service/installer.go:467
 msgid "Failed to open downloaded file"
 msgstr "打开下载的文件失败"
 
-#: internal/service/installer.go:407
+#: internal/service/installer.go:411
 msgid "Failed to parse version info"
 msgstr "解析版本信息失败"
 
@@ -235,20 +235,20 @@ msgstr "启动失败"
 msgid "Failed to stop"
 msgstr "停止失败"
 
-#: internal/service/installer.go:567
+#: internal/service/installer.go:582
 msgid "Failed to sync panel"
 msgstr "同步面板失败"
 
-#: internal/service/installer.go:466
+#: internal/service/installer.go:483
 msgid "Failed to unzip panel"
 msgstr "解压面板失败"
 
-#: internal/ui/app.go:868
-#: internal/ui/app.go:938
+#: internal/ui/app.go:888
+#: internal/ui/app.go:968
 msgid "File System"
 msgstr "文件系统"
 
-#: internal/ui/app.go:650
+#: internal/ui/app.go:670
 msgid "For safety, please wait before proceeding"
 msgstr "为安全起见，请稍候再继续"
 
@@ -264,32 +264,32 @@ msgstr "正在将 /dev/%s1 格式化为 %s……"
 msgid "Formatting partition"
 msgstr "格式化分区"
 
-#: internal/ui/app.go:640
+#: internal/ui/app.go:660
 msgid "High-risk operation"
 msgstr "高风险操作"
 
-#: internal/service/installer.go:70
+#: internal/service/installer.go:72
 msgid "Initializing panel"
 msgstr "初始化面板"
 
 #: internal/ui/app.go:263
-#: internal/ui/app.go:452
+#: internal/ui/app.go:462
 msgid "Install Panel"
 msgstr "安装面板"
 
-#: internal/service/installer.go:102
+#: internal/service/installer.go:104
 msgid "Installation complete"
 msgstr "安装完成"
 
-#: internal/ui/app.go:457
+#: internal/ui/app.go:467
 msgid "Installation failed"
 msgstr "安装失败"
 
-#: internal/ui/app.go:461
+#: internal/ui/app.go:471
 msgid "Installation successful"
 msgstr "安装成功"
 
-#: internal/service/installer.go:65
+#: internal/service/installer.go:67
 msgid "Installing dependencies"
 msgstr "安装依赖"
 
@@ -301,16 +301,16 @@ msgstr "安装分区工具"
 msgid "Installing partition tools..."
 msgstr "正在安装分区工具……"
 
-#: internal/service/installer.go:143
+#: internal/service/installer.go:145
 msgid "Kernel version too old, requires 5.x or above"
 msgstr "内核版本过旧，需要 5.x 或更高版本"
 
-#: internal/ui/app.go:948
+#: internal/ui/app.go:978
 msgid "Loading disk list..."
 msgstr "正在加载磁盘列表……"
 
-#: internal/ui/app.go:851
-#: internal/ui/app.go:937
+#: internal/ui/app.go:871
+#: internal/ui/app.go:967
 msgid "Mount Point"
 msgstr "挂载点"
 
@@ -335,32 +335,32 @@ msgid "Mounting partition"
 msgstr "挂载分区"
 
 #: internal/ui/app.go:328
-#: internal/ui/app.go:596
-#: internal/ui/app.go:891
+#: internal/ui/app.go:606
+#: internal/ui/app.go:911
 msgid "No"
 msgstr "否"
 
-#: internal/ui/app.go:731
+#: internal/ui/app.go:751
 msgid "No available disks found"
 msgstr "未找到可用磁盘"
 
-#: internal/service/installer.go:426
+#: internal/service/installer.go:430
 msgid "No download URL found for architecture %s"
 msgstr "未找到架构 %s 的下载 URL"
 
-#: internal/ui/app.go:928
+#: internal/ui/app.go:958
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: internal/service/installer.go:64
+#: internal/service/installer.go:66
 msgid "Optimizing system settings"
 msgstr "优化系统设置"
 
-#: internal/service/installer.go:104
+#: internal/service/installer.go:106
 msgid "Panel installed successfully"
 msgstr "面板安装成功"
 
-#: internal/service/installer.go:155
+#: internal/service/installer.go:157
 msgid "Panel is already installed"
 msgstr "面板已安装"
 
@@ -376,15 +376,15 @@ msgstr "面板卸载成功"
 msgid "Panel will be installed to %s"
 msgstr "面板将安装到 %s"
 
-#: internal/ui/app.go:932
+#: internal/ui/app.go:962
 msgid "Partition and mount successful"
 msgstr "分区及挂载已成功"
 
-#: internal/ui/app.go:641
+#: internal/ui/app.go:661
 msgid "Please backup all data before uninstalling."
 msgstr "卸载前请备份所有数据。"
 
-#: internal/ui/app.go:856
+#: internal/ui/app.go:876
 msgid "Please enter an absolute path"
 msgstr "请输入绝对路径"
 
@@ -392,7 +392,7 @@ msgstr "请输入绝对路径"
 msgid "Please run with root privileges"
 msgstr "请以 root 权限运行"
 
-#: internal/ui/app.go:871
+#: internal/ui/app.go:891
 msgid "Recommended"
 msgstr "推荐"
 
@@ -428,11 +428,11 @@ msgstr "正在移除交换文件……"
 msgid "Removing systemd service file..."
 msgstr "正在移除 systemd 服务文件……"
 
-#: internal/service/installer.go:150
+#: internal/service/installer.go:152
 msgid "Requires 64-bit system"
 msgstr "需要 64 位系统"
 
-#: internal/ui/app.go:839
+#: internal/ui/app.go:859
 msgid "Select Disk"
 msgstr "选择磁盘"
 
@@ -440,15 +440,15 @@ msgstr "选择磁盘"
 msgid "Select Operation"
 msgstr "选择操作"
 
-#: internal/ui/app.go:840
+#: internal/ui/app.go:860
 msgid "Select a disk to partition and mount"
 msgstr "选择要分区和挂载的磁盘"
 
-#: internal/ui/app.go:869
+#: internal/ui/app.go:889
 msgid "Select the file system type"
 msgstr "选择文件系统类型"
 
-#: internal/ui/app.go:661
+#: internal/ui/app.go:681
 msgid "Skip"
 msgstr "跳过"
 
@@ -460,16 +460,16 @@ msgstr "正在停止 acepanel 服务……"
 msgid "Stopping panel service"
 msgstr "停止面板服务"
 
-#: internal/ui/app.go:688
+#: internal/ui/app.go:708
 msgid "Thank you for using AcePanel."
 msgstr "感谢您使用 AcePanel。"
 
-#: internal/service/installer.go:373
+#: internal/service/installer.go:375
 msgid "There is an error in the /etc/fstab file configuration"
 msgstr "在 /etc/fstab 文件配置中存在错误"
 
 #: internal/ui/app.go:264
-#: internal/ui/app.go:634
+#: internal/ui/app.go:654
 msgid "Uninstall Panel"
 msgstr "卸载面板"
 
@@ -477,15 +477,15 @@ msgstr "卸载面板"
 msgid "Uninstallation complete"
 msgstr "卸载完成"
 
-#: internal/ui/app.go:682
+#: internal/ui/app.go:702
 msgid "Uninstallation failed"
 msgstr "卸载失败"
 
-#: internal/ui/app.go:686
+#: internal/ui/app.go:706
 msgid "Uninstallation successful"
 msgstr "卸载成功"
 
-#: internal/service/installer.go:128
+#: internal/service/installer.go:130
 msgid "Unsupported CPU architecture"
 msgstr "不支持的 CPU 架构"
 
@@ -493,8 +493,8 @@ msgstr "不支持的 CPU 架构"
 msgid "Unsupported filesystem type: %s"
 msgstr "不支持的文件系统类型：%s"
 
-#: internal/service/installer.go:124
-#: internal/service/installer.go:305
+#: internal/service/installer.go:126
+#: internal/service/installer.go:307
 #: internal/system/firewall.go:45
 msgid "Unsupported operating system"
 msgstr "不支持的操作系统"
@@ -507,33 +507,33 @@ msgstr "正在更新 /etc/fstab 以实现自动挂载……"
 msgid "Updating fstab"
 msgstr "更新 fstab"
 
-#: internal/ui/app.go:651
+#: internal/ui/app.go:671
 msgid "Waiting:"
 msgstr "等待中："
 
-#: internal/ui/app.go:966
+#: internal/ui/app.go:996
 msgid "Warning: This will erase all data on the disk!"
 msgstr "警告：这将擦除磁盘上的所有数据！"
 
 #: internal/ui/app.go:327
-#: internal/ui/app.go:595
-#: internal/ui/app.go:890
+#: internal/ui/app.go:605
+#: internal/ui/app.go:910
 msgid "Yes"
 msgstr "是"
 
-#: internal/system/package.go:174
+#: internal/system/package.go:175
 msgid "apt-get install failed"
 msgstr "apt-get install 失败"
 
-#: internal/system/package.go:186
+#: internal/system/package.go:187
 msgid "apt-get remove failed"
 msgstr "apt-get remove 失败"
 
-#: internal/system/package.go:162
+#: internal/system/package.go:163
 msgid "apt-get update failed"
 msgstr "apt-get update 失败"
 
-#: internal/service/installer.go:97
+#: internal/service/installer.go:99
 msgid "completed"
 msgstr "已完成"
 
@@ -557,7 +557,7 @@ msgstr "fstab 配置错误"
 msgid "fstab configuration error, please check /etc/fstab"
 msgstr "fstab 配置错误，请检查 /etc/fstab"
 
-#: internal/ui/app.go:653
+#: internal/ui/app.go:673
 msgid "seconds"
 msgstr "秒"
 
