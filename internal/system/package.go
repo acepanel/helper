@@ -127,6 +127,8 @@ func (m *dnfManager) EnableEPEL(ctx context.Context, inChina bool) error {
 		_, _ = m.executor.Run(ctx, "dnf", "install", "-y", url)
 	}
 
+	_, _ = m.executor.Run(ctx, "dnf", "config-manager", "--set-enabled", "epel")
+
 	if inChina {
 		// 删除无镜像的repo
 		_ = os.Remove("/etc/yum.repos.d/epel-cisco-openh264.repo")
@@ -137,7 +139,6 @@ func (m *dnfManager) EnableEPEL(ctx context.Context, inChina bool) error {
 		)
 	}
 
-	_, _ = m.executor.Run(ctx, "dnf", "config-manager", "--set-enabled", "epel")
 	return nil
 }
 
