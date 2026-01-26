@@ -8,10 +8,20 @@ import (
 )
 
 func main() {
-	verbose := flag.Bool("v", false, "verbose mode")
+	verbose := flag.String("v", "", "verbose mode, optionally specify log file path")
 	flag.Parse()
 
-	config.Global.Verbose = *verbose
+	if *verbose != "" {
+		config.Global.Verbose = true
+		// 如果不是 "true" 或 "1"，则作为文件路径
+		if *verbose != "true" && *verbose != "1" {
+			config.Global.LogFile = *verbose
+			if err := config.Global.InitLogFile(); err != nil {
+				panic(err)
+			}
+			defer config.Global.CloseLogFile()
+		}
+	}
 
 	helper, err := initHelper()
 	if err != nil {

@@ -417,9 +417,19 @@ func (a *App) startInstall() tea.Cmd {
 
 		// 设置 verbose 回调
 		if config.Global.Verbose {
-			a.installer.SetVerboseCallback(func(cmd string) {
+			a.installer.SetVerboseCallback(func(cmd, stdout, stderr string, err error) {
 				if a.program != nil {
-					a.program.Send(verboseMsg("$ " + cmd))
+					msg := "$ " + cmd
+					if stdout != "" {
+						msg += "\n" + strings.TrimSpace(stdout)
+					}
+					if stderr != "" {
+						msg += "\n[stderr] " + strings.TrimSpace(stderr)
+					}
+					if err != nil {
+						msg += "\n[error] " + err.Error()
+					}
+					a.program.Send(verboseMsg(msg))
 				}
 			})
 		}
@@ -611,9 +621,19 @@ func (a *App) startUninstall() tea.Cmd {
 
 		// 设置 verbose 回调
 		if config.Global.Verbose {
-			a.uninstaller.SetVerboseCallback(func(cmd string) {
+			a.uninstaller.SetVerboseCallback(func(cmd, stdout, stderr string, err error) {
 				if a.program != nil {
-					a.program.Send(verboseMsg("$ " + cmd))
+					msg := "$ " + cmd
+					if stdout != "" {
+						msg += "\n" + strings.TrimSpace(stdout)
+					}
+					if stderr != "" {
+						msg += "\n[stderr] " + strings.TrimSpace(stderr)
+					}
+					if err != nil {
+						msg += "\n[error] " + err.Error()
+					}
+					a.program.Send(verboseMsg(msg))
 				}
 			})
 		}
@@ -900,9 +920,19 @@ func (a *App) startMount() tea.Cmd {
 
 		// 设置 verbose 回调
 		if config.Global.Verbose {
-			a.mounter.SetVerboseCallback(func(cmd string) {
+			a.mounter.SetVerboseCallback(func(cmd, stdout, stderr string, err error) {
 				if a.program != nil {
-					a.program.Send(verboseMsg("$ " + cmd))
+					msg := "$ " + cmd
+					if stdout != "" {
+						msg += "\n" + strings.TrimSpace(stdout)
+					}
+					if stderr != "" {
+						msg += "\n[stderr] " + strings.TrimSpace(stderr)
+					}
+					if err != nil {
+						msg += "\n[error] " + err.Error()
+					}
+					a.program.Send(verboseMsg(msg))
 				}
 			})
 		}
