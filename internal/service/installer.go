@@ -9,7 +9,9 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 
@@ -385,6 +387,8 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 
 	// 获取最新版本信息
 	client := resty.New()
+	client.SetRetryCount(3)
+	client.SetTimeout(10 * time.Second)
 	resp, err := client.R().
 		SetContext(ctx).
 		Get("https://api.acepanel.net/version/latest")
@@ -428,10 +432,23 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 
 	// 下载面板
 	zipPath := cfg.SetupPath + "/panel/panel.zip"
-	_, err = client.R().
-		SetContext(ctx).
-		SetOutput(zipPath).
-		Get("https://dl.acepanel.net" + downloadURL)
+	fullURL := "https://dl.acepanel.net" + downloadURL
+	_, err = i.executor.Run(ctx, "aria2c",
+		"-c",
+		"--file-allocation=falloc",
+		"--allow-overwrite=true",
+		"--auto-file-renaming=false",
+		"--console-log-level=notice",
+		"--summary-interval=2",
+		"--retry-wait=5",
+		"--max-tries=5",
+		"-x", "16",
+		"-s", "16",
+		"-k", "1M",
+		"-d", filepath.Dir(zipPath),
+		"-o", filepath.Base(zipPath),
+		fullURL,
+	)
 	if err != nil {
 		return fmt.Errorf("%s: %w", i18n.T.Get("Failed to download panel"), err)
 	}
