@@ -195,7 +195,7 @@ msgstr ""
 msgid "Failed to get version info"
 msgstr ""
 
-#: internal/service/installer.go:576
+#: internal/service/installer.go:579
 msgid "Failed to initialize panel"
 msgstr ""
 
@@ -227,7 +227,7 @@ msgstr ""
 msgid "Failed to stop"
 msgstr ""
 
-#: internal/service/installer.go:582
+#: internal/service/installer.go:585
 msgid "Failed to sync panel"
 msgstr ""
 
@@ -360,7 +360,7 @@ msgstr ""
 msgid "Panel is not installed"
 msgstr ""
 
-#: internal/service/uninstaller.go:89
+#: internal/service/uninstaller.go:90
 msgid "Panel uninstalled successfully"
 msgstr ""
 
@@ -388,19 +388,19 @@ msgstr ""
 msgid "Recommended"
 msgstr ""
 
-#: internal/service/uninstaller.go:86
+#: internal/service/uninstaller.go:87
 msgid "Removing %s..."
 msgstr ""
 
 #: internal/service/uninstaller.go:66
-msgid "Removing /usr/local/sbin/acepanel..."
+msgid "Removing AcePanel CLI tool..."
 msgstr ""
 
 #: internal/service/uninstaller.go:66
 msgid "Removing CLI tool"
 msgstr ""
 
-#: internal/service/uninstaller.go:86
+#: internal/service/uninstaller.go:87
 msgid "Removing installation directory"
 msgstr ""
 
@@ -408,11 +408,11 @@ msgstr ""
 msgid "Removing service file"
 msgstr ""
 
-#: internal/service/uninstaller.go:70
+#: internal/service/uninstaller.go:71
 msgid "Removing swap file"
 msgstr ""
 
-#: internal/service/uninstaller.go:70
+#: internal/service/uninstaller.go:71
 msgid "Removing swap file..."
 msgstr ""
 
@@ -445,7 +445,7 @@ msgid "Skip"
 msgstr ""
 
 #: internal/service/uninstaller.go:56
-msgid "Stopping acepanel service..."
+msgid "Stopping AcePanel service..."
 msgstr ""
 
 #: internal/service/uninstaller.go:56
@@ -465,7 +465,7 @@ msgstr ""
 msgid "Uninstall Panel"
 msgstr ""
 
-#: internal/service/uninstaller.go:89
+#: internal/service/uninstaller.go:90
 msgid "Uninstallation complete"
 msgstr ""
 
@@ -545,7 +545,7 @@ msgstr ""
 msgid "fstab configuration error"
 msgstr ""
 
-#: internal/service/uninstaller.go:82
+#: internal/service/uninstaller.go:83
 msgid "fstab configuration error, please check /etc/fstab"
 msgstr ""
 
