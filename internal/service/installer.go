@@ -487,7 +487,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	_ = os.Remove(zipPath)
 
 	// 移动配置文件
-	_ = os.Rename(cfg.SetupPath+"/panel/config.example.yml", cfg.SetupPath+"/panel/storage/config.yml")
+	_, _ = i.executor.Run(ctx, "mv", cfg.SetupPath+"/panel/config.example.yml", cfg.SetupPath+"/panel/storage/config.yml")
 
 	// 替换配置中的路径
 	_, _ = i.executor.Run(ctx, "sed", "-i", fmt.Sprintf("s|/opt/ace|%s|g", cfg.SetupPath), cfg.SetupPath+"/panel/storage/config.yml")
@@ -497,11 +497,11 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	_, _ = i.executor.Run(ctx, "chmod", "600", cfg.SetupPath+"/panel/storage/config.yml")
 
 	// 移动CLI工具
-	_ = os.Rename(cfg.SetupPath+"/panel/cli", "/usr/local/sbin/acepanel")
+	_, _ = i.executor.Run(ctx, "mv", "-f", cfg.SetupPath+"/panel/cli", "/usr/local/sbin/acepanel")
 	_, _ = i.executor.Run(ctx, "chmod", "+x", "/usr/local/sbin/acepanel")
 
 	// 设置软链接
-	_ = os.Symlink("/usr/local/sbin/acepanel", "/usr/local/sbin/ace")
+	_, _ = i.executor.Run(ctx, "ln", "-sf", "/usr/local/sbin/acepanel", "/usr/local/sbin/ace")
 
 	return nil
 }
