@@ -42,7 +42,7 @@ func (u *uninstaller) SetVerboseCallback(cb system.VerboseCallback) {
 }
 
 func (u *uninstaller) Uninstall(ctx context.Context, setupPath string, progress ProgressCallback) error {
-	// 检查root权限
+	// 检查 root 权限
 	if err := u.detector.CheckRoot(); err != nil {
 		return err
 	}
@@ -53,7 +53,7 @@ func (u *uninstaller) Uninstall(ctx context.Context, setupPath string, progress 
 	}
 
 	// 停止服务
-	progress(i18n.T.Get("Stopping panel service"), i18n.T.Get("Stopping acepanel service..."))
+	progress(i18n.T.Get("Stopping panel service"), i18n.T.Get("Stopping AcePanel service..."))
 	_ = u.systemd.Stop(ctx, "acepanel")
 	_ = u.systemd.Disable(ctx, "acepanel")
 
@@ -62,21 +62,22 @@ func (u *uninstaller) Uninstall(ctx context.Context, setupPath string, progress 
 	_ = u.systemd.RemoveServiceFile("acepanel")
 	_ = u.systemd.DaemonReload(ctx)
 
-	// 删除CLI工具
-	progress(i18n.T.Get("Removing CLI tool"), i18n.T.Get("Removing /usr/local/sbin/acepanel..."))
+	// 删除 CLI 工具
+	progress(i18n.T.Get("Removing CLI tool"), i18n.T.Get("Removing AcePanel CLI tool..."))
 	_ = os.Remove("/usr/local/sbin/acepanel")
+	_ = os.Remove("/usr/local/sbin/ace")
 
-	// 移除swap
+	// 移除 swap
 	progress(i18n.T.Get("Removing swap file"), i18n.T.Get("Removing swap file..."))
 	swapFile := setupPath + "/swap"
 	if _, err := os.Stat(swapFile); err == nil {
 		_, _ = u.executor.Run(ctx, "swapoff", swapFile)
 		_ = os.Remove(swapFile)
-		// 从fstab中删除swap条目
+		// 从 fstab 中删除 swap 条目
 		_, _ = u.executor.Run(ctx, "sed", "-i", "/swap/d", "/etc/fstab")
 	}
 
-	// 验证fstab
+	// 验证 fstab
 	result, _ := u.executor.Run(ctx, "mount", "-a")
 	if result != nil && result.ExitCode != 0 {
 		return errors.New(i18n.T.Get("fstab configuration error, please check /etc/fstab"))

@@ -500,6 +500,9 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 	_ = os.Rename(cfg.SetupPath+"/panel/cli", "/usr/local/sbin/acepanel")
 	_, _ = i.executor.Run(ctx, "chmod", "+x", "/usr/local/sbin/acepanel")
 
+	// 设置软链接
+	_ = os.Symlink("/usr/local/sbin/acepanel", "/usr/local/sbin/ace")
+
 	return nil
 }
 
