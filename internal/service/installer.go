@@ -282,7 +282,7 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	sysctlConf.WriteString("net.core.somaxconn=1024\n")
 
 	// 写入 sysctl 配置
-	_ = os.WriteFile("/etc/sysctl.d/99-panel.conf", []byte(sysctlConf.String()), 0644)
+	_ = os.WriteFile("/etc/sysctl.d/99-acepanel.conf", []byte(sysctlConf.String()), 0644)
 
 	// sudoers 添加 /usr/local/bin 和 /usr/local/sbin 路径
 	// 检查是否已包含
