@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Traditional\n"
-"PO-Revision-Date: 2026-01-26 09:56\n"
+"PO-Revision-Date: 2026-01-27 15:15\n"
 
 #: internal/ui/app.go:662
 msgid "All data will be cleared and cannot be recovered!"
@@ -203,7 +203,7 @@ msgstr "取得 UUID 失敗"
 msgid "Failed to get version info"
 msgstr "取得版本資訊失敗"
 
-#: internal/service/installer.go:576
+#: internal/service/installer.go:579
 msgid "Failed to initialize panel"
 msgstr "初始化面板失敗"
 
@@ -235,7 +235,7 @@ msgstr "啟動失敗"
 msgid "Failed to stop"
 msgstr "停止失敗"
 
-#: internal/service/installer.go:582
+#: internal/service/installer.go:585
 msgid "Failed to sync panel"
 msgstr "同步面板失敗"
 
@@ -368,7 +368,7 @@ msgstr "面板已安裝"
 msgid "Panel is not installed"
 msgstr "面板未安裝"
 
-#: internal/service/uninstaller.go:89
+#: internal/service/uninstaller.go:90
 msgid "Panel uninstalled successfully"
 msgstr "面板卸載成功"
 
@@ -396,19 +396,19 @@ msgstr "請以 root 權限執行"
 msgid "Recommended"
 msgstr "推薦"
 
-#: internal/service/uninstaller.go:86
+#: internal/service/uninstaller.go:87
 msgid "Removing %s..."
 msgstr "正在移除 %s……"
 
 #: internal/service/uninstaller.go:66
-msgid "Removing /usr/local/sbin/acepanel..."
-msgstr "正在移除 /usr/local/sbin/acepanel……"
+msgid "Removing AcePanel CLI tool..."
+msgstr "移除 AcePanel CLI 工具……"
 
 #: internal/service/uninstaller.go:66
 msgid "Removing CLI tool"
 msgstr "移除 CLI 工具"
 
-#: internal/service/uninstaller.go:86
+#: internal/service/uninstaller.go:87
 msgid "Removing installation directory"
 msgstr "移除安裝目錄"
 
@@ -416,11 +416,11 @@ msgstr "移除安裝目錄"
 msgid "Removing service file"
 msgstr "移除服務檔案"
 
-#: internal/service/uninstaller.go:70
+#: internal/service/uninstaller.go:71
 msgid "Removing swap file"
 msgstr "移除交換檔案"
 
-#: internal/service/uninstaller.go:70
+#: internal/service/uninstaller.go:71
 msgid "Removing swap file..."
 msgstr "正在移除交換檔案……"
 
@@ -453,8 +453,8 @@ msgid "Skip"
 msgstr "跳過"
 
 #: internal/service/uninstaller.go:56
-msgid "Stopping acepanel service..."
-msgstr "正在停止 acepanel 服務……"
+msgid "Stopping AcePanel service..."
+msgstr "停止 AcePanel 服務……"
 
 #: internal/service/uninstaller.go:56
 msgid "Stopping panel service"
@@ -473,7 +473,7 @@ msgstr "在 /etc/fstab 檔案配置中存在錯誤"
 msgid "Uninstall Panel"
 msgstr "卸載面板"
 
-#: internal/service/uninstaller.go:89
+#: internal/service/uninstaller.go:90
 msgid "Uninstallation complete"
 msgstr "卸載完成"
 
@@ -553,7 +553,7 @@ msgstr "dnf remove 失敗"
 msgid "fstab configuration error"
 msgstr "fstab 配置錯誤"
 
-#: internal/service/uninstaller.go:82
+#: internal/service/uninstaller.go:83
 msgid "fstab configuration error, please check /etc/fstab"
 msgstr "fstab 配置錯誤，請檢查 /etc/fstab"
 
