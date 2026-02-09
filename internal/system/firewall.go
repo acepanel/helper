@@ -51,6 +51,9 @@ func (f *firewall) Install(ctx context.Context) error {
 		_, _ = f.executor.Run(ctx, "systemctl", "stop", "ufw")
 		_, _ = f.executor.Run(ctx, "systemctl", "disable", "ufw")
 		_ = pkgMgr.Remove(ctx, "ufw")
+
+		// 还有个傻逼 cloud-init 和 firewalld 冲突
+		_ = pkgMgr.Remove(ctx, "cloud-init")
 	}
 
 	return pkgMgr.Install(ctx, "firewalld")
