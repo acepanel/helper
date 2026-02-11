@@ -143,7 +143,8 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: internal/system/firewall.go:80
+#: internal/system/firewall.go:100
+#: internal/system/firewall.go:110
 msgid "Failed to add port"
 msgstr ""
 
@@ -183,7 +184,8 @@ msgstr ""
 msgid "Failed to enable"
 msgstr ""
 
-#: internal/system/firewall.go:65
+#: internal/system/firewall.go:67
+#: internal/system/firewall.go:78
 msgid "Failed to enable firewall"
 msgstr ""
 
@@ -207,11 +209,13 @@ msgstr ""
 msgid "Failed to parse version info"
 msgstr ""
 
-#: internal/system/firewall.go:103
+#: internal/system/firewall.go:156
+#: internal/system/firewall.go:166
 msgid "Failed to reload firewall"
 msgstr ""
 
-#: internal/system/firewall.go:92
+#: internal/system/firewall.go:129
+#: internal/system/firewall.go:139
 msgid "Failed to remove port"
 msgstr ""
 
