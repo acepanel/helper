@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Traditional\n"
-"PO-Revision-Date: 2026-01-27 15:15\n"
+"PO-Revision-Date: 2026-02-11 14:17\n"
 
 #: internal/ui/app.go:662
 msgid "All data will be cleared and cannot be recovered!"
@@ -151,7 +151,8 @@ msgstr "錯誤"
 msgid "Exit"
 msgstr "退出"
 
-#: internal/system/firewall.go:80
+#: internal/system/firewall.go:100
+#: internal/system/firewall.go:110
 msgid "Failed to add port"
 msgstr "新增連接埠失敗"
 
@@ -191,7 +192,8 @@ msgstr "下載面板失敗"
 msgid "Failed to enable"
 msgstr "啟用失敗"
 
-#: internal/system/firewall.go:65
+#: internal/system/firewall.go:67
+#: internal/system/firewall.go:78
 msgid "Failed to enable firewall"
 msgstr "啟用防火牆失敗"
 
@@ -215,11 +217,13 @@ msgstr "開啟下載的檔案失敗"
 msgid "Failed to parse version info"
 msgstr "解析版本資訊失敗"
 
-#: internal/system/firewall.go:103
+#: internal/system/firewall.go:156
+#: internal/system/firewall.go:166
 msgid "Failed to reload firewall"
 msgstr "重新載入防火牆失敗"
 
-#: internal/system/firewall.go:92
+#: internal/system/firewall.go:129
+#: internal/system/firewall.go:139
 msgid "Failed to remove port"
 msgstr "移除連接埠失敗"
 
