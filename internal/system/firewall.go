@@ -45,27 +45,37 @@ func (f *firewall) Install(ctx context.Context) error {
 		return fmt.Errorf("%s", i18n.T.Get("Unsupported operating system"))
 	}
 
-	// Debian/Ubuntu 需要先禁用并卸载 ufw
 	if info.OS == types.OSDebian || info.OS == types.OSUbuntu {
-		_, _ = f.executor.Run(ctx, "ufw", "disable")
-		_, _ = f.executor.Run(ctx, "systemctl", "stop", "ufw")
-		_, _ = f.executor.Run(ctx, "systemctl", "disable", "ufw")
-		_ = pkgMgr.Remove(ctx, "ufw")
-
-		// 还有个傻逼 cloud-init 和 firewalld 冲突
-		_ = pkgMgr.Remove(ctx, "cloud-init")
+		return pkgMgr.Install(ctx, "ufw")
 	}
 
 	return pkgMgr.Install(ctx, "firewalld")
 }
 
 func (f *firewall) Enable(ctx context.Context) error {
+	ufw, err := f.isUFW(ctx)
+	if err != nil {
+		return err
+	}
+
+	if ufw {
+		result, err := f.executor.Run(ctx, "ufw", "--force", "enable")
+		if err != nil {
+			return err
+		}
+		if result.ExitCode != 0 {
+			return fmt.Errorf("%s: %s", i18n.T.Get("Failed to enable firewall"), result.Stderr)
+		}
+		return nil
+	}
+
+	// firewalld
 	result, err := f.executor.Run(ctx, "systemctl", "enable", "--now", "firewalld")
 	if err != nil {
 		return err
 	}
 	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to enable firewalld"), result.Stderr)
+		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to enable firewall"), result.Stderr)
 	}
 
 	// 设置默认zone
@@ -74,7 +84,24 @@ func (f *firewall) Enable(ctx context.Context) error {
 }
 
 func (f *firewall) AddPort(ctx context.Context, port int, protocol string) error {
+	ufw, err := f.isUFW(ctx)
+	if err != nil {
+		return err
+	}
+
 	portStr := fmt.Sprintf("%d/%s", port, protocol)
+
+	if ufw {
+		result, err := f.executor.Run(ctx, "ufw", "allow", portStr)
+		if err != nil {
+			return err
+		}
+		if result.ExitCode != 0 {
+			return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to add port"), portStr, result.Stderr)
+		}
+		return nil
+	}
+
 	result, err := f.executor.Run(ctx, "firewall-cmd", "--permanent", "--zone=public", "--add-port="+portStr)
 	if err != nil {
 		return err
@@ -86,7 +113,24 @@ func (f *firewall) AddPort(ctx context.Context, port int, protocol string) error
 }
 
 func (f *firewall) RemovePort(ctx context.Context, port int, protocol string) error {
+	ufw, err := f.isUFW(ctx)
+	if err != nil {
+		return err
+	}
+
 	portStr := fmt.Sprintf("%d/%s", port, protocol)
+
+	if ufw {
+		result, err := f.executor.Run(ctx, "ufw", "delete", "allow", portStr)
+		if err != nil {
+			return err
+		}
+		if result.ExitCode != 0 {
+			return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to remove port"), portStr, result.Stderr)
+		}
+		return nil
+	}
+
 	result, err := f.executor.Run(ctx, "firewall-cmd", "--permanent", "--zone=public", "--remove-port="+portStr)
 	if err != nil {
 		return err
@@ -98,6 +142,22 @@ func (f *firewall) RemovePort(ctx context.Context, port int, protocol string) er
 }
 
 func (f *firewall) Reload(ctx context.Context) error {
+	ufw, err := f.isUFW(ctx)
+	if err != nil {
+		return err
+	}
+
+	if ufw {
+		result, err := f.executor.Run(ctx, "ufw", "reload")
+		if err != nil {
+			return err
+		}
+		if result.ExitCode != 0 {
+			return fmt.Errorf("%s: %s", i18n.T.Get("Failed to reload firewall"), result.Stderr)
+		}
+		return nil
+	}
+
 	result, err := f.executor.Run(ctx, "firewall-cmd", "--reload")
 	if err != nil {
 		return err
@@ -106,4 +166,12 @@ func (f *firewall) Reload(ctx context.Context) error {
 		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to reload firewall"), result.Stderr)
 	}
 	return nil
+}
+
+func (f *firewall) isUFW(ctx context.Context) (bool, error) {
+	info, err := f.detector.Detect(ctx)
+	if err != nil {
+		return false, err
+	}
+	return info.OS == types.OSDebian || info.OS == types.OSUbuntu, nil
 }

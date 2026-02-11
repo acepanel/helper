@@ -184,7 +184,7 @@ msgid "Failed to enable"
 msgstr ""
 
 #: internal/system/firewall.go:65
-msgid "Failed to enable firewalld"
+msgid "Failed to enable firewall"
 msgstr ""
 
 #: internal/service/mounter.go:147

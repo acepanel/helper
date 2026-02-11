@@ -507,7 +507,7 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 }
 
 func (i *installer) configureFirewall(ctx context.Context, cfg *types.InstallConfig) error {
-	// 安装firewalld
+	// 安装防火墙
 	if err := i.firewall.Install(ctx); err != nil {
 		return err
 	}

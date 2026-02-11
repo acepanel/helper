@@ -192,8 +192,8 @@ msgid "Failed to enable"
 msgstr "啟用失敗"
 
 #: internal/system/firewall.go:65
-msgid "Failed to enable firewalld"
-msgstr "啟用 firewalld 失敗"
+msgid "Failed to enable firewall"
+msgstr "啟用防火牆失敗"
 
 #: internal/service/mounter.go:147
 msgid "Failed to get UUID"
