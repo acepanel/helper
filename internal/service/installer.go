@@ -281,9 +281,9 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	}
 
 	// somaxconn 调优
-	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=1024")
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=65535")
 	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.core.somaxconn/d", "/etc/sysctl.conf")
-	sysctlConf.WriteString("net.core.somaxconn=1024\n")
+	sysctlConf.WriteString("net.core.somaxconn=65535\n")
 
 	// 写入 sysctl 配置
 	_ = os.WriteFile("/etc/sysctl.d/99-acepanel.conf", []byte(sysctlConf.String()), 0644)
