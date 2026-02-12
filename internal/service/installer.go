@@ -280,10 +280,20 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 		sysctlConf.WriteString("net.netfilter.nf_conntrack_buckets=375808\n")
 	}
 
+	// netdev_max_backlog 调优
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.netdev_max_backlog=16384")
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.core.netdev_max_backlog/d", "/etc/sysctl.conf")
+	sysctlConf.WriteString("net.core.netdev_max_backlog=16384\n")
+
 	// somaxconn 调优
-	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=65535")
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=8192")
 	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.core.somaxconn/d", "/etc/sysctl.conf")
-	sysctlConf.WriteString("net.core.somaxconn=65535\n")
+	sysctlConf.WriteString("net.core.somaxconn=8192\n")
+
+	// tcp_max_syn_backlog 调优
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.ipv4.tcp_max_syn_backlog=8192")
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.ipv4.tcp_max_syn_backlog/d", "/etc/sysctl.conf")
+	sysctlConf.WriteString("net.ipv4.tcp_max_syn_backlog=8192\n")
 
 	// 写入 sysctl 配置
 	_ = os.WriteFile("/etc/sysctl.d/99-acepanel.conf", []byte(sysctlConf.String()), 0644)
