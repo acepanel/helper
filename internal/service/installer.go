@@ -175,10 +175,6 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	_, _ = i.executor.Run(ctx, "setenforce", "0")
 	_, _ = i.executor.Run(ctx, "sed", "-i", "s/SELINUX=enforcing/SELINUX=disabled/g", "/etc/selinux/config")
 
-	// 临时设置系统参数
-	_, _ = i.executor.Run(ctx, "sysctl", "-w", "vm.overcommit_memory=1")
-	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=1024")
-
 	// 设置 file-max
 	_ = os.WriteFile("/proc/sys/fs/file-max", []byte("2147483584"), 0644)
 
@@ -212,6 +208,13 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	if !strings.Contains(string(sysctlContent), "fs.file-max") {
 		sysctlConf.WriteString("fs.file-max = 2147483584\n")
 	}
+
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "vm.overcommit_memory=1")
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "vm.swappiness=10")
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/vm.overcommit_memory/d", "/etc/sysctl.conf")
+	_, _ = i.executor.Run(ctx, "sed", "-i", "/vm.swappiness/d", "/etc/sysctl.conf")
+	sysctlConf.WriteString("vm.overcommit_memory = 1\n")
+	sysctlConf.WriteString("vm.swappiness = 10\n")
 
 	// 自动开启 BBR
 	// 清理旧配置
@@ -278,6 +281,7 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	}
 
 	// somaxconn 调优
+	_, _ = i.executor.Run(ctx, "sysctl", "-w", "net.core.somaxconn=1024")
 	_, _ = i.executor.Run(ctx, "sed", "-i", "/net.core.somaxconn/d", "/etc/sysctl.conf")
 	sysctlConf.WriteString("net.core.somaxconn=1024\n")
 
