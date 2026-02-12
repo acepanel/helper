@@ -42,7 +42,7 @@ msgstr ""
 msgid "Checking system requirements"
 msgstr ""
 
-#: internal/service/installer.go:477
+#: internal/service/installer.go:481
 msgid "Checksum mismatch"
 msgstr ""
 
@@ -148,7 +148,7 @@ msgstr ""
 msgid "Failed to add port"
 msgstr ""
 
-#: internal/service/installer.go:472
+#: internal/service/installer.go:476
 msgid "Failed to compute checksum"
 msgstr ""
 
@@ -172,11 +172,11 @@ msgstr ""
 msgid "Failed to disable"
 msgstr ""
 
-#: internal/service/installer.go:461
+#: internal/service/installer.go:465
 msgid "Failed to download checksum"
 msgstr ""
 
-#: internal/service/installer.go:453
+#: internal/service/installer.go:457
 msgid "Failed to download panel"
 msgstr ""
 
@@ -193,19 +193,19 @@ msgstr ""
 msgid "Failed to get UUID"
 msgstr ""
 
-#: internal/service/installer.go:396
+#: internal/service/installer.go:400
 msgid "Failed to get version info"
 msgstr ""
 
-#: internal/service/installer.go:579
+#: internal/service/installer.go:583
 msgid "Failed to initialize panel"
 msgstr ""
 
-#: internal/service/installer.go:467
+#: internal/service/installer.go:471
 msgid "Failed to open downloaded file"
 msgstr ""
 
-#: internal/service/installer.go:411
+#: internal/service/installer.go:415
 msgid "Failed to parse version info"
 msgstr ""
 
@@ -231,11 +231,11 @@ msgstr ""
 msgid "Failed to stop"
 msgstr ""
 
-#: internal/service/installer.go:585
+#: internal/service/installer.go:589
 msgid "Failed to sync panel"
 msgstr ""
 
-#: internal/service/installer.go:483
+#: internal/service/installer.go:487
 msgid "Failed to unzip panel"
 msgstr ""
 
@@ -340,7 +340,7 @@ msgstr ""
 msgid "No available disks found"
 msgstr ""
 
-#: internal/service/installer.go:430
+#: internal/service/installer.go:434
 msgid "No download URL found for architecture %s"
 msgstr ""
 
@@ -460,7 +460,7 @@ msgstr ""
 msgid "Thank you for using AcePanel."
 msgstr ""
 
-#: internal/service/installer.go:375
+#: internal/service/installer.go:379
 msgid "There is an error in the /etc/fstab file configuration"
 msgstr ""
 
@@ -490,7 +490,7 @@ msgid "Unsupported filesystem type: %s"
 msgstr ""
 
 #: internal/service/installer.go:126
-#: internal/service/installer.go:307
+#: internal/service/installer.go:311
 #: internal/system/firewall.go:45
 msgid "Unsupported operating system"
 msgstr ""
