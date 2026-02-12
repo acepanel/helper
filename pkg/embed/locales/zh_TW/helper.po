@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Traditional\n"
-"PO-Revision-Date: 2026-02-11 14:17\n"
+"PO-Revision-Date: 2026-02-12 18:51\n"
 
 #: internal/ui/app.go:662
 msgid "All data will be cleared and cannot be recovered!"
@@ -50,7 +50,7 @@ msgstr "無法操作系統碟"
 msgid "Checking system requirements"
 msgstr "檢查系統要求"
 
-#: internal/service/installer.go:477
+#: internal/service/installer.go:481
 msgid "Checksum mismatch"
 msgstr "校驗和不匹配"
 
@@ -156,7 +156,7 @@ msgstr "退出"
 msgid "Failed to add port"
 msgstr "新增連接埠失敗"
 
-#: internal/service/installer.go:472
+#: internal/service/installer.go:476
 msgid "Failed to compute checksum"
 msgstr "計算校驗和失敗"
 
@@ -180,11 +180,11 @@ msgstr "daemon-reload 失敗"
 msgid "Failed to disable"
 msgstr "停用失敗"
 
-#: internal/service/installer.go:461
+#: internal/service/installer.go:465
 msgid "Failed to download checksum"
 msgstr "下載校驗和失敗"
 
-#: internal/service/installer.go:453
+#: internal/service/installer.go:457
 msgid "Failed to download panel"
 msgstr "下載面板失敗"
 
@@ -201,19 +201,19 @@ msgstr "啟用防火牆失敗"
 msgid "Failed to get UUID"
 msgstr "取得 UUID 失敗"
 
-#: internal/service/installer.go:396
+#: internal/service/installer.go:400
 msgid "Failed to get version info"
 msgstr "取得版本資訊失敗"
 
-#: internal/service/installer.go:579
+#: internal/service/installer.go:583
 msgid "Failed to initialize panel"
 msgstr "初始化面板失敗"
 
-#: internal/service/installer.go:467
+#: internal/service/installer.go:471
 msgid "Failed to open downloaded file"
 msgstr "開啟下載的檔案失敗"
 
-#: internal/service/installer.go:411
+#: internal/service/installer.go:415
 msgid "Failed to parse version info"
 msgstr "解析版本資訊失敗"
 
@@ -239,11 +239,11 @@ msgstr "啟動失敗"
 msgid "Failed to stop"
 msgstr "停止失敗"
 
-#: internal/service/installer.go:585
+#: internal/service/installer.go:589
 msgid "Failed to sync panel"
 msgstr "同步面板失敗"
 
-#: internal/service/installer.go:483
+#: internal/service/installer.go:487
 msgid "Failed to unzip panel"
 msgstr "解壓面板失敗"
 
@@ -348,7 +348,7 @@ msgstr "否"
 msgid "No available disks found"
 msgstr "未找到可用磁碟"
 
-#: internal/service/installer.go:430
+#: internal/service/installer.go:434
 msgid "No download URL found for architecture %s"
 msgstr "未找到架構 %s 的下載 URL"
 
@@ -468,7 +468,7 @@ msgstr "停止面板服務"
 msgid "Thank you for using AcePanel."
 msgstr "感謝您使用 AcePanel。"
 
-#: internal/service/installer.go:375
+#: internal/service/installer.go:379
 msgid "There is an error in the /etc/fstab file configuration"
 msgstr "在 /etc/fstab 檔案配置中存在錯誤"
 
@@ -498,7 +498,7 @@ msgid "Unsupported filesystem type: %s"
 msgstr "不支援的檔案系統類型：%s"
 
 #: internal/service/installer.go:126
-#: internal/service/installer.go:307
+#: internal/service/installer.go:311
 #: internal/system/firewall.go:45
 msgid "Unsupported operating system"
 msgstr "不支援的作業系統"
