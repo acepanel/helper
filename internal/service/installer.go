@@ -522,14 +522,9 @@ func (i *installer) downloadPanel(ctx context.Context, cfg *types.InstallConfig)
 
 func (i *installer) configureFirewall(ctx context.Context, cfg *types.InstallConfig) error {
 	// 安装防火墙
-	if err := i.firewall.Install(ctx); err != nil {
-		return err
-	}
-
+	i.firewall.Install(ctx)
 	// 启用
-	if err := i.firewall.Enable(ctx); err != nil {
-		return err
-	}
+	i.firewall.Enable(ctx)
 
 	// 获取SSH端口
 	info, _ := i.detector.Detect(ctx)
@@ -547,11 +542,13 @@ func (i *installer) configureFirewall(ctx context.Context, cfg *types.InstallCon
 	}
 
 	for _, p := range ports {
-		_ = i.firewall.AddPort(ctx, p.port, p.protocol)
+		i.firewall.AddPort(ctx, p.port, p.protocol)
 	}
 
 	// 重载
-	return i.firewall.Reload(ctx)
+	i.firewall.Reload(ctx)
+
+	return nil
 }
 
 func (i *installer) createService(ctx context.Context, cfg *types.InstallConfig) error {

@@ -4,22 +4,21 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/acepanel/helper/pkg/i18n"
 	"github.com/acepanel/helper/pkg/types"
 )
 
 // Firewall 防火墙接口
 type Firewall interface {
 	// Install 安装防火墙
-	Install(ctx context.Context) error
+	Install(ctx context.Context)
 	// Enable 启用防火墙
-	Enable(ctx context.Context) error
+	Enable(ctx context.Context)
 	// AddPort 添加端口
-	AddPort(ctx context.Context, port int, protocol string) error
+	AddPort(ctx context.Context, port int, protocol string)
 	// RemovePort 移除端口
-	RemovePort(ctx context.Context, port int, protocol string) error
+	RemovePort(ctx context.Context, port int, protocol string)
 	// Reload 重载配置
-	Reload(ctx context.Context) error
+	Reload(ctx context.Context)
 }
 
 type firewall struct {
@@ -35,143 +34,64 @@ func NewFirewall(executor Executor, detector Detector) Firewall {
 	}
 }
 
-func (f *firewall) Install(ctx context.Context) error {
+func (f *firewall) Install(ctx context.Context) {
 	info, err := f.detector.Detect(ctx)
 	if err != nil {
-		return err
+		return
 	}
 	pkgMgr := NewPackageManager(info.OS, f.executor)
 	if pkgMgr == nil {
-		return fmt.Errorf("%s", i18n.T.Get("Unsupported operating system"))
+		return
 	}
 
-	if info.OS == types.OSDebian || info.OS == types.OSUbuntu {
-		return pkgMgr.Install(ctx, "ufw")
+	if f.isUFW(ctx) {
+		_ = pkgMgr.Install(ctx, "ufw")
+	} else {
+		_ = pkgMgr.Install(ctx, "firewalld")
 	}
-
-	return pkgMgr.Install(ctx, "firewalld")
 }
 
-func (f *firewall) Enable(ctx context.Context) error {
-	ufw, err := f.isUFW(ctx)
-	if err != nil {
-		return err
+func (f *firewall) Enable(ctx context.Context) {
+	if f.isUFW(ctx) {
+		_, _ = f.executor.Run(ctx, "ufw", "--force", "enable")
+	} else {
+		_, _ = f.executor.Run(ctx, "systemctl", "enable", "--now", "firewalld")
+		_, _ = f.executor.Run(ctx, "firewall-cmd", "--set-default-zone=public")
 	}
-
-	if ufw {
-		result, err := f.executor.Run(ctx, "ufw", "--force", "enable")
-		if err != nil {
-			return err
-		}
-		if result.ExitCode != 0 {
-			return fmt.Errorf("%s: %s", i18n.T.Get("Failed to enable firewall"), result.Stderr)
-		}
-		return nil
-	}
-
-	// firewalld
-	result, err := f.executor.Run(ctx, "systemctl", "enable", "--now", "firewalld")
-	if err != nil {
-		return err
-	}
-	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to enable firewall"), result.Stderr)
-	}
-
-	// 设置默认zone
-	_, err = f.executor.Run(ctx, "firewall-cmd", "--set-default-zone=public")
-	return err
 }
 
-func (f *firewall) AddPort(ctx context.Context, port int, protocol string) error {
-	ufw, err := f.isUFW(ctx)
-	if err != nil {
-		return err
-	}
-
+func (f *firewall) AddPort(ctx context.Context, port int, protocol string) {
 	portStr := fmt.Sprintf("%d/%s", port, protocol)
 
-	if ufw {
-		result, err := f.executor.Run(ctx, "ufw", "allow", portStr)
-		if err != nil {
-			return err
-		}
-		if result.ExitCode != 0 {
-			return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to add port"), portStr, result.Stderr)
-		}
-		return nil
+	if f.isUFW(ctx) {
+		_, _ = f.executor.Run(ctx, "ufw", "allow", portStr)
+	} else {
+		_, _ = f.executor.Run(ctx, "firewall-cmd", "--permanent", "--zone=public", "--add-port="+portStr)
 	}
-
-	result, err := f.executor.Run(ctx, "firewall-cmd", "--permanent", "--zone=public", "--add-port="+portStr)
-	if err != nil {
-		return err
-	}
-	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to add port"), portStr, result.Stderr)
-	}
-	return nil
 }
 
-func (f *firewall) RemovePort(ctx context.Context, port int, protocol string) error {
-	ufw, err := f.isUFW(ctx)
-	if err != nil {
-		return err
-	}
-
+func (f *firewall) RemovePort(ctx context.Context, port int, protocol string) {
 	portStr := fmt.Sprintf("%d/%s", port, protocol)
 
-	if ufw {
-		result, err := f.executor.Run(ctx, "ufw", "delete", "allow", portStr)
-		if err != nil {
-			return err
-		}
-		if result.ExitCode != 0 {
-			return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to remove port"), portStr, result.Stderr)
-		}
-		return nil
+	if f.isUFW(ctx) {
+		_, _ = f.executor.Run(ctx, "ufw", "delete", "allow", portStr)
+	} else {
+		_, _ = f.executor.Run(ctx, "firewall-cmd", "--permanent", "--zone=public", "--remove-port="+portStr)
 	}
-
-	result, err := f.executor.Run(ctx, "firewall-cmd", "--permanent", "--zone=public", "--remove-port="+portStr)
-	if err != nil {
-		return err
-	}
-	if result.ExitCode != 0 {
-		return fmt.Errorf("%s %s: %s", i18n.T.Get("Failed to remove port"), portStr, result.Stderr)
-	}
-	return nil
 }
 
-func (f *firewall) Reload(ctx context.Context) error {
-	ufw, err := f.isUFW(ctx)
-	if err != nil {
-		return err
+func (f *firewall) Reload(ctx context.Context) {
+	if f.isUFW(ctx) {
+		_, _ = f.executor.Run(ctx, "ufw", "reload")
+	} else {
+		_, _ = f.executor.Run(ctx, "firewall-cmd", "--reload")
 	}
-
-	if ufw {
-		result, err := f.executor.Run(ctx, "ufw", "reload")
-		if err != nil {
-			return err
-		}
-		if result.ExitCode != 0 {
-			return fmt.Errorf("%s: %s", i18n.T.Get("Failed to reload firewall"), result.Stderr)
-		}
-		return nil
-	}
-
-	result, err := f.executor.Run(ctx, "firewall-cmd", "--reload")
-	if err != nil {
-		return err
-	}
-	if result.ExitCode != 0 {
-		return fmt.Errorf("%s: %s", i18n.T.Get("Failed to reload firewall"), result.Stderr)
-	}
-	return nil
 }
 
-func (f *firewall) isUFW(ctx context.Context) (bool, error) {
+func (f *firewall) isUFW(ctx context.Context) bool {
 	info, err := f.detector.Detect(ctx)
 	if err != nil {
-		return false, err
+		return false
 	}
-	return info.OS == types.OSDebian || info.OS == types.OSUbuntu, nil
+	return info.OS == types.OSDebian || info.OS == types.OSUbuntu
 }
