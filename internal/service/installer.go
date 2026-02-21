@@ -254,7 +254,7 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 			}
 		}
 		if qdisc != "" {
-			sysctlConf.WriteString(fmt.Sprintf("net.core.default_qdisc=%s\n", qdisc))
+			_, _ = fmt.Fprintf(&sysctlConf, "net.core.default_qdisc=%s\n", qdisc)
 		}
 		sysctlConf.WriteString("net.ipv4.tcp_congestion_control=bbr\n")
 	}

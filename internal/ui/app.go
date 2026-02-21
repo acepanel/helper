@@ -477,7 +477,7 @@ func (a *App) viewInstall() string {
 		sb.WriteString("\n\n")
 		sb.WriteString(RenderHelp("Enter", i18n.T.Get("Back")))
 	} else if a.installRunning {
-		sb.WriteString(fmt.Sprintf("%s %s\n\n", a.installSpinner.View(), a.installStep))
+		_, _ = fmt.Fprintf(&sb, "%s %s\n\n", a.installSpinner.View(), a.installStep)
 		sb.WriteString(a.installProgress.ViewAs(a.installPercent))
 		sb.WriteString("\n\n")
 		for _, log := range a.installLogs {
@@ -684,7 +684,7 @@ func (a *App) viewUninstall() string {
 		sb.WriteString(a.uninstallForm.View())
 
 	case 3: // running
-		sb.WriteString(fmt.Sprintf("%s %s\n\n", a.uninstallSpinner.View(), a.uninstallStep))
+		_, _ = fmt.Fprintf(&sb, "%s %s\n\n", a.uninstallSpinner.View(), a.uninstallStep)
 		for _, log := range a.uninstallLogs {
 			sb.WriteString(LogStyle.Render(log))
 			sb.WriteString("\n")
@@ -975,13 +975,13 @@ func (a *App) viewMount() string {
 
 	switch a.mountState {
 	case 0: // loading
-		sb.WriteString(fmt.Sprintf("%s %s", a.mountSpinner.View(), i18n.T.Get("Loading disk list...")))
+		_, _ = fmt.Fprintf(&sb, "%s %s", a.mountSpinner.View(), i18n.T.Get("Loading disk list..."))
 
 	case 1: // select disk
 		sb.WriteString(i18n.T.Get("Available disks:"))
 		sb.WriteString("\n\n")
 		for _, disk := range a.disks {
-			sb.WriteString(fmt.Sprintf("  • %s (%s)\n", disk.Name, disk.Size))
+			_, _ = fmt.Fprintf(&sb, "  • %s (%s)\n", disk.Name, disk.Size)
 		}
 		sb.WriteString("\n")
 		sb.WriteString(a.mountDiskForm.View())
@@ -998,7 +998,7 @@ func (a *App) viewMount() string {
 		sb.WriteString(a.mountConfirmForm.View())
 
 	case 5: // running
-		sb.WriteString(fmt.Sprintf("%s %s\n\n", a.mountSpinner.View(), a.mountStep))
+		_, _ = fmt.Fprintf(&sb, "%s %s\n\n", a.mountSpinner.View(), a.mountStep)
 		for _, log := range a.mountLogs {
 			sb.WriteString(LogStyle.Render(log))
 			sb.WriteString("\n")
