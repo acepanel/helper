@@ -47,9 +47,10 @@ func (m *mounter) IsPartitioned(disk string) bool {
 }
 
 func firstPartitionName(disk string) string {
-	if disk == "" {
-		return "1"
+	if len(disk) == 0 {
+		return ""
 	}
+
 	last := disk[len(disk)-1]
 	if last >= '0' && last <= '9' {
 		return disk + "p1"
@@ -58,6 +59,9 @@ func firstPartitionName(disk string) string {
 }
 
 func firstPartitionPath(disk string) string {
+	if disk == "" {
+		return ""
+	}
 	return "/dev/" + firstPartitionName(disk)
 }
 
