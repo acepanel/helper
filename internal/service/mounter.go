@@ -42,31 +42,12 @@ func (m *mounter) ListDisks(ctx context.Context) ([]types.DiskInfo, error) {
 }
 
 func (m *mounter) IsPartitioned(disk string) bool {
-	_, err := os.Stat(firstPartitionPath(disk))
+	_, err := os.Stat("/dev/" + m.firstPartitionName(disk))
 	return err == nil
 }
 
-func firstPartitionName(disk string) string {
-	if len(disk) == 0 {
-		return ""
-	}
-
-	last := disk[len(disk)-1]
-	if last >= '0' && last <= '9' {
-		return disk + "p1"
-	}
-	return disk + "1"
-}
-
-func firstPartitionPath(disk string) string {
-	if disk == "" {
-		return ""
-	}
-	return "/dev/" + firstPartitionName(disk)
-}
-
 func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress ProgressCallback) error {
-	partitionPath := firstPartitionPath(cfg.Disk)
+	partitionPath := "/dev/" + m.firstPartitionName(cfg.Disk)
 
 	// 检查root权限
 	if err := m.detector.CheckRoot(); err != nil {
@@ -195,4 +176,15 @@ func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress Pr
 
 	progress(i18n.T.Get("Mount complete"), i18n.T.Get("Disk partition and mount successful"))
 	return nil
+}
+func (m *mounter) firstPartitionName(disk string) string {
+	if len(disk) == 0 {
+		return ""
+	}
+
+	last := disk[len(disk)-1]
+	if last >= '0' && last <= '9' {
+		return disk + "p1"
+	}
+	return disk + "1"
 }
