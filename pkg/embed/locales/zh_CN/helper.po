@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Simplified\n"
-"PO-Revision-Date: 2026-02-12 19:17\n"
+"PO-Revision-Date: 2026-03-24 13:19\n"
 
 #: internal/ui/app.go:662
 msgid "All data will be cleared and cannot be recovered!"
@@ -42,7 +42,7 @@ msgstr "CPU 必须支持至少 x86-64-v2 指令集"
 msgid "Cancel"
 msgstr "取消"
 
-#: internal/service/mounter.go:62
+#: internal/service/mounter.go:64
 msgid "Cannot operate on system disk"
 msgstr "无法操作系统盘"
 
@@ -74,19 +74,19 @@ msgstr "确认卸载"
 msgid "Continue"
 msgstr "继续"
 
-#: internal/service/mounter.go:82
+#: internal/service/mounter.go:84
 msgid "Creating %s..."
 msgstr "正在创建 %s……"
 
-#: internal/service/mounter.go:82
+#: internal/service/mounter.go:84
 msgid "Creating mount point"
 msgstr "创建挂载点"
 
-#: internal/service/mounter.go:112
+#: internal/service/mounter.go:114
 msgid "Creating partition"
 msgstr "创建分区"
 
-#: internal/service/mounter.go:112
+#: internal/service/mounter.go:114
 msgid "Creating partition on /dev/%s..."
 msgstr "正在 /dev/%s 上创建分区……"
 
@@ -102,11 +102,11 @@ msgstr "创建 systemd 服务"
 msgid "Creating www user"
 msgstr "创建 www 用户"
 
-#: internal/service/mounter.go:97
+#: internal/service/mounter.go:99
 msgid "Deleting existing partitions"
 msgstr "删除现有分区"
 
-#: internal/service/mounter.go:97
+#: internal/service/mounter.go:99
 msgid "Deleting existing partitions..."
 msgstr "正在删除现有分区……"
 
@@ -123,11 +123,11 @@ msgstr "设备"
 msgid "Disk Partition"
 msgstr "磁盘分区"
 
-#: internal/service/mounter.go:57
+#: internal/service/mounter.go:59
 msgid "Disk not found"
 msgstr "磁盘未找到"
 
-#: internal/service/mounter.go:175
+#: internal/service/mounter.go:177
 msgid "Disk partition and mount successful"
 msgstr "磁盘分区和挂载成功"
 
@@ -151,11 +151,6 @@ msgstr "错误"
 msgid "Exit"
 msgstr "退出"
 
-#: internal/system/firewall.go:100
-#: internal/system/firewall.go:110
-msgid "Failed to add port"
-msgstr "添加端口失败"
-
 #: internal/service/installer.go:486
 msgid "Failed to compute checksum"
 msgstr "计算校验和失败"
@@ -164,7 +159,7 @@ msgstr "计算校验和失败"
 msgid "Failed to create group"
 msgstr "创建组失败"
 
-#: internal/service/mounter.go:116
+#: internal/service/mounter.go:118
 msgid "Failed to create partition"
 msgstr "创建分区失败"
 
@@ -192,12 +187,7 @@ msgstr "下载面板失败"
 msgid "Failed to enable"
 msgstr "启用失败"
 
-#: internal/system/firewall.go:67
-#: internal/system/firewall.go:78
-msgid "Failed to enable firewall"
-msgstr "启用防火墙失败"
-
-#: internal/service/mounter.go:147
+#: internal/service/mounter.go:149
 msgid "Failed to get UUID"
 msgstr "获取 UUID 失败"
 
@@ -205,7 +195,7 @@ msgstr "获取 UUID 失败"
 msgid "Failed to get version info"
 msgstr "获取版本信息失败"
 
-#: internal/service/installer.go:593
+#: internal/service/installer.go:590
 msgid "Failed to initialize panel"
 msgstr "初始化面板失败"
 
@@ -216,16 +206,6 @@ msgstr "打开下载的文件失败"
 #: internal/service/installer.go:425
 msgid "Failed to parse version info"
 msgstr "解析版本信息失败"
-
-#: internal/system/firewall.go:156
-#: internal/system/firewall.go:166
-msgid "Failed to reload firewall"
-msgstr "重新加载防火墙失败"
-
-#: internal/system/firewall.go:129
-#: internal/system/firewall.go:139
-msgid "Failed to remove port"
-msgstr "移除端口失败"
 
 #: internal/system/systemd.go:93
 msgid "Failed to restart"
@@ -239,7 +219,7 @@ msgstr "启动失败"
 msgid "Failed to stop"
 msgstr "停止失败"
 
-#: internal/service/installer.go:599
+#: internal/service/installer.go:596
 msgid "Failed to sync panel"
 msgstr "同步面板失败"
 
@@ -256,15 +236,15 @@ msgstr "文件系统"
 msgid "For safety, please wait before proceeding"
 msgstr "为安全起见，请稍候再继续"
 
-#: internal/service/mounter.go:130
+#: internal/service/mounter.go:132
 msgid "Format failed"
 msgstr "格式化失败"
 
-#: internal/service/mounter.go:120
-msgid "Formatting /dev/%s1 as %s..."
-msgstr "正在将 /dev/%s1 格式化为 %s……"
+#: internal/service/mounter.go:122
+msgid "Formatting %s as %s..."
+msgstr ""
 
-#: internal/service/mounter.go:120
+#: internal/service/mounter.go:122
 msgid "Formatting partition"
 msgstr "格式化分区"
 
@@ -297,11 +277,11 @@ msgstr "安装成功"
 msgid "Installing dependencies"
 msgstr "安装依赖"
 
-#: internal/service/mounter.go:66
+#: internal/service/mounter.go:68
 msgid "Installing partition tools"
 msgstr "安装分区工具"
 
-#: internal/service/mounter.go:66
+#: internal/service/mounter.go:68
 msgid "Installing partition tools..."
 msgstr "正在安装分区工具……"
 
@@ -318,23 +298,23 @@ msgstr "正在加载磁盘列表……"
 msgid "Mount Point"
 msgstr "挂载点"
 
-#: internal/service/mounter.go:175
+#: internal/service/mounter.go:177
 msgid "Mount complete"
 msgstr "挂载完成"
 
-#: internal/service/mounter.go:140
+#: internal/service/mounter.go:142
 msgid "Mount failed"
 msgstr "挂载失败"
 
-#: internal/service/mounter.go:90
+#: internal/service/mounter.go:92
 msgid "Mount point is not empty"
 msgstr "挂载点不为空"
 
-#: internal/service/mounter.go:137
-msgid "Mounting /dev/%s1 to %s..."
-msgstr "正在将 /dev/%s1 挂载到 %s……"
+#: internal/service/mounter.go:139
+msgid "Mounting %s to %s..."
+msgstr ""
 
-#: internal/service/mounter.go:137
+#: internal/service/mounter.go:139
 msgid "Mounting partition"
 msgstr "挂载分区"
 
@@ -493,21 +473,20 @@ msgstr "卸载成功"
 msgid "Unsupported CPU architecture"
 msgstr "不支持的 CPU 架构"
 
-#: internal/service/mounter.go:127
+#: internal/service/mounter.go:129
 msgid "Unsupported filesystem type: %s"
 msgstr "不支持的文件系统类型：%s"
 
 #: internal/service/installer.go:126
 #: internal/service/installer.go:321
-#: internal/system/firewall.go:45
 msgid "Unsupported operating system"
 msgstr "不支持的操作系统"
 
-#: internal/service/mounter.go:144
+#: internal/service/mounter.go:146
 msgid "Updating /etc/fstab for auto-mount..."
 msgstr "正在更新 /etc/fstab 以实现自动挂载……"
 
-#: internal/service/mounter.go:144
+#: internal/service/mounter.go:146
 msgid "Updating fstab"
 msgstr "更新 fstab"
 
@@ -553,7 +532,7 @@ msgstr "dnf makecache 失败"
 msgid "dnf remove failed"
 msgstr "dnf remove 失败"
 
-#: internal/service/mounter.go:172
+#: internal/service/mounter.go:174
 msgid "fstab configuration error"
 msgstr "fstab 配置错误"
 
