@@ -42,11 +42,13 @@ func (m *mounter) ListDisks(ctx context.Context) ([]types.DiskInfo, error) {
 }
 
 func (m *mounter) IsPartitioned(disk string) bool {
-	_, err := os.Stat("/dev/" + disk + "1")
+	_, err := os.Stat("/dev/" + m.firstPartitionName(disk))
 	return err == nil
 }
 
 func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress ProgressCallback) error {
+	partitionPath := "/dev/" + m.firstPartitionName(cfg.Disk)
+
 	// 检查root权限
 	if err := m.detector.CheckRoot(); err != nil {
 		return err
@@ -91,7 +93,7 @@ func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress Pr
 	}
 
 	// 卸载已有分区
-	_, _ = m.executor.Run(ctx, "umount", "/dev/"+cfg.Disk+"1")
+	_, _ = m.executor.Run(ctx, "umount", partitionPath)
 
 	// 删除所有分区
 	progress(i18n.T.Get("Deleting existing partitions"), i18n.T.Get("Deleting existing partitions..."))
@@ -117,12 +119,12 @@ func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress Pr
 	}
 
 	// 格式化
-	progress(i18n.T.Get("Formatting partition"), i18n.T.Get("Formatting /dev/%s1 as %s...", cfg.Disk, cfg.FSType))
+	progress(i18n.T.Get("Formatting partition"), i18n.T.Get("Formatting %s as %s...", partitionPath, cfg.FSType))
 	switch cfg.FSType {
 	case types.FSTypeExt4:
-		result, err = m.executor.Run(ctx, "mkfs.ext4", "-F", "/dev/"+cfg.Disk+"1")
+		result, err = m.executor.Run(ctx, "mkfs.ext4", "-F", partitionPath)
 	case types.FSTypeXFS:
-		result, err = m.executor.Run(ctx, "mkfs.xfs", "-f", "/dev/"+cfg.Disk+"1")
+		result, err = m.executor.Run(ctx, "mkfs.xfs", "-f", partitionPath)
 	default:
 		return errors.New(i18n.T.Get("Unsupported filesystem type: %s", cfg.FSType))
 	}
@@ -134,15 +136,15 @@ func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress Pr
 	_, _ = m.executor.Run(ctx, "systemctl", "daemon-reload")
 
 	// 挂载
-	progress(i18n.T.Get("Mounting partition"), i18n.T.Get("Mounting /dev/%s1 to %s...", cfg.Disk, cfg.MountPoint))
-	result, err = m.executor.Run(ctx, "mount", "/dev/"+cfg.Disk+"1", cfg.MountPoint)
+	progress(i18n.T.Get("Mounting partition"), i18n.T.Get("Mounting %s to %s...", partitionPath, cfg.MountPoint))
+	result, err = m.executor.Run(ctx, "mount", partitionPath, cfg.MountPoint)
 	if err != nil || (result != nil && result.ExitCode != 0) {
 		return errors.New(i18n.T.Get("Mount failed"))
 	}
 
 	// 获取UUID
 	progress(i18n.T.Get("Updating fstab"), i18n.T.Get("Updating /etc/fstab for auto-mount..."))
-	result, err = m.executor.Run(ctx, "blkid", "-s", "UUID", "-o", "value", "/dev/"+cfg.Disk+"1")
+	result, err = m.executor.Run(ctx, "blkid", "-s", "UUID", "-o", "value", partitionPath)
 	if err != nil || result == nil || result.ExitCode != 0 {
 		return errors.New(i18n.T.Get("Failed to get UUID"))
 	}
@@ -150,7 +152,7 @@ func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress Pr
 
 	// 更新fstab
 	// 先删除旧条目
-	_, _ = m.executor.Run(ctx, "sed", "-i", fmt.Sprintf("\\|/dev/%s1|d", cfg.Disk), "/etc/fstab")
+	_, _ = m.executor.Run(ctx, "sed", "-i", fmt.Sprintf("\\|%s|d", partitionPath), "/etc/fstab")
 	_, _ = m.executor.Run(ctx, "sed", "-i", fmt.Sprintf("\\|%s|d", cfg.MountPoint), "/etc/fstab")
 
 	// 添加新条目
@@ -174,4 +176,15 @@ func (m *mounter) Mount(ctx context.Context, cfg *types.MountConfig, progress Pr
 
 	progress(i18n.T.Get("Mount complete"), i18n.T.Get("Disk partition and mount successful"))
 	return nil
+}
+func (m *mounter) firstPartitionName(disk string) string {
+	if len(disk) == 0 {
+		return ""
+	}
+
+	last := disk[len(disk)-1]
+	if last >= '0' && last <= '9' {
+		return disk + "p1"
+	}
+	return disk + "1"
 }
