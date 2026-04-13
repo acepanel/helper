@@ -6,7 +6,7 @@ require (
 	github.com/charmbracelet/bubbles v0.21.1
 	github.com/charmbracelet/bubbletea v1.3.10
 	github.com/charmbracelet/huh v0.8.0
-	github.com/charmbracelet/lipgloss v1.1.0
+	github.com/charmbracelet/lipgloss/v2 v2.0.3
 	github.com/go-resty/resty/v2 v2.17.2
 	github.com/google/wire v0.7.0
 	github.com/leonelquinteros/gotext v1.7.2
