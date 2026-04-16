@@ -299,11 +299,18 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 	_ = os.WriteFile("/etc/sysctl.d/99-acepanel.conf", []byte(sysctlConf.String()), 0644)
 
 	// sudoers 添加 /usr/local/bin 和 /usr/local/sbin 路径
-	// 检查是否已包含
-	sudoersCheck, _ := i.executor.Run(ctx, "sh", "-c", "grep -q '^Defaults.*secure_path.*:/usr/local/bin' /etc/sudoers && echo yes")
+	sudoersCheck, _ := i.executor.Run(ctx, "sh", "-c",
+		`grep -Eq '^[[:space:]]*Defaults.*secure_path.*(^|:)/usr/local/sbin(:|"|[[:space:]]|$)' /etc/sudoers && echo yes`)
 	if sudoersCheck == nil || strings.TrimSpace(sudoersCheck.Stdout) != "yes" {
-		_, _ = i.executor.Run(ctx, "sed", "-i",
-			`s|^\(Defaults\s*secure_path\s*=\s*/sbin:/bin:/usr/sbin:/usr/bin\)$|\1:/usr/local/sbin:/usr/local/bin|`,
+		_, _ = i.executor.Run(ctx, "sed", "-i", "-E",
+			`/^[[:space:]]*Defaults.*secure_path/ { s|"([[:space:]]*#.*)?$|:/usr/local/sbin"\1|; t; s|([[:space:]]*#.*)?$|:/usr/local/sbin\1|; }`,
+			"/etc/sudoers")
+	}
+	sudoersCheck, _ = i.executor.Run(ctx, "sh", "-c",
+		`grep -Eq '^[[:space:]]*Defaults.*secure_path.*(^|:)/usr/local/bin(:|"|[[:space:]]|$)' /etc/sudoers && echo yes`)
+	if sudoersCheck == nil || strings.TrimSpace(sudoersCheck.Stdout) != "yes" {
+		_, _ = i.executor.Run(ctx, "sed", "-i", "-E",
+			`/^[[:space:]]*Defaults.*secure_path/ { s|"([[:space:]]*#.*)?$|:/usr/local/bin"\1|; t; s|([[:space:]]*#.*)?$|:/usr/local/bin\1|; }`,
 			"/etc/sudoers")
 	}
 
