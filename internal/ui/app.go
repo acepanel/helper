@@ -8,14 +8,14 @@ import (
 	"strings"
 	"time"
 
+	"charm.land/bubbles/v2/progress"
+	"charm.land/bubbles/v2/spinner"
+	"charm.land/bubbles/v2/viewport"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/huh/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/acepanel/helper/pkg/config"
 	"github.com/acepanel/helper/pkg/embed"
-	"github.com/charmbracelet/bubbles/progress"
-	"github.com/charmbracelet/bubbles/spinner"
-	"github.com/charmbracelet/bubbles/viewport"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/huh"
-	"github.com/charmbracelet/lipgloss"
 	"github.com/leonelquinteros/gotext"
 
 	"github.com/acepanel/helper/internal/service"
@@ -145,19 +145,19 @@ func NewApp(installer service.Installer, uninstaller service.Uninstaller, mounte
 	// 初始化 spinner
 	s := spinner.New()
 	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(ColorPrimary)
+	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Green)
 	app.installSpinner = s
 	app.uninstallSpinner = s
 	app.mountSpinner = s
 
 	// 初始化进度条
-	app.installProgress = progress.New(progress.WithDefaultGradient())
+	app.installProgress = progress.New(progress.WithDefaultBlend())
 
 	// 初始化 verbose viewport
-	app.verboseViewport = viewport.New(80, 8)
+	app.verboseViewport = viewport.New(viewport.WithWidth(80), viewport.WithHeight(8))
 	app.verboseViewport.Style = lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
-		BorderForeground(ColorMuted).
+		BorderForeground(lipgloss.BrightBlack).
 		Padding(0, 1)
 
 	return app
@@ -179,7 +179,7 @@ func (a *App) Init() tea.Cmd {
 				).
 				Value(&a.langChoice),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 
 	return a.langForm.Init()
 }
@@ -189,9 +189,9 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		a.width = msg.Width
 		a.height = msg.Height
-		a.installProgress.Width = msg.Width - 10
+		a.installProgress.SetWidth(msg.Width - 10)
 
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if msg.String() == "ctrl+c" {
 			return a, tea.Quit
 		}
@@ -213,20 +213,23 @@ func (a *App) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return a, nil
 }
 
-func (a *App) View() string {
+func (a *App) View() tea.View {
+	var content string
 	switch a.state {
 	case ViewLanguageSelect:
-		return a.viewLanguageSelect()
+		content = a.viewLanguageSelect()
 	case ViewMainMenu:
-		return a.viewMainMenu()
+		content = a.viewMainMenu()
 	case ViewInstall:
-		return a.viewInstall()
+		content = a.viewInstall()
 	case ViewUninstall:
-		return a.viewUninstall()
+		content = a.viewUninstall()
 	case ViewMount:
-		return a.viewMount()
+		content = a.viewMount()
 	}
-	return ""
+	v := tea.NewView(content)
+	v.AltScreen = true
+	return v
 }
 
 // ========== 语言选择 ==========
@@ -267,7 +270,7 @@ func (a *App) initMainMenu() tea.Cmd {
 				).
 				Value(&a.menuChoice),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 
 	return a.menuForm.Init()
 }
@@ -328,14 +331,14 @@ func (a *App) initInstall() tea.Cmd {
 				Negative(i18n.T.Get("No")).
 				Value(&a.installConfirmed),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 
 	return a.installForm.Init()
 }
 
 func (a *App) updateInstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		if msg.String() == "esc" && !a.installRunning {
 			a.state = ViewMainMenu
 			return a, a.initMainMenu()
@@ -502,7 +505,7 @@ func (a *App) viewInstall() string {
 
 func (a *App) updateUninstall(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "esc":
 			if !a.uninstallRunning {
@@ -606,7 +609,7 @@ func (a *App) initUninstallConfirm() {
 				Negative(i18n.T.Get("No")).
 				Value(&a.uninstallConfirm),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 }
 
 func (a *App) tickCountdown() tea.Cmd {
@@ -726,7 +729,7 @@ func (a *App) loadDisks() tea.Cmd {
 
 func (a *App) updateMount(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		switch msg.String() {
 		case "esc":
 			if !a.mountRunning {
@@ -861,7 +864,7 @@ func (a *App) initDiskForm() {
 				Options(options...).
 				Value(&a.mountConfig.Disk),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 }
 
 func (a *App) initMountPointForm() {
@@ -878,7 +881,7 @@ func (a *App) initMountPointForm() {
 					return nil
 				}),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 }
 
 func (a *App) initFSForm() {
@@ -893,7 +896,7 @@ func (a *App) initFSForm() {
 				).
 				Value(&a.mountConfig.FSType),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 }
 
 func (a *App) initMountConfirmForm() {
@@ -911,7 +914,7 @@ func (a *App) initMountConfirmForm() {
 				Negative(i18n.T.Get("No")).
 				Value(&a.mountConfirmed),
 		),
-	).WithTheme(huh.ThemeDracula())
+	).WithTheme(huh.ThemeFunc(huh.ThemeDracula))
 }
 
 func (a *App) startMount() tea.Cmd {

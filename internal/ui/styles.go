@@ -1,17 +1,6 @@
 package ui
 
-import "github.com/charmbracelet/lipgloss"
-
-// 颜色定义
-var (
-	ColorPrimary   = lipgloss.Color("#18a058") // 绿色主色
-	ColorSecondary = lipgloss.Color("#36ad6a") // 浅绿色
-	ColorSuccess   = lipgloss.Color("#18a058") // 绿色成功
-	ColorWarning   = lipgloss.Color("#f0a020") // 橙黄色警告
-	ColorError     = lipgloss.Color("#d03050") // 红色错误
-	ColorMuted     = lipgloss.Color("#909399") // 灰色次要
-	ColorHighlight = lipgloss.Color("#2080f0") // 蓝色高亮
-)
+import "charm.land/lipgloss/v2"
 
 // Logo ASCII艺术
 const Logo = `
@@ -27,60 +16,60 @@ const Logo = `
 var (
 	LogoStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(ColorPrimary).
+			Foreground(lipgloss.Green).
 			MarginBottom(1)
 
 	TitleStyle = lipgloss.NewStyle().
 			Bold(true).
-			Foreground(ColorPrimary).
+			Foreground(lipgloss.Green).
 			MarginBottom(1)
 
 	SuccessStyle = lipgloss.NewStyle().
-			Foreground(ColorSuccess).
+			Foreground(lipgloss.Green).
 			Bold(true)
 
 	WarningStyle = lipgloss.NewStyle().
-			Foreground(ColorWarning).
+			Foreground(lipgloss.Yellow).
 			Bold(true)
 
 	ErrorStyle = lipgloss.NewStyle().
-			Foreground(ColorError).
+			Foreground(lipgloss.Red).
 			Bold(true)
 
 	MutedStyle = lipgloss.NewStyle().
-			Foreground(ColorMuted)
+			Foreground(lipgloss.BrightBlack)
 
 	BoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			BorderForeground(ColorMuted).
+			BorderForeground(lipgloss.BrightBlack).
 			Padding(1, 2)
 
 	WarningBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			BorderForeground(ColorWarning).
+			BorderForeground(lipgloss.Yellow).
 			Padding(1, 2)
 
 	ErrorBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			BorderForeground(ColorError).
+			BorderForeground(lipgloss.Red).
 			Padding(1, 2)
 
 	InfoBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
-			BorderForeground(ColorPrimary).
+			BorderForeground(lipgloss.Green).
 			Padding(1, 2)
 
 	LogStyle = lipgloss.NewStyle().
-			Foreground(ColorMuted).
+			Foreground(lipgloss.BrightBlack).
 			PaddingLeft(4)
 
 	KeyStyle = lipgloss.NewStyle().
-			Foreground(ColorMuted).
-			Background(lipgloss.Color("#374151")).
+			Foreground(lipgloss.White).
+			Background(lipgloss.BrightBlack).
 			Padding(0, 1)
 
 	HelpStyle = lipgloss.NewStyle().
-			Foreground(ColorMuted).
+			Foreground(lipgloss.BrightBlack).
 			MarginTop(1)
 )
 

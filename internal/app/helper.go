@@ -1,7 +1,7 @@
 package app
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 
 	"github.com/acepanel/helper/internal/service"
 	"github.com/acepanel/helper/internal/ui"
@@ -23,7 +23,7 @@ func NewHelper(installer service.Installer, uninstaller service.Uninstaller, mou
 
 func (h *Helper) Run() error {
 	app := ui.NewApp(h.installer, h.uninstaller, h.mounter)
-	p := tea.NewProgram(app, tea.WithAltScreen())
+	p := tea.NewProgram(app)
 	app.SetProgram(p)
 
 	_, err := p.Run()
