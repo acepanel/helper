@@ -314,6 +314,16 @@ func (i *installer) optimizeSystem(ctx context.Context, cfg *types.InstallConfig
 			"/etc/sudoers")
 	}
 
+	// /etc/environment 没有 PATH 时写入
+	envContent, _ := os.ReadFile("/etc/environment")
+	if !strings.Contains(string(envContent), "PATH=") {
+		envFile, err := os.OpenFile("/etc/environment", os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+		if err == nil {
+			_, _ = envFile.WriteString("PATH=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n")
+			_ = envFile.Close()
+		}
+	}
+
 	// 重载 sysctl
 	_, _ = i.executor.Run(ctx, "sysctl", "-p")
 	_, _ = i.executor.Run(ctx, "systemctl", "restart", "systemd-sysctl")
