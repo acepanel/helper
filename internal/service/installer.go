@@ -356,9 +356,9 @@ func (i *installer) installDeps(ctx context.Context, cfg *types.InstallConfig) e
 	// 安装依赖
 	var packages []string
 	if info.OS == types.OSRHEL {
-		packages = []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "p7zip", "p7zip-plugins", "git", "jq", "dos2unix", "make"}
+		packages = []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "xz", "p7zip", "p7zip-plugins", "git", "jq", "dos2unix", "make"}
 	} else {
-		packages = []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "p7zip", "p7zip-full", "git", "jq", "dos2unix", "make"}
+		packages = []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "xz-utils", "p7zip", "p7zip-full", "git", "jq", "dos2unix", "make"}
 	}
 
 	return pkgMgr.Install(ctx, packages...)
