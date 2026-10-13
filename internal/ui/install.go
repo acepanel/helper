@@ -153,39 +153,37 @@ func (p *installPage) install() (page, tea.Cmd) {
 
 func (p *installPage) view() string {
 	var b strings.Builder
-	b.WriteString(title(i18n.T.Get("Install Panel")))
-
+	var keys string
 	switch p.state {
 	case installConfirm:
 		b.WriteString(p.form.View())
-		b.WriteString(help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back")))
+		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case installPreflight:
-		b.WriteString(p.tv.view(p.app.logLines(lipgloss.Height(b.String()) + len(p.tv.steps) + 4)))
-		b.WriteString(help("Ctrl+C", i18n.T.Get("Abort")))
+		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 6)))
+		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case installAskUpgrade, installAskReboot:
-		b.WriteString(p.summary() + "\n\n")
-		b.WriteString(p.form.View())
-		b.WriteString(help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back")))
+		b.WriteString(p.summary() + "\n\n" + p.form.View())
+		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case installUpgrading, installRunning:
 		b.WriteString(p.summary() + "\n\n")
-		b.WriteString(p.tv.view(p.app.logLines(lipgloss.Height(b.String()) + len(p.tv.steps) + 4)))
-		b.WriteString(help("Ctrl+C", i18n.T.Get("Abort")))
+		b.WriteString(p.tv.view(p.app.logLines(lipgloss.Height(b.String()) + len(p.tv.steps) + 6)))
+		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case installDone:
 		if p.err != nil {
 			b.WriteString(errorStyle.Render("✗ "+i18n.T.Get("Installation failed")) + "\n\n")
-			b.WriteString(p.tv.view(0))
-			b.WriteString("\n" + errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()) + "\n")
+			b.WriteString(p.tv.view(0) + "\n")
+			b.WriteString(errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()))
 		} else {
 			b.WriteString(successStyle.Render("✓ "+i18n.T.Get("Installation successful")) + "\n\n")
 			// 面板信息不加边框也不缩进，方便直接复制；退出后还会再打印一遍
 			if p.info != "" {
 				b.WriteString(p.info + "\n\n")
-				b.WriteString(mutedStyle.Render(i18n.T.Get("The information above will be printed again after exiting the installer.")) + "\n")
+				b.WriteString(mutedStyle.Render(i18n.T.Get("The information above will be printed again after exiting the installer.")))
 			}
 		}
-		b.WriteString(help("Enter", i18n.T.Get("Back")))
+		keys = help("Enter", i18n.T.Get("Back"))
 	}
-	return b.String()
+	return layout(i18n.T.Get("Install Panel"), b.String(), keys)
 }
 
 // summary 环境检测得到的系统概况

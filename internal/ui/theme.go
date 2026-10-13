@@ -69,7 +69,8 @@ func newForm(groups ...*huh.Group) *huh.Form {
 // confirmForm 是/否确认表单，value 的初始值决定默认停在哪个按钮
 func confirmForm(title, desc, yes, no string, value *bool) *huh.Form {
 	return newForm(huh.NewGroup(
-		huh.NewConfirm().Title(title).Description(desc).Affirmative(yes).Negative(no).Value(value),
+		huh.NewConfirm().Title(title).Description(desc).Affirmative(yes).Negative(no).
+			WithButtonAlignment(lipgloss.Left).Value(value),
 	))
 }
 
@@ -82,8 +83,18 @@ func updateForm(f *huh.Form, msg tea.Msg) (*huh.Form, tea.Cmd, bool) {
 	return f, cmd, f.State == huh.StateCompleted
 }
 
-func title(s string) string {
-	return titleStyle.Render(s) + "\n\n"
+// layout 标题、正文、按键提示之间各空一行，标题和提示可为空
+func layout(title, body, keys string) string {
+	var b strings.Builder
+	if title != "" {
+		b.WriteString(titleStyle.Render(title) + "\n\n")
+	}
+	b.WriteString(strings.TrimRight(body, "\n"))
+	if keys != "" {
+		b.WriteString("\n\n" + keys)
+	}
+	b.WriteString("\n")
+	return b.String()
 }
 
 // help 底部按键提示，参数成对出现：按键、说明
@@ -92,7 +103,7 @@ func help(pairs ...string) string {
 	for i := 0; i+1 < len(pairs); i += 2 {
 		parts = append(parts, keyStyle.Render(pairs[i])+" "+mutedStyle.Render(pairs[i+1]))
 	}
-	return "\n" + strings.Join(parts, "  ")
+	return strings.Join(parts, "  ")
 }
 
 // table 两列信息表，标签右侧对齐后渲染成一个框

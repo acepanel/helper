@@ -46,7 +46,7 @@ func (p *langPage) update(msg tea.Msg) (page, tea.Cmd) {
 	return next, next.init()
 }
 
-func (p *langPage) view() string { return p.form.View() }
+func (p *langPage) view() string { return layout("", p.form.View(), "") }
 
 func (p *langPage) task() *taskView { return nil }
 
@@ -105,7 +105,7 @@ func (p *menuPage) update(msg tea.Msg) (page, tea.Cmd) {
 }
 
 func (p *menuPage) view() string {
-	return p.form.View() + help("↑↓", i18n.T.Get("Select"), "Enter", i18n.T.Get("Confirm"), "Ctrl+C", i18n.T.Get("Quit"))
+	return layout("", p.form.View(), help("↑↓", i18n.T.Get("Select"), "Enter", i18n.T.Get("Confirm"), "Ctrl+C", i18n.T.Get("Quit")))
 }
 
 func (p *menuPage) task() *taskView { return nil }

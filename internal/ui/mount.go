@@ -163,38 +163,37 @@ func (p *mountPage) newMountForm(disks []sys.Disk) *huh.Form {
 
 func (p *mountPage) view() string {
 	var b strings.Builder
-	b.WriteString(title(i18n.T.Get("Disk Partition")))
-
+	var keys string
 	switch p.state {
 	case mountLoading:
-		b.WriteString(" " + p.spinner.View() + " " + i18n.T.Get("Preparing partition tools...") + "\n")
-		b.WriteString(help("Esc", i18n.T.Get("Back")))
+		b.WriteString(" " + p.spinner.View() + " " + i18n.T.Get("Preparing partition tools..."))
+		keys = help("Esc", i18n.T.Get("Back"))
 	case mountForm:
 		b.WriteString(p.form.View())
-		b.WriteString(help("Enter", i18n.T.Get("Next"), "Shift+Tab", i18n.T.Get("Previous"), "Esc", i18n.T.Get("Back")))
+		keys = help("Enter", i18n.T.Get("Next"), "Shift+Tab", i18n.T.Get("Previous"), "Esc", i18n.T.Get("Back"))
 	case mountConfirm:
 		b.WriteString(warnBox.Render(warnStyle.Render("⚠ "+i18n.T.Get("Warning: This will erase all data on the disk!"))) + "\n\n")
 		b.WriteString(p.form.View())
-		b.WriteString(help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back")))
+		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case mountRunning:
-		b.WriteString(p.tv.view(p.app.logLines(2 + len(p.tv.steps) + 4)))
-		b.WriteString(help("Ctrl+C", i18n.T.Get("Abort")))
+		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 6)))
+		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case mountDone:
 		if p.err != nil {
 			b.WriteString(errorStyle.Render("✗ "+i18n.T.Get("Operation failed")) + "\n\n")
 			if len(p.tv.steps) > 0 {
 				b.WriteString(p.tv.view(0) + "\n")
 			}
-			b.WriteString(errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()) + "\n")
+			b.WriteString(errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()))
 		} else {
 			b.WriteString(successStyle.Render("✓ "+i18n.T.Get("Partition and mount successful")) + "\n\n")
 			b.WriteString(table([][2]string{
 				{i18n.T.Get("Device"), p.cfg.Partition},
 				{i18n.T.Get("Mount Point"), p.cfg.MountPoint},
 				{i18n.T.Get("File System"), p.cfg.FSType},
-			}) + "\n")
+			}))
 		}
-		b.WriteString(help("Enter", i18n.T.Get("Back")))
+		keys = help("Enter", i18n.T.Get("Back"))
 	}
-	return b.String()
+	return layout(i18n.T.Get("Disk Partition"), b.String(), keys)
 }
