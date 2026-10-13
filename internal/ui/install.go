@@ -121,7 +121,7 @@ func (p *installPage) taskDone() (page, tea.Cmd) {
 		}
 		p.state, p.confirm = installAskUpgrade, true
 		p.form = confirmForm(
-			i18n.T.Get("AcePanel recommends running on the latest system release. Upgrade the system now?"),
+			i18n.T.Get("The current system release is outdated. It is strongly recommended to run AcePanel on the latest system release. Upgrade the system now?"),
 			"", i18n.T.Get("Upgrade"), i18n.T.Get("Skip"), &p.confirm,
 		)
 		return p, p.form.Init()
