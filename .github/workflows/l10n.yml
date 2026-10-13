@@ -32,7 +32,7 @@ jobs:
         with:
           commit_message: "chore(l10n): update pot files"
       - name: Sync with Crowdin
-        uses: crowdin/github-action@v2
+        uses: crowdin/github-action@v3
         with:
           config: crowdin.yml
           upload_sources: true
