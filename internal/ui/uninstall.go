@@ -106,7 +106,7 @@ func (p *uninstallPage) tick() tea.Cmd {
 
 func (p *uninstallPage) askConfirm() tea.Cmd {
 	p.state, p.confirm = uninstallConfirm, false
-	p.form = confirmForm(
+	p.form = yesNo(
 		i18n.T.Get("Confirm Uninstallation"),
 		i18n.T.Get("Are you sure you want to uninstall the panel?"),
 		i18n.T.Get("Yes"), i18n.T.Get("No"), &p.confirm,
@@ -117,39 +117,37 @@ func (p *uninstallPage) askConfirm() tea.Cmd {
 func (p *uninstallPage) view() string {
 	var b strings.Builder
 	var keys string
+	title := i18n.T.Get("Uninstall Panel")
 	switch p.state {
 	case uninstallWarning:
-		b.WriteString(warnBox.Render(
-			warnStyle.Render("⚠ "+i18n.T.Get("High-risk operation")) + "\n\n" +
-				i18n.T.Get("Please backup all data before uninstalling.") + "\n" +
-				i18n.T.Get("All data will be cleared and cannot be recovered!"),
+		b.WriteString(note(warnStyle.Render("!"), warnStyle.Render(i18n.T.Get("High-risk operation")),
+			i18n.T.Get("Please backup all data before uninstalling."),
+			i18n.T.Get("All data will be cleared and cannot be recovered!"),
 		))
 		keys = help("Enter", i18n.T.Get("Continue"), "Esc", i18n.T.Get("Back"))
 	case uninstallCountdown:
-		b.WriteString(warnBox.Render(fmt.Sprintf("%s\n\n%s %d %s",
-			i18n.T.Get("For safety, please wait before proceeding"),
-			i18n.T.Get("Waiting:"), p.countdown, i18n.T.Get("seconds"),
-		)))
+		lines := []string{fmt.Sprintf("%s %d %s", i18n.T.Get("Waiting:"), p.countdown, i18n.T.Get("seconds"))}
 		if p.skips > 0 {
-			b.WriteString("\n\n" + mutedStyle.Render(i18n.T.Get("Press Enter %d more times to skip", countdownSkips-p.skips)))
+			lines = append(lines, mutedStyle.Render(i18n.T.Get("Press Enter %d more times to skip", countdownSkips-p.skips)))
 		}
+		b.WriteString(note(warnStyle.Render("!"), warnStyle.Render(i18n.T.Get("For safety, please wait before proceeding")), lines...))
 		keys = help("Enter×10", i18n.T.Get("Skip"), "Esc", i18n.T.Get("Cancel"))
 	case uninstallConfirm:
 		b.WriteString(p.form.View())
 		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case uninstallRunning:
-		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 6)))
+		title += "  " + p.tv.counter()
+		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 4)))
 		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case uninstallDone:
 		if p.err != nil {
-			b.WriteString(errorStyle.Render("✗ "+i18n.T.Get("Uninstallation failed")) + "\n\n")
-			b.WriteString(p.tv.view(0) + "\n")
-			b.WriteString(errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()))
+			title += "  " + p.tv.counter()
+			b.WriteString(p.tv.view(0) + "\n" + errorStyle.Render("✗ "+i18n.T.Get("Uninstallation failed")))
 		} else {
 			b.WriteString(successStyle.Render("✓ "+i18n.T.Get("Uninstallation successful")) + "\n\n")
 			b.WriteString(i18n.T.Get("Thank you for using AcePanel."))
 		}
 		keys = help("Enter", i18n.T.Get("Back"))
 	}
-	return layout(i18n.T.Get("Uninstall Panel"), b.String(), keys)
+	return layout(title, b.String(), keys)
 }

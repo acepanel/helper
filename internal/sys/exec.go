@@ -16,7 +16,7 @@ import (
 // Verbose 为真时把命令输出也交给 OnCommand
 var Verbose bool
 
-// OnCommand 每条命令执行完的回调，output 只在 Verbose 时有内容
+// OnCommand 命令开始时回调命令行；Verbose 模式下结束后再回调一次输出，此时 cmd 为空
 var OnCommand func(cmd, output string)
 
 var (
@@ -43,6 +43,10 @@ func CloseLog() {
 
 // Exec 执行命令并返回输出和退出码，子进程放进独立进程组，上下文取消时整组杀掉
 func Exec(ctx context.Context, input, name string, args ...string) (stdout, stderr string, code int, err error) {
+	line := "$ " + strings.Join(append([]string{name}, args...), " ")
+	if OnCommand != nil {
+		OnCommand(line, "")
+	}
 	cmd := exec.CommandContext(ctx, name, args...)
 	cmd.Env = append(os.Environ(), "LC_ALL=C", "DEBIAN_FRONTEND=noninteractive")
 	cmd.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
@@ -60,7 +64,7 @@ func Exec(ctx context.Context, input, name string, args ...string) (stdout, stde
 	if errors.As(err, &exitErr) {
 		code = exitErr.ExitCode()
 	}
-	record(name, args, stdout, stderr, err)
+	record(line, stdout, stderr, err)
 	return stdout, stderr, code, err
 }
 
@@ -81,8 +85,7 @@ func RunInput(ctx context.Context, input, name string, args ...string) (string, 
 	return stdout, fmt.Errorf("%s: %w", name, err)
 }
 
-func record(name string, args []string, stdout, stderr string, err error) {
-	line := "$ " + strings.Join(append([]string{name}, args...), " ")
+func record(line, stdout, stderr string, err error) {
 	var output strings.Builder
 	if s := strings.TrimSpace(stdout); s != "" {
 		output.WriteString(s + "\n")
@@ -99,13 +102,8 @@ func record(name string, args []string, stdout, stderr string, err error) {
 		_, _ = fmt.Fprintf(logFile, "[%s] %s\n%s", time.Now().Format(time.DateTime), line, output.String())
 		logMu.Unlock()
 	}
-	if OnCommand == nil {
-		return
-	}
-	if Verbose {
-		OnCommand(line, strings.TrimRight(output.String(), "\n"))
-	} else {
-		OnCommand(line, "")
+	if Verbose && OnCommand != nil && output.Len() > 0 {
+		OnCommand("", strings.TrimRight(output.String(), "\n"))
 	}
 }
 

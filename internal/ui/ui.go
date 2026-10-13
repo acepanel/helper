@@ -86,6 +86,11 @@ func (a *App) header() string {
 	return logoStyle.Render(logo) + "\n\n"
 }
 
+// contentWidth 进度条、日志框等块级内容的宽度，跟 logo 差不多宽，窄终端按终端收缩
+func (a *App) contentWidth() int {
+	return max(40, min(a.width-2, 80))
+}
+
 // logLines 命令面板可用的行数，used 为页面其余内容占的行数
 func (a *App) logLines(used int) int {
 	n := a.height - used - 2

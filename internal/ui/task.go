@@ -5,9 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"charm.land/bubbles/v2/progress"
 	"charm.land/bubbles/v2/spinner"
-	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
 
@@ -32,16 +30,14 @@ type (
 	taskDoneMsg struct{ err error }
 )
 
-// taskView 步骤列表、进度条和命令输出，安装/卸载/分区共用
+// taskView 步骤列表就是进度本身，安装/卸载/分区共用
 type taskView struct {
 	app       *App
 	steps     []task.Step
 	state     []stepState
 	errs      []error
 	spinner   spinner.Model
-	bar       progress.Model
-	logs      viewport.Model
-	lines     []string
+	lines     []string // verbose 模式下的命令输出
 	lastCmd   string
 	cancel    context.CancelFunc
 	running   bool
@@ -52,9 +48,7 @@ type taskView struct {
 func newTaskView(app *App) *taskView {
 	return &taskView{
 		app:     app,
-		spinner: spinner.New(spinner.WithSpinner(spinner.Dot), spinner.WithStyle(lipgloss.NewStyle().Foreground(green))),
-		bar:     progress.New(progress.WithDefaultBlend(), progress.WithWidth(40), progress.WithFillCharacters('█', '░')),
-		logs:    viewport.New(viewport.WithWidth(76), viewport.WithHeight(8)),
+		spinner: spinner.New(spinner.WithSpinner(spinner.MiniDot), spinner.WithStyle(lipgloss.NewStyle().Foreground(green))),
 	}
 }
 
@@ -66,7 +60,6 @@ func (t *taskView) start(steps []task.Step) tea.Cmd {
 	t.errs = make([]error, len(steps))
 	t.lines, t.lastCmd = nil, ""
 	t.running, t.cancelled, t.err = true, false, nil
-	t.logs.SetContent("")
 	sys.OnCommand = func(cmd, output string) { t.app.prog.Send(cmdMsg{cmd: cmd, output: output}) }
 	return tea.Batch(t.spinner.Tick, func() tea.Msg {
 		return taskDoneMsg{err: task.Run(ctx, steps, func(e task.Event) { t.app.prog.Send(stepMsg(e)) })}
@@ -82,9 +75,6 @@ func (t *taskView) stop() {
 
 func (t *taskView) update(msg tea.Msg) tea.Cmd {
 	switch msg := msg.(type) {
-	case tea.WindowSizeMsg:
-		t.bar.SetWidth(min(60, max(20, msg.Width-8)))
-		t.logs.SetWidth(max(20, msg.Width-6))
 	case stepMsg:
 		switch {
 		case msg.Err != nil && !msg.Done:
@@ -97,16 +87,16 @@ func (t *taskView) update(msg tea.Msg) tea.Cmd {
 			t.state[msg.Step] = stepRunning
 		}
 	case cmdMsg:
-		t.lastCmd = msg.cmd
-		t.lines = append(t.lines, msg.cmd)
+		if msg.cmd != "" {
+			t.lastCmd = msg.cmd
+			t.lines = append(t.lines, msg.cmd)
+		}
 		if msg.output != "" {
 			t.lines = append(t.lines, strings.Split(msg.output, "\n")...)
 		}
 		if len(t.lines) > 200 {
 			t.lines = t.lines[len(t.lines)-200:]
 		}
-		t.logs.SetContent(strings.Join(t.lines, "\n"))
-		t.logs.GotoBottom()
 	case taskDoneMsg:
 		t.running, t.err = false, msg.err
 		t.cancel()
@@ -122,44 +112,58 @@ func (t *taskView) update(msg tea.Msg) tea.Cmd {
 	return nil
 }
 
-// view 渲染步骤列表，maxLog 是命令面板可用行数，0 表示只显示最近一条命令
+// counter 已完成/总数，放在页面标题旁边
+func (t *taskView) counter() string {
+	done := 0
+	for _, s := range t.state {
+		if s == stepDone || s == stepWarn {
+			done++
+		}
+	}
+	return mutedStyle.Render(fmt.Sprintf("%d/%d", done, len(t.steps)))
+}
+
+// view 渲染步骤列表，maxLog 是 verbose 模式下当前步骤下方可显示的输出行数
 func (t *taskView) view(maxLog int) string {
 	var b strings.Builder
-	done := 0
+	w := t.app.contentWidth()
 	for i, s := range t.steps {
-		var icon string
-		name := s.Name
 		switch t.state[i] {
 		case stepRunning:
-			icon = t.spinner.View()
+			_, _ = fmt.Fprintf(&b, "%s %s\n", t.spinner.View(), s.Name)
+			b.WriteString(t.output(maxLog, w))
 		case stepDone:
-			icon, done = successStyle.Render("✓"), done+1
+			_, _ = fmt.Fprintf(&b, "%s %s\n", successStyle.Render("✓"), s.Name)
 		case stepWarn:
-			icon, done = warnStyle.Render("!"), done+1
+			_, _ = fmt.Fprintf(&b, "%s %s\n", warnStyle.Render("!"), s.Name)
+			b.WriteString(reason(warnText, firstLine(t.errs[i]), w) + "\n")
 		case stepFailed:
-			icon = errorStyle.Render("✗")
+			_, _ = fmt.Fprintf(&b, "%s %s\n", errorStyle.Render("✗"), s.Name)
+			b.WriteString(reason(errorText, t.errs[i].Error(), w) + "\n")
 		default:
-			icon, name = mutedStyle.Render("○"), mutedStyle.Render(name)
-		}
-		_, _ = fmt.Fprintf(&b, " %s %s\n", icon, name)
-		if t.state[i] == stepWarn {
-			_, _ = fmt.Fprintf(&b, "   %s\n", warnStyle.Render(firstLine(t.errs[i])))
+			_, _ = fmt.Fprintf(&b, "%s %s\n", mutedStyle.Render("○"), mutedStyle.Render(s.Name))
 		}
 	}
-	if len(t.steps) > 1 {
-		b.WriteString("\n " + t.bar.ViewAs(float64(done)/float64(len(t.steps))) + "\n")
+	if t.running && t.cancelled {
+		b.WriteString("\n" + note(warnStyle.Render("!"), warnText.Render(i18n.T.Get("Aborting, waiting for the current command to stop..."))) + "\n")
 	}
-	if !t.running {
-		return b.String()
-	}
-	if t.cancelled {
-		b.WriteString("\n " + warnStyle.Render(i18n.T.Get("Aborting, waiting for the current command to stop...")) + "\n")
-	}
+	return b.String()
+}
+
+// output 当前步骤下方的命令回显：verbose 模式给最近几行输出，否则只给正在执行的命令
+func (t *taskView) output(maxLog, width int) string {
+	lines := []string{t.lastCmd}
 	if sys.Verbose && maxLog > 0 {
-		t.logs.SetHeight(maxLog)
-		b.WriteString("\n" + boxStyle.Render(t.logs.View()) + "\n")
-	} else if t.lastCmd != "" {
-		b.WriteString("\n " + mutedStyle.MaxWidth(max(20, t.app.width-2)).Inline(true).Render(t.lastCmd) + "\n")
+		lines = t.lines
+		if len(lines) > maxLog {
+			lines = lines[len(lines)-maxLog:]
+		}
+	}
+	var b strings.Builder
+	for _, l := range lines {
+		if l != "" {
+			b.WriteString("  " + mutedStyle.MaxWidth(width-2).Inline(true).Render(l) + "\n")
+		}
 	}
 	return b.String()
 }

@@ -50,6 +50,8 @@ func newMountPage(app *App) *mountPage {
 }
 
 func (p *mountPage) init() tea.Cmd {
+	// 准备阶段要装分区工具，也把正在执行的命令显示出来
+	sys.OnCommand = func(cmd, output string) { p.app.prog.Send(cmdMsg{cmd: cmd, output: output}) }
 	return tea.Batch(p.spinner.Tick, func() tea.Msg {
 		disks, err := task.PrepareMount(context.Background())
 		return disksMsg{disks: disks, err: err}
@@ -78,6 +80,7 @@ func (p *mountPage) update(msg tea.Msg) (page, tea.Cmd) {
 			return p, cmd
 		}
 	case disksMsg:
+		sys.OnCommand = nil
 		if msg.err == nil && len(msg.disks) == 0 {
 			msg.err = errors.New(i18n.T.Get("No available disks found"))
 		}
@@ -103,7 +106,7 @@ func (p *mountPage) update(msg tea.Msg) (page, tea.Cmd) {
 			return p, tea.Batch(cmd, fcmd)
 		}
 		p.state, p.confirm = mountConfirm, false
-		p.form = confirmForm(
+		p.form = yesNo(
 			i18n.T.Get("Confirm Operation"),
 			i18n.T.Get("Disk: %s, Mount Point: %s, File System: %s", p.cfg.Disk, p.cfg.MountPoint, p.cfg.FSType),
 			i18n.T.Get("Yes"), i18n.T.Get("No"), &p.confirm,
@@ -141,6 +144,7 @@ func (p *mountPage) newMountForm(disks []sys.Disk) *huh.Form {
 			huh.NewInput().
 				Title(i18n.T.Get("Mount Point")).
 				Description(i18n.T.Get("Enter the mount point path (e.g. /opt/ace)")).
+				Prompt("› ").
 				Value(&p.cfg.MountPoint).
 				Validate(func(s string) error {
 					if !strings.HasPrefix(s, "/") {
@@ -164,28 +168,33 @@ func (p *mountPage) newMountForm(disks []sys.Disk) *huh.Form {
 func (p *mountPage) view() string {
 	var b strings.Builder
 	var keys string
+	title := i18n.T.Get("Disk Partition")
 	switch p.state {
 	case mountLoading:
-		b.WriteString(" " + p.spinner.View() + " " + i18n.T.Get("Preparing partition tools..."))
+		b.WriteString(p.spinner.View() + " " + i18n.T.Get("Preparing partition tools...") + "\n")
+		b.WriteString(p.tv.output(0, p.app.contentWidth()))
 		keys = help("Esc", i18n.T.Get("Back"))
 	case mountForm:
 		b.WriteString(p.form.View())
 		keys = help("Enter", i18n.T.Get("Next"), "Shift+Tab", i18n.T.Get("Previous"), "Esc", i18n.T.Get("Back"))
 	case mountConfirm:
-		b.WriteString(warnBox.Render(warnStyle.Render("⚠ "+i18n.T.Get("Warning: This will erase all data on the disk!"))) + "\n\n")
+		b.WriteString(note(warnStyle.Render("!"), warnStyle.Render(i18n.T.Get("Warning: This will erase all data on the disk!"))) + "\n\n")
 		b.WriteString(p.form.View())
 		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case mountRunning:
-		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 6)))
+		title += "  " + p.tv.counter()
+		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 4)))
 		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case mountDone:
-		if p.err != nil {
-			b.WriteString(errorStyle.Render("✗ "+i18n.T.Get("Operation failed")) + "\n\n")
-			if len(p.tv.steps) > 0 {
-				b.WriteString(p.tv.view(0) + "\n")
-			}
-			b.WriteString(errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()))
-		} else {
+		switch {
+		case p.err != nil && len(p.tv.steps) > 0:
+			title += "  " + p.tv.counter()
+			b.WriteString(p.tv.view(0) + "\n" + errorStyle.Render("✗ "+i18n.T.Get("Operation failed")))
+		case p.err != nil:
+			// 准备阶段出错时还没有步骤列表，原因直接跟在结论下面
+			b.WriteString(errorStyle.Render("✗ "+i18n.T.Get("Operation failed")) + "\n")
+			b.WriteString(reason(errorText, p.err.Error(), p.app.contentWidth()))
+		default:
 			b.WriteString(successStyle.Render("✓ "+i18n.T.Get("Partition and mount successful")) + "\n\n")
 			b.WriteString(table([][2]string{
 				{i18n.T.Get("Device"), p.cfg.Partition},
@@ -195,5 +204,5 @@ func (p *mountPage) view() string {
 		}
 		keys = help("Enter", i18n.T.Get("Back"))
 	}
-	return layout(i18n.T.Get("Disk Partition"), b.String(), keys)
+	return layout(title, b.String(), keys)
 }

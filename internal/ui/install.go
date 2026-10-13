@@ -41,7 +41,7 @@ type installPage struct {
 
 func newInstallPage(app *App) *installPage {
 	p := &installPage{app: app, tv: newTaskView(app), confirm: true}
-	p.form = confirmForm(i18n.T.Get("Install AcePanel to %s?", setupPath), "", i18n.T.Get("Yes"), i18n.T.Get("No"), &p.confirm)
+	p.form = yesNo(i18n.T.Get("Install AcePanel to %s?", setupPath), "", i18n.T.Get("Yes"), i18n.T.Get("No"), &p.confirm)
 	return p
 }
 
@@ -120,7 +120,7 @@ func (p *installPage) taskDone() (page, tea.Cmd) {
 			return p.install()
 		}
 		p.state, p.confirm = installAskUpgrade, true
-		p.form = confirmForm(
+		p.form = yesNo(
 			i18n.T.Get("The current system release is outdated. It is strongly recommended to run AcePanel on the latest system release. Upgrade the system now?"),
 			"", i18n.T.Get("Upgrade"), i18n.T.Get("Skip"), &p.confirm,
 		)
@@ -130,15 +130,10 @@ func (p *installPage) taskDone() (page, tea.Cmd) {
 			return p.install()
 		}
 		p.state, p.reboot = installAskReboot, true
-		p.form = newForm(huh.NewGroup(
-			huh.NewSelect[bool]().
-				Title(i18n.T.Get("The system has been upgraded and needs a reboot before continuing")).
-				Options(
-					huh.NewOption(i18n.T.Get("Reboot now"), true),
-					huh.NewOption(i18n.T.Get("Exit and reboot manually"), false),
-				).
-				Value(&p.reboot),
-		))
+		p.form = yesNo(
+			i18n.T.Get("The system has been upgraded and needs a reboot before continuing"),
+			"", i18n.T.Get("Reboot now"), i18n.T.Get("Exit and reboot manually"), &p.reboot,
+		)
 		return p, p.form.Init()
 	case installRunning:
 		p.app.final, p.state = p.info, installDone
@@ -154,36 +149,38 @@ func (p *installPage) install() (page, tea.Cmd) {
 func (p *installPage) view() string {
 	var b strings.Builder
 	var keys string
+	title := i18n.T.Get("Install Panel")
 	switch p.state {
 	case installConfirm:
 		b.WriteString(p.form.View())
 		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case installPreflight:
-		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 6)))
+		title += "  " + p.tv.counter()
+		b.WriteString(p.tv.view(p.app.logLines(len(p.tv.steps) + 4)))
 		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case installAskUpgrade, installAskReboot:
 		b.WriteString(p.summary() + "\n\n" + p.form.View())
 		keys = help("Enter", i18n.T.Get("Confirm"), "Esc", i18n.T.Get("Back"))
 	case installUpgrading, installRunning:
+		title += "  " + p.tv.counter()
 		b.WriteString(p.summary() + "\n\n")
-		b.WriteString(p.tv.view(p.app.logLines(lipgloss.Height(b.String()) + len(p.tv.steps) + 6)))
+		b.WriteString(p.tv.view(p.app.logLines(lipgloss.Height(b.String()) + len(p.tv.steps) + 4)))
 		keys = help("Ctrl+C", i18n.T.Get("Abort"))
 	case installDone:
 		if p.err != nil {
-			b.WriteString(errorStyle.Render("✗ "+i18n.T.Get("Installation failed")) + "\n\n")
-			b.WriteString(p.tv.view(0) + "\n")
-			b.WriteString(errorBox.Width(min(100, max(40, p.app.width-4))).Render(p.err.Error()))
+			title += "  " + p.tv.counter()
+			b.WriteString(p.tv.view(0) + "\n" + errorStyle.Render("✗ "+i18n.T.Get("Installation failed")))
 		} else {
-			b.WriteString(successStyle.Render("✓ "+i18n.T.Get("Installation successful")) + "\n\n")
+			b.WriteString(successStyle.Render("✓ " + i18n.T.Get("Installation successful")))
 			// 面板信息不加边框也不缩进，方便直接复制；退出后还会再打印一遍
 			if p.info != "" {
-				b.WriteString(p.info + "\n\n")
-				b.WriteString(mutedStyle.Render(i18n.T.Get("The information above will be printed again after exiting the installer.")))
+				b.WriteString("\n\n" + p.info + "\n\n")
+				b.WriteString(note(mutedStyle.Render("i"), mutedStyle.Render(i18n.T.Get("The information above will be printed again after exiting the installer."))))
 			}
 		}
 		keys = help("Enter", i18n.T.Get("Back"))
 	}
-	return layout(i18n.T.Get("Install Panel"), b.String(), keys)
+	return layout(title, b.String(), keys)
 }
 
 // summary 环境检测得到的系统概况
@@ -195,11 +192,11 @@ func (p *installPage) summary() string {
 	release := info.Version
 	switch {
 	case p.pre.Latest != "":
-		release += "  " + warnStyle.Render("→ "+p.pre.Latest)
+		release += "  " + warnText.Render("→ "+p.pre.Latest)
 	case p.pre.Outdated:
-		release += "  " + warnStyle.Render(i18n.T.Get("update available"))
+		release += "  " + warnText.Render(i18n.T.Get("update available"))
 	default:
-		release += "  " + successStyle.Render(i18n.T.Get("latest"))
+		release += "  " + mutedStyle.Render(i18n.T.Get("latest"))
 	}
 	rows := [][2]string{
 		{i18n.T.Get("System"), fmt.Sprintf("%s (%s)", info.Name, archName(info.Arch))},
