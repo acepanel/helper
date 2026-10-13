@@ -22,10 +22,6 @@ msgstr ""
 msgid "Aborting, waiting for the current command to stop..."
 msgstr ""
 
-#: internal/ui/install.go:124
-msgid "AcePanel recommends running on the latest system release. Upgrade the system now?"
-msgstr ""
-
 #: internal/ui/uninstall.go:126
 msgid "All data will be cleared and cannot be recovered!"
 msgstr ""
@@ -383,6 +379,10 @@ msgstr ""
 
 #: internal/ui/uninstall.go:152
 msgid "Thank you for using AcePanel."
+msgstr ""
+
+#: internal/ui/install.go:124
+msgid "The current system release is outdated. It is strongly recommended to run AcePanel on the latest system release. Upgrade the system now?"
 msgstr ""
 
 #: internal/ui/install.go:183
