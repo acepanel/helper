@@ -13,7 +13,7 @@ msgstr ""
 "X-Crowdin-File-ID: 1242\n"
 "Project-Id-Version: acepanel\n"
 "Language-Team: Chinese Simplified\n"
-"PO-Revision-Date: 2026-10-13 06:54\n"
+"PO-Revision-Date: 2026-10-13 07:05\n"
 
 #: internal/ui/install.go:164
 #: internal/ui/install.go:172
@@ -29,10 +29,6 @@ msgstr "已中止"
 #: internal/ui/task.go:156
 msgid "Aborting, waiting for the current command to stop..."
 msgstr "正在中止，等待当前命令停止..."
-
-#: internal/ui/install.go:124
-msgid "AcePanel recommends running on the latest system release. Upgrade the system now?"
-msgstr "AcePanel 建议在最新版本系统使用，是否升级系统？"
 
 #: internal/ui/uninstall.go:126
 msgid "All data will be cleared and cannot be recovered!"
@@ -392,6 +388,10 @@ msgstr "系统"
 #: internal/ui/uninstall.go:152
 msgid "Thank you for using AcePanel."
 msgstr "感谢您使用 AcePanel。"
+
+#: internal/ui/install.go:124
+msgid "The current system release is outdated. It is strongly recommended to run AcePanel on the latest system release. Upgrade the system now?"
+msgstr "当前系统版本过旧，强烈建议在最新版本系统使用 AcePanel，是否升级系统？"
 
 #: internal/ui/install.go:183
 msgid "The information above will be printed again after exiting the installer."
