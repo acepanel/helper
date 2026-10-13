@@ -17,7 +17,7 @@ jobs:
         uses: actions/setup-go@v7
         with:
           cache: true
-          go-version: 'stable'
+          go-version-file: go.mod
       - name: Install gettext
         run: |
           sudo apt-get install -y gettext
