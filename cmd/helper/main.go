@@ -2,33 +2,39 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 	_ "time/tzdata"
 
-	"github.com/acepanel/helper/pkg/config"
+	"github.com/acepanel/helper/internal/sys"
+	"github.com/acepanel/helper/internal/ui"
 )
 
 func main() {
-	verbose := flag.String("v", "", "verbose mode, optionally specify log file path")
+	if err := run(); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+}
+
+func run() error {
+	flag.BoolVar(&sys.Verbose, "v", false, "show executed commands and their output")
+	logPath := flag.String("log", "", "write executed commands and their output to this file")
 	flag.Parse()
 
-	if *verbose != "" {
-		config.Global.Verbose = true
-		// 如果不是 "true" 或 "1"，则作为文件路径
-		if *verbose != "true" && *verbose != "1" {
-			config.Global.LogFile = *verbose
-			if err := config.Global.InitLogFile(); err != nil {
-				panic(err)
-			}
-			defer config.Global.CloseLogFile()
+	if *logPath != "" {
+		if err := sys.OpenLog(*logPath); err != nil {
+			return err
 		}
+		defer sys.CloseLog()
 	}
 
-	helper, err := initHelper()
+	final, err := ui.Run()
 	if err != nil {
-		panic(err)
+		return err
 	}
-
-	if err = helper.Run(); err != nil {
-		panic(err)
+	if final != "" {
+		fmt.Println(final)
 	}
+	return nil
 }
