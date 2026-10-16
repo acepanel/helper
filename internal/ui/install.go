@@ -191,12 +191,12 @@ func (p *installPage) summary() string {
 	}
 	release := info.Version
 	switch {
+	case !p.pre.Outdated:
+		release += "  " + mutedStyle.Render(i18n.T.Get("latest"))
 	case p.pre.Latest != "":
 		release += "  " + warnText.Render("→ "+p.pre.Latest)
-	case p.pre.Outdated:
-		release += "  " + warnText.Render(i18n.T.Get("update available"))
 	default:
-		release += "  " + mutedStyle.Render(i18n.T.Get("latest"))
+		release += "  " + warnText.Render(i18n.T.Get("update available"))
 	}
 	rows := [][2]string{
 		{i18n.T.Get("System"), fmt.Sprintf("%s (%s)", info.Name, archName(info.Arch))},

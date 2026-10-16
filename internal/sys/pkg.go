@@ -60,22 +60,26 @@ func (p *Pkg) ReleaseUpdate(ctx context.Context) (outdated bool, latest string, 
 }
 
 func dnfReleaseUpdate(ctx context.Context) (bool, string, error) {
-	name, err := Run(ctx, "rpm", "-qf", "--qf", "%{NAME}", "/etc/os-release")
+	// 输出形如 "rocky-release 9.8"
+	out, err := Run(ctx, "rpm", "-qf", "--qf", "%{NAME} %{VERSION}", "/etc/os-release")
 	if err != nil {
 		return false, "", err
 	}
-	// 退出码 100 表示有更新，输出形如 "almalinux-release.noarch  9.8-1.el9  baseos"
+	name, installed, _ := strings.Cut(strings.TrimSpace(out), " ")
+	// 退出码 100 表示包有更新，输出形如 "rocky-release.noarch  9.8-1.2.el9  baseos"；
+	// 同一小版本内 release 包也会发修订，所以要比较版本号而不是有没有更新
 	stdout, stderr, code, err := Exec(ctx, "", "dnf", "-q", "check-update", name)
-	if code == 100 {
-		for _, line := range strings.Split(stdout, "\n") {
-			if fields := strings.Fields(line); len(fields) >= 2 && strings.HasPrefix(fields[0], name+".") {
-				return true, strings.SplitN(fields[1], "-", 2)[0], nil
-			}
+	if code != 100 {
+		if err != nil {
+			return false, "", fmt.Errorf("dnf check-update: %w: %s", err, tail(stderr, 5))
 		}
-		return true, "", nil
+		return false, "", nil
 	}
-	if err != nil {
-		return false, "", fmt.Errorf("dnf check-update: %w: %s", err, tail(stderr, 5))
+	for _, line := range strings.Split(stdout, "\n") {
+		if fields := strings.Fields(line); len(fields) >= 2 && strings.HasPrefix(fields[0], name+".") {
+			latest := strings.SplitN(fields[1], "-", 2)[0]
+			return latest != installed, latest, nil
+		}
 	}
 	return false, "", nil
 }
@@ -101,9 +105,13 @@ func aptReleaseUpdate(ctx context.Context) (bool, string, error) {
 	if candidate == "" || candidate == "(none)" || candidate == installed {
 		return false, "", nil
 	}
-	// Debian 的 base-files 版本 13.8+deb13u7 对应 13.7
+	// Debian 的 base-files 版本 13.8+deb13u7 对应 13.7，点版本相同只是包修订时不算落后
 	if m := debianPoint.FindStringSubmatch(candidate); m != nil {
-		return true, m[1] + "." + m[2], nil
+		latest := m[1] + "." + m[2]
+		if cur := debianPoint.FindStringSubmatch(installed); cur != nil && cur[1]+"."+cur[2] == latest {
+			return false, "", nil
+		}
+		return true, latest, nil
 	}
 	return true, "", nil
 }
