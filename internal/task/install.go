@@ -75,9 +75,27 @@ func installDeps(ctx context.Context, pkg *sys.Pkg, info *sys.Info) error {
 	}
 	pkgs := []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "zstd", "bzip2", "7zip", "git", "jq", "dos2unix", "make"}
 	if info.Family == sys.FamilyRHEL {
-		return pkg.Install(ctx, append(pkgs, "xz")...)
+		pkgs = append(pkgs, "xz")
+	} else {
+		pkgs = append(pkgs, "xz-utils")
 	}
-	return pkg.Install(ctx, append(pkgs, "xz-utils")...)
+	if err := pkg.Install(ctx, pkgs...); err != nil {
+		return err
+	}
+	return link7z()
+}
+
+// link7z Ubuntu 22.04 和 Debian 12 的 7zip 包只带 7zz，补一个 7z 软链给安装脚本用
+func link7z() error {
+	if _, err := exec.LookPath("7z"); err == nil {
+		return nil
+	}
+	zz, err := exec.LookPath("7zz")
+	if err != nil {
+		return err
+	}
+	_ = os.Remove("/usr/local/bin/7z")
+	return os.Symlink(zz, "/usr/local/bin/7z")
 }
 
 func optimizeSystem(ctx context.Context, info *sys.Info) error {
