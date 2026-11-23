@@ -73,7 +73,7 @@ func installDeps(ctx context.Context, pkg *sys.Pkg, info *sys.Info) error {
 	if err := pkg.EnableEPEL(ctx); err != nil {
 		return err
 	}
-	pkgs := []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "zstd", "bzip2", "7zip", "git", "jq", "dos2unix", "make"}
+	pkgs := []string{"sudo", "bash", "curl", "wget", "aria2", "zip", "unzip", "tar", "zstd", "bzip2", "7zip", "git", "jq", "dos2unix", "make", "nftables"}
 	if info.Family == sys.FamilyRHEL {
 		pkgs = append(pkgs, "xz")
 	} else {
